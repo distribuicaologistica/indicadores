@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Administração · Tarumã</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fundo:#eef4fb;
+    --fundo-2:#dbe9fa;
+    --superficie:#ffffff;
+    --borda:#d6e4f4;
+    --azul:#2b7fd4;
+    --azul-forte:#1a5fa8;
+    --azul-suave:#eaf3fd;
+    --tinta:#0f2a45;
+    --tinta-fraca:#65809c;
+    --ok:#12876a;
+    --erro:#c0392b;
+    --raio:16px;
+    --sombra:0 1px 2px rgba(15,42,69,.04), 0 14px 32px -20px rgba(15,42,69,.26);
+    --display:"Sora", system-ui, sans-serif;
+    --corpo:"Plus Jakarta Sans", system-ui, sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;font-family:var(--corpo);color:var(--tinta);
+    background:var(--fundo);
+    background-image:
+      radial-gradient(90% 45% at 50% 0%, #ffffff 0%, var(--fundo) 50%, var(--fundo-2) 100%),
+      radial-gradient(35% 25% at 88% 8%, rgba(43,127,212,.12), transparent 70%);
+    padding:26px 18px 60px;
+  }
+  .folha{max-width:1000px;margin:0 auto}
+  [hidden]{display:none !important}
+
+  /* ---------- porta de entrada ---------- */
+  .porta{
+    min-height:calc(100vh - 90px);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .cartao-login{
+    width:100%;max-width:392px;
+    background:var(--superficie);border:1px solid var(--borda);
+    border-radius:var(--raio);box-shadow:var(--sombra);
+    padding:36px 32px 26px;position:relative;overflow:hidden;
+  }
+  .cartao-login::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:4px;
+    background:linear-gradient(90deg, var(--azul-forte) 0%, var(--azul) 55%, #7dbcf2 100%);
+  }
+  .cartao-login h1{text-align:center;margin:0}
+  .cartao-login .subtitulo{text-align:center;margin:6px 0 26px}
+  .simbolo{
+    width:46px;height:46px;border-radius:13px;margin:0 auto 16px;
+    background:var(--azul-suave);border:1px solid var(--borda);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .simbolo svg{width:22px;height:22px;stroke:var(--azul);fill:none;stroke-width:1.7}
+
+  /* ---------- topo ---------- */
+  header.topo{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:16px;flex-wrap:wrap;margin-bottom:24px;
+  }
+  .identidade{display:flex;align-items:center;gap:13px}
+  .identidade .simbolo{
+    width:42px;height:42px;margin:0;background:var(--superficie);box-shadow:var(--sombra);
+  }
+  h1{font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.02em;margin:0}
+  .subtitulo,.quem{font-size:12px;color:var(--tinta-fraca);margin:2px 0 0}
+  .barra-acoes{display:flex;gap:8px;flex-wrap:wrap}
+  .botao-topo{
+    font-family:var(--corpo);font-size:13px;font-weight:600;text-decoration:none;
+    color:var(--tinta-fraca);background:var(--superficie);
+    border:1px solid var(--borda);border-radius:10px;padding:9px 15px;cursor:pointer;transition:.15s;
+  }
+  .botao-topo:hover{color:var(--azul);border-color:var(--azul)}
+  .botao-topo:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+
+  /* ---------- cartões ---------- */
+  .cartao{
+    background:var(--superficie);border:1px solid var(--borda);
+    border-radius:var(--raio);padding:24px 26px;margin-bottom:20px;box-shadow:var(--sombra);
+  }
+  .cartao h2{
+    font-family:var(--display);font-weight:600;font-size:16px;
+    margin:0 0 20px;padding-bottom:14px;border-bottom:1px solid var(--borda);
+  }
+
+  .linha-campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}
+  .campo label{display:block;font-size:12px;font-weight:600;color:var(--tinta);margin-bottom:7px}
+  input,select{
+    width:100%;font-family:var(--corpo);font-size:14px;color:var(--tinta);
+    background:#f8fbfe;border:1.5px solid var(--borda);border-radius:10px;padding:11px 13px;
+    transition:border-color .15s, box-shadow .15s, background .15s;
+  }
+  input::placeholder{color:#a8bdd4}
+  input:focus,select:focus{
+    outline:none;background:var(--superficie);
+    border-color:var(--azul);box-shadow:0 0 0 4px rgba(43,127,212,.14);
+  }
+  input.mono{font-family:var(--mono);letter-spacing:.08em}
+
+  .acao{
+    font-family:var(--corpo);font-weight:600;font-size:14px;color:#fff;
+    background:var(--azul);border:0;border-radius:10px;padding:13px 24px;cursor:pointer;
+    box-shadow:0 6px 16px -6px rgba(43,127,212,.6);transition:.15s;
+  }
+  .acao:hover:not(:disabled){background:var(--azul-forte)}
+  .acao:disabled{opacity:.6;cursor:progress;box-shadow:none}
+  .acao:focus-visible{outline:2px solid var(--azul-forte);outline-offset:3px}
+  .acao.largura{width:100%;margin-top:6px}
+
+  .aviso{
+    font-size:13px;line-height:1.5;padding:12px 14px;border-radius:10px;margin-bottom:20px;
+    background:#fdeceb;color:var(--erro);border:1px solid #f6d3d0;
+  }
+  .aviso.ok{background:#e7f6f1;color:var(--ok);border-color:#c5e9df}
+
+  .busca{margin-bottom:18px}
+
+  .ficha{
+    display:grid;grid-template-columns:1fr auto;gap:8px 18px;align-items:center;
+    padding:16px;border:1px solid var(--borda);border-radius:12px;margin-bottom:10px;
+    transition:border-color .15s, background .15s;
+  }
+  .ficha:hover{border-color:#bcd6ef;background:#fbfdff}
+  .ficha.inativa .dados{opacity:.5}
+  .dados .nome{font-weight:600;font-size:15px}
+  .dados .meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px;font-size:12px;color:var(--tinta-fraca)}
+  .num{font-family:var(--mono);font-size:11px;color:var(--azul);background:var(--azul-suave);border-radius:6px;padding:2px 7px}
+  .selo{font-size:10px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;border-radius:20px;padding:3px 9px}
+  .selo.admin{background:#e6f0fb;color:var(--azul-forte)}
+  .selo.gestor{background:#e7f6f1;color:var(--ok)}
+  .selo.motorista{background:#fff3e2;color:#b26a00}
+  .selo.provisoria{background:#fff3e2;color:#b26a00}
+  .selo.bloqueado{background:#fdeceb;color:var(--erro)}
+
+  .botoes{display:flex;gap:6px;flex-wrap:wrap}
+  .mini{
+    font-family:var(--corpo);font-size:12px;font-weight:600;color:var(--tinta-fraca);
+    background:var(--superficie);border:1px solid var(--borda);border-radius:9px;
+    padding:8px 12px;cursor:pointer;transition:.15s;
+  }
+  .mini:hover{color:var(--azul);border-color:var(--azul)}
+  .mini.perigo:hover{color:var(--erro);border-color:var(--erro)}
+  .mini:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+
+  .edicao{grid-column:1/-1;padding-top:16px;margin-top:14px;border-top:1px solid var(--borda)}
+  .edicao .linha-campos{margin-bottom:14px}
+
+  .vazio{text-align:center;color:var(--tinta-fraca);font-size:14px;padding:34px 0;line-height:1.6}
+
+  .paginacao{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    margin-top:16px;padding-top:14px;border-top:1px solid var(--borda);font-size:12px;color:var(--tinta-fraca)}
+  .paginacao .botoes-pag{display:flex;align-items:center;gap:6px}
+  .paginacao .posicao{font-family:var(--mono);font-size:12px;color:var(--tinta);padding:0 4px}
+  .mini:disabled{opacity:.4;cursor:default}
+  .mini:disabled:hover{color:var(--tinta-fraca);border-color:var(--borda)}
+
+  .abas{display:flex;gap:4px;border-bottom:1px solid var(--borda);margin-bottom:22px;flex-wrap:wrap}
+  .aba{font-size:14px;font-weight:600;color:var(--tinta-fraca);background:none;border:0;
+    border-bottom:2px solid transparent;padding:11px 14px;cursor:pointer;margin-bottom:-1px}
+  .aba:hover{color:var(--azul)}
+  .aba.ativa{color:var(--azul);border-bottom-color:var(--azul)}
+  .aba:focus-visible{outline:2px solid var(--azul);outline-offset:-2px}
+
+  .rolagem{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-fraca);
+    text-align:left;padding:10px 12px;border-bottom:1px solid var(--borda);white-space:nowrap}
+  td{padding:9px 12px;border-bottom:1px solid #edf3fa;vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  td input,td select{padding:8px 10px;font-size:13px}
+  td.estreito{width:96px}
+  .cod{font-family:var(--mono);font-size:11px;color:var(--azul);background:var(--azul-suave);
+    border-radius:6px;padding:3px 8px;white-space:nowrap}
+
+  @media (max-width:640px){
+    .ficha{grid-template-columns:1fr}
+    .botoes{margin-top:10px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<!-- ================= PORTA DE ENTRADA ================= -->
+<div class="folha porta" id="porta">
+  <div class="cartao-login">
+    <div class="simbolo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3l7 3.5v5c0 4.2-2.9 7.7-7 8.5-4.1-.8-7-4.3-7-8.5v-5L12 3z"/>
+        <path d="M9.5 12l1.8 1.8L15 10"/>
+      </svg>
+    </div>
+    <h1>Administração</h1>
+    <p class="subtitulo">Entre com sua matrícula de administrador</p>
+
+    <p class="aviso" id="erro-entrada" role="alert" aria-live="polite" hidden></p>
+
+    <form id="form-entrada" novalidate>
+      <div class="campo" style="margin-bottom:18px">
+        <label for="e-matricula">Matrícula</label>
+        <input id="e-matricula" class="mono" inputmode="numeric" maxlength="14"
+               autocomplete="username" placeholder="0000" required>
+      </div>
+      <div class="campo" style="margin-bottom:18px">
+        <label for="e-senha">Senha</label>
+        <input id="e-senha" type="password" autocomplete="current-password"
+               placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="acao largura" id="btn-entrada">Entrar</button>
+    </form>
+
+    <p class="vazio" style="padding:20px 0 0;font-size:12px">
+      Não é administrador? <a href="./login.html" style="color:var(--azul)">Ir para o painel</a>
+    </p>
+  </div>
+</div>
+
+<!-- ================= ADMINISTRAÇÃO ================= -->
+<div class="folha" id="area" hidden>
+
+  <header class="topo">
+    <div class="identidade">
+      <div class="simbolo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="8" r="3.2"/>
+          <path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/>
+          <path d="M17 8h4M17 12h4M17 16h4"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Funcionários</h1>
+        <div class="quem" id="quem">—</div>
+      </div>
+    </div>
+    <div class="barra-acoes">
+      <a class="botao-topo" href="./painel.html">Ver indicadores</a>
+      <button class="botao-topo" id="sair">Sair</button>
+    </div>
+  </header>
+
+  <div class="abas">
+    <button class="aba ativa" data-secao="funcionarios">Funcionários</button>
+    <button class="aba" data-secao="indicadores">Indicadores</button>
+  </div>
+
+  <p class="aviso" id="aviso" role="alert" aria-live="polite" hidden></p>
+
+  <div id="secao-funcionarios">
+
+  <section class="cartao">
+    <h2>Cadastrar funcionário</h2>
+    <form id="form-novo">
+      <div class="linha-campos">
+        <div class="campo">
+          <label for="n-matricula">Matrícula</label>
+          <input id="n-matricula" class="mono" inputmode="numeric" maxlength="14" required>
+        </div>
+        <div class="campo">
+          <label for="n-nome">Nome</label>
+          <input id="n-nome" required>
+        </div>
+        <div class="campo">
+          <label for="n-setor">Setor</label>
+          <input id="n-setor" placeholder="Vendas, Logística…">
+        </div>
+        <div class="campo">
+          <label for="n-cpf">CPF (senha do 1º acesso)</label>
+          <input id="n-cpf" class="mono" inputmode="numeric" maxlength="11" required>
+        </div>
+        <div class="campo">
+          <label for="n-papel">Papel</label>
+          <select id="n-papel">
+            <option value="funcionario">Funcionário</option>
+            <option value="motorista">Motorista</option>
+            <option value="gestor">Gestor</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="campo" id="campo-n-mot" hidden>
+          <label for="n-motorista">Código do motorista (Promax)</label>
+          <input id="n-motorista" class="mono" inputmode="numeric" maxlength="20" placeholder="1042">
+        </div>
+      </div>
+      <button type="submit" class="acao" id="btn-novo" style="margin-top:20px">Cadastrar</button>
+    </form>
+  </section>
+
+  <section class="cartao">
+    <h2>Cadastrados</h2>
+    <div class="campo busca">
+      <label for="busca">Buscar por nome, matrícula ou setor</label>
+      <input id="busca" autocomplete="off" placeholder="Digite para filtrar…">
+    </div>
+    <div id="lista"><p class="vazio">Carregando…</p></div>
+  </section>
+
+  </div><!-- /secao-funcionarios -->
+
+  <div id="secao-indicadores" hidden>
+
+    <section class="cartao">
+      <h2>Novo indicador</h2>
+      <div class="linha-campos">
+        <div class="campo">
+          <label for="i-codigo">Código</label>
+          <input id="i-codigo" class="mono" placeholder="devolucao" maxlength="30">
+        </div>
+        <div class="campo">
+          <label for="i-nome">Nome na tela</label>
+          <input id="i-nome" placeholder="Devolução">
+        </div>
+        <div class="campo">
+          <label for="i-unidade">Unidade</label>
+          <input id="i-unidade" placeholder="%, un, pontos">
+        </div>
+        <div class="campo">
+          <label for="i-meta">Meta padrão</label>
+          <input id="i-meta" inputmode="decimal" placeholder="2,0">
+        </div>
+        <div class="campo">
+          <label for="i-sentido">Bate a meta quando é</label>
+          <select id="i-sentido">
+            <option value="menor_melhor">menor ou igual à meta</option>
+            <option value="maior_melhor">maior ou igual à meta</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="i-agregacao">Fechamento do mês</label>
+          <select id="i-agregacao">
+            <option value="media">média dos dias</option>
+            <option value="soma">soma dos dias</option>
+          </select>
+        </div>
+      </div>
+      <button class="acao" id="i-criar" style="margin-top:20px">Criar indicador</button>
+      <p class="vazio" style="padding:14px 0 0;text-align:left;font-size:12px">
+        O código é a chave e não pode ser alterado depois — os lançamentos apontam para ele.
+        Use letras minúsculas, sem espaço nem acento.
+      </p>
+    </section>
+
+    <section class="cartao">
+      <h2>Cadastrados</h2>
+      <div id="lista-indicadores"><p class="vazio">Carregando…</p></div>
+    </section>
+
+  </div><!-- /secao-indicadores -->
+
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+/* ================= CONFIGURAÇÃO ================= */
+const SUPABASE_URL      = "https://nquoksknvkahnfvqvcoo.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_u0e1CVU5F7PTGdQ0U2Mx8g_wPRXUHhh";
+const DOMINIO_INTERNO   = "taruma.com.br";
+const FUNCAO      = `${SUPABASE_URL}/functions/v1/admin-usuarios`;
+const TELA_LOGIN  = "./login.html";
+/* ================================================ */
+
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = (id) => document.getElementById(id);
+
+let funcionarios = [];
+let indicadores = [];
+
+const emailDaMatricula = (m) => `${m}@${DOMINIO_INTERNO}`;
+const soDigitos = (v) => v.replace(/\D/g, "");
+const escapar = (t) => String(t ?? "").replace(/[&<>"']/g, (c) =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+["n-matricula", "n-cpf", "e-matricula", "n-motorista"].forEach((id) => {
+  $(id).addEventListener("input", (e) => { e.target.value = soDigitos(e.target.value); });
+});
+
+/* ---------- paginação ---------- */
+const POR_PAGINA = 50;
+const paginas = { funcionarios: 1, indicadores: 1 };
+
+function paginar(lista, chave){
+  const total = lista.length;
+  const ultima = Math.max(1, Math.ceil(total / POR_PAGINA));
+  const atual = Math.min(Math.max(paginas[chave], 1), ultima);
+  paginas[chave] = atual;
+  const inicio = (atual - 1) * POR_PAGINA;
+  return {
+    itens: lista.slice(inicio, inicio + POR_PAGINA),
+    chave, atual, ultima, total,
+    de: total ? inicio + 1 : 0,
+    ate: Math.min(inicio + POR_PAGINA, total)
+  };
+}
+
+function controlesPagina(pg){
+  if (pg.total <= POR_PAGINA) return "";
+  return `<div class="paginacao">
+      <span>Mostrando ${pg.de}–${pg.ate} de ${pg.total}</span>
+      <div class="botoes-pag">
+        <button class="mini" data-pag="${pg.chave}:1" ${pg.atual === 1 ? "disabled" : ""}>Início</button>
+        <button class="mini" data-pag="${pg.chave}:${pg.atual - 1}" ${pg.atual === 1 ? "disabled" : ""}>Anterior</button>
+        <span class="posicao">${pg.atual} / ${pg.ultima}</span>
+        <button class="mini" data-pag="${pg.chave}:${pg.atual + 1}" ${pg.atual === pg.ultima ? "disabled" : ""}>Próxima</button>
+        <button class="mini" data-pag="${pg.chave}:${pg.ultima}" ${pg.atual === pg.ultima ? "disabled" : ""}>Fim</button>
+      </div>
+    </div>`;
+}
+
+function ligarPaginacao(area, redesenhar){
+  area.querySelectorAll("[data-pag]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const [chave, destino] = b.dataset.pag.split(":");
+      paginas[chave] = Number(destino);
+      redesenhar();
+    }));
+}
+
+$("n-papel").addEventListener("change", (e) => {
+  $("campo-n-mot").hidden = e.target.value !== "motorista";
+});
+
+function avisar(el, texto, ok = false){
+  el.textContent = texto;
+  el.classList.toggle("ok", ok);
+  el.hidden = false;
+}
+const limpar = (el) => { el.hidden = true; };
+
+/* ==================================================================
+   Entrada: matrícula + senha, só admin passa
+   ================================================================== */
+$("form-entrada").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  limpar($("erro-entrada"));
+
+  const matricula = $("e-matricula").value.trim();
+  const senha = $("e-senha").value;
+  const botao = $("btn-entrada");
+
+  if (!matricula || !senha){
+    avisar($("erro-entrada"), "Preencha matrícula e senha.");
+    return;
+  }
+
+  botao.disabled = true; botao.textContent = "Entrando…";
+
+  try{
+    const { error } = await sb.auth.signInWithPassword({
+      email: emailDaMatricula(matricula),
+      password: senha
+    });
+
+    if (error){
+      avisar($("erro-entrada"), /invalid login credentials/i.test(error.message)
+        ? "Matrícula ou senha incorreta."
+        : "Não deu para entrar agora. Tente de novo em instantes.");
+      $("e-senha").value = "";
+      return;
+    }
+
+    await abrirSePuder();
+
+  } catch (err){
+    console.error(err);
+    avisar($("erro-entrada"), "Sem conexão com o servidor. Verifique a rede e tente de novo.");
+  } finally {
+    botao.disabled = false; botao.textContent = "Entrar";
+  }
+});
+
+async function abrirSePuder(){
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return false;
+
+  const { data: perfil } = await sb
+    .from("perfis")
+    .select("nome, matricula, papel, ativo, senha_provisoria")
+    .eq("id", session.user.id)
+    .single();
+
+  if (!perfil || !perfil.ativo){
+    await sb.auth.signOut();
+    avisar($("erro-entrada"), "Esta conta não está liberada.");
+    return false;
+  }
+  if (perfil.senha_provisoria){
+    await sb.auth.signOut();
+    avisar($("erro-entrada"), "Você ainda usa a senha do CPF. Entre pelo painel e crie sua senha antes.");
+    return false;
+  }
+  if (perfil.papel !== "admin"){
+    await sb.auth.signOut();
+    avisar($("erro-entrada"), "Esta área é só para administradores.");
+    return false;
+  }
+
+  $("quem").textContent = `${perfil.nome.split(" ")[0]} · matrícula ${perfil.matricula}`;
+  $("porta").hidden = true;
+  $("area").hidden = false;
+  await carregar();
+  return true;
+}
+
+/* ==================================================================
+   Chamadas à Edge Function
+   ================================================================== */
+async function chamar(acao, dados = {}){
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session){ location.reload(); return null; }
+
+  const resposta = await fetch(FUNCAO, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.access_token}`
+    },
+    body: JSON.stringify({ acao, ...dados })
+  });
+
+  const corpo = await resposta.json().catch(() => ({}));
+  if (!resposta.ok) throw new Error(corpo.erro || "Não deu para completar a operação.");
+  return corpo;
+}
+
+/* ---------- lista ---------- */
+function desenhar(){
+  const termo = $("busca").value.trim().toLowerCase();
+  const visiveis = funcionarios.filter((f) =>
+    !termo ||
+    f.nome.toLowerCase().includes(termo) ||
+    f.matricula.includes(termo) ||
+    (f.setor ?? "").toLowerCase().includes(termo)
+  );
+
+  if (!visiveis.length){
+    $("lista").innerHTML = `<p class="vazio">${
+      funcionarios.length ? "Nenhum funcionário encontrado com esse termo."
+                          : "Ninguém cadastrado ainda. Comece pelo formulário acima."
+    }</p>`;
+    return;
+  }
+
+  const pg = paginar(visiveis, "funcionarios");
+
+  $("lista").innerHTML = pg.itens.map((f) => `
+    <div class="ficha ${f.ativo ? "" : "inativa"}" data-id="${f.id}">
+      <div class="dados">
+        <div class="nome">${escapar(f.nome)}</div>
+        <div class="meta">
+          <span class="num">${escapar(f.matricula)}</span>
+          <span>${escapar(f.setor || "sem setor")}</span>
+          ${f.papel !== "funcionario" ? `<span class="selo ${f.papel}">${f.papel}</span>` : ""}
+          ${f.senha_provisoria ? `<span class="selo provisoria">senha do CPF</span>` : ""}
+          ${!f.ativo ? `<span class="selo bloqueado">bloqueado</span>` : ""}
+        </div>
+      </div>
+      <div class="botoes">
+        <button class="mini" data-fazer="editar">Editar</button>
+        <button class="mini" data-fazer="resetar">Resetar senha</button>
+        <button class="mini ${f.ativo ? "perigo" : ""}" data-fazer="ativo">${f.ativo ? "Bloquear" : "Liberar"}</button>
+      </div>
+    </div>
+  `).join("") + controlesPagina(pg);
+
+  ligarPaginacao($("lista"), desenhar);
+}
+
+async function carregar(){
+  try{
+    const { funcionarios: lista } = await chamar("listar");
+    funcionarios = lista ?? [];
+    desenhar();
+  } catch (e){
+    $("lista").innerHTML = `<p class="vazio">${escapar(e.message)}</p>`;
+  }
+}
+
+$("busca").addEventListener("input", () => { paginas.funcionarios = 1; desenhar(); });
+
+/* ---------- cadastrar ---------- */
+$("form-novo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  limpar($("aviso"));
+  const botao = $("btn-novo");
+  botao.disabled = true; botao.textContent = "Cadastrando…";
+  try{
+    const papel = $("n-papel").value;
+    const codigoMot = $("n-motorista").value.trim();
+
+    if (papel === "motorista" && !codigoMot){
+      avisar($("aviso"), "Informe o código do motorista no Promax para vincular o acesso.");
+      return;
+    }
+
+    const r = await chamar("criar", {
+      matricula: $("n-matricula").value,
+      nome: $("n-nome").value,
+      setor: $("n-setor").value,
+      cpf: $("n-cpf").value,
+      papel
+    });
+
+    let recado = r.mensagem;
+    if (papel === "motorista"){
+      const erro = await vincularMotorista($("n-matricula").value.trim(), codigoMot, $("n-nome").value.trim());
+      recado += erro ? ` Atenção: ${erro}` : ` Vinculado ao motorista ${codigoMot}.`;
+    }
+
+    avisar($("aviso"), recado, true);
+    $("form-novo").reset();
+    $("campo-n-mot").hidden = true;
+    await carregar();
+  } catch (err){
+    avisar($("aviso"), err.message);
+  } finally {
+    botao.disabled = false; botao.textContent = "Cadastrar";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+});
+
+/* ---------- vínculo com o cadastro de motorista ---------- */
+async function vincularMotorista(matricula, codigo, nome){
+  try{
+    const { funcionarios: lista } = await chamar("listar");
+    const perfil = (lista ?? []).find((f) => f.matricula === matricula);
+    if (!perfil) return "não achei o perfil para vincular.";
+
+    const { error: e1 } = await sb.from("motoristas")
+      .upsert({ codigo, nome: nome || `Motorista ${codigo}` },
+              { onConflict: "codigo", ignoreDuplicates: true });
+    if (e1) return e1.message;
+
+    // Solta o código anterior desta conta antes de amarrar o novo.
+    await sb.from("motoristas").update({ perfil_id: null }).eq("perfil_id", perfil.id);
+
+    const { error: e2 } = await sb.from("motoristas")
+      .update({ perfil_id: perfil.id }).eq("codigo", codigo);
+    if (e2) return e2.message;
+
+    return null;
+  } catch (e){
+    return e.message;
+  }
+}
+
+/* ---------- ações da lista ---------- */
+$("lista").addEventListener("click", async (e) => {
+  const botao = e.target.closest("[data-fazer]");
+  if (!botao) return;
+  const ficha = botao.closest(".ficha");
+  const f = funcionarios.find((x) => x.id === ficha.dataset.id);
+  if (!f) return;
+
+  if (botao.dataset.fazer === "editar"){ abrirEdicao(ficha, f); return; }
+
+  if (botao.dataset.fazer === "resetar"){
+    const cpf = prompt(`Resetar a senha de ${f.nome}.\n\nDigite o CPF (só números) — vira a senha provisória:`);
+    if (!cpf) return;
+    try{
+      const r = await chamar("resetar_senha", { id: f.id, cpf });
+      avisar($("aviso"), r.mensagem, true);
+      await carregar();
+    } catch (err){ avisar($("aviso"), err.message); }
+    return;
+  }
+
+  if (botao.dataset.fazer === "ativo"){
+    const novo = !f.ativo;
+    if (!novo && !confirm(`Bloquear o acesso de ${f.nome}?`)) return;
+    try{
+      const r = await chamar("alternar_ativo", { id: f.id, ativo: novo });
+      avisar($("aviso"), r.mensagem, true);
+      await carregar();
+    } catch (err){ avisar($("aviso"), err.message); }
+  }
+});
+
+function abrirEdicao(ficha, f){
+  const aberto = ficha.querySelector(".edicao");
+  if (aberto){ aberto.remove(); return; }
+
+  const bloco = document.createElement("div");
+  bloco.className = "edicao";
+  bloco.innerHTML = `
+    <div class="linha-campos">
+      <div class="campo">
+        <label>Nome</label>
+        <input data-e="nome" value="${escapar(f.nome)}">
+      </div>
+      <div class="campo">
+        <label>Setor</label>
+        <input data-e="setor" value="${escapar(f.setor || "")}">
+      </div>
+      <div class="campo">
+        <label>Papel</label>
+        <select data-e="papel">
+          <option value="funcionario">Funcionário</option>
+          <option value="motorista">Motorista</option>
+          <option value="gestor">Gestor</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Código do motorista</label>
+        <input data-e="motorista" placeholder="só para papel motorista">
+      </div>
+    </div>
+    <button class="acao" data-e="salvar">Salvar</button>
+  `;
+  bloco.querySelector('[data-e="papel"]').value = f.papel;
+  ficha.appendChild(bloco);
+
+  sb.from("motoristas").select("codigo").eq("perfil_id", f.id).maybeSingle()
+    .then(({ data }) => {
+      if (data) bloco.querySelector('[data-e="motorista"]').value = data.codigo;
+    });
+
+  bloco.querySelector('[data-e="salvar"]').addEventListener("click", async (ev) => {
+    ev.target.disabled = true; ev.target.textContent = "Salvando…";
+    try{
+      const papel = bloco.querySelector('[data-e="papel"]').value;
+      const codigoMot = bloco.querySelector('[data-e="motorista"]').value.trim();
+
+      if (papel === "motorista" && !codigoMot){
+        throw new Error("Informe o código do motorista para vincular o acesso.");
+      }
+
+      const r = await chamar("atualizar", {
+        id: f.id,
+        nome: bloco.querySelector('[data-e="nome"]').value,
+        setor: bloco.querySelector('[data-e="setor"]').value,
+        papel
+      });
+
+      let extra = "";
+      if (papel === "motorista"){
+        const erro = await vincularMotorista(f.matricula, codigoMot,
+          bloco.querySelector('[data-e="nome"]').value.trim());
+        extra = erro ? ` Atenção: ${erro}` : ` Vinculado ao motorista ${codigoMot}.`;
+      } else {
+        await sb.from("motoristas").update({ perfil_id: null }).eq("perfil_id", f.id);
+      }
+
+      avisar($("aviso"), r.mensagem + extra, true);
+      await carregar();
+    } catch (err){
+      avisar($("aviso"), err.message);
+      ev.target.disabled = false; ev.target.textContent = "Salvar";
+    }
+  });
+}
+
+/* ==================================================================
+   Indicadores (catálogo)
+   ================================================================== */
+document.querySelectorAll("[data-secao]").forEach((b) => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("[data-secao]").forEach((x) =>
+      x.classList.toggle("ativa", x === b));
+    $("secao-funcionarios").hidden = b.dataset.secao !== "funcionarios";
+    $("secao-indicadores").hidden  = b.dataset.secao !== "indicadores";
+    limpar($("aviso"));
+    if (b.dataset.secao === "indicadores") carregarIndicadores();
+  });
+});
+
+function paraNumero(t){
+  let v = String(t ?? "").trim();
+  if (!v) return null;
+  if (v.includes(",") && v.includes(".")) v = v.replace(/\./g, "").replace(",", ".");
+  else if (v.includes(",")) v = v.replace(",", ".");
+  if (!/^-?\d+(\.\d+)?$/.test(v)) return null;
+  return Number(v);
+}
+
+async function carregarIndicadores(){
+  const { data, error } = await sb.from("indicadores").select("*").order("ordem");
+  if (error){
+    $("lista-indicadores").innerHTML = `<p class="vazio">${escapar(error.message)}</p>`;
+    return;
+  }
+  indicadores = data ?? [];
+  desenharIndicadores();
+}
+
+function desenharIndicadores(){
+  if (!indicadores.length){
+    $("lista-indicadores").innerHTML = `<p class="vazio">Nenhum indicador cadastrado.</p>`;
+    return;
+  }
+
+  const pg = paginar(indicadores, "indicadores");
+
+  $("lista-indicadores").innerHTML = `
+    <div class="rolagem"><table>
+      <thead><tr>
+        <th>Código</th><th>Nome</th><th>Unidade</th><th>Meta padrão</th>
+        <th>Sentido</th><th>Fechamento</th><th>Casas</th><th>Ordem</th><th>Ativo</th><th></th>
+      </tr></thead>
+      <tbody>${pg.itens.map((i) => `
+        <tr data-codigo="${escapar(i.codigo)}">
+          <td><span class="cod">${escapar(i.codigo)}</span></td>
+          <td><input data-c="nome" value="${escapar(i.nome)}" style="min-width:150px"></td>
+          <td class="estreito"><input data-c="unidade" value="${escapar(i.unidade || "")}"></td>
+          <td class="estreito"><input data-c="meta_padrao" inputmode="decimal"
+              value="${i.meta_padrao === null ? "" : String(i.meta_padrao).replace(".", ",")}"></td>
+          <td><select data-c="sentido">
+            <option value="menor_melhor" ${i.sentido === "menor_melhor" ? "selected" : ""}>menor é melhor</option>
+            <option value="maior_melhor" ${i.sentido === "maior_melhor" ? "selected" : ""}>maior é melhor</option>
+          </select></td>
+          <td><select data-c="agregacao">
+            <option value="media" ${i.agregacao === "media" ? "selected" : ""}>média</option>
+            <option value="soma" ${i.agregacao === "soma" ? "selected" : ""}>soma</option>
+          </select></td>
+          <td class="estreito"><input data-c="casas" inputmode="numeric" value="${i.casas}"></td>
+          <td class="estreito"><input data-c="ordem" inputmode="numeric" value="${i.ordem}"></td>
+          <td><select data-c="ativo">
+            <option value="sim" ${i.ativo ? "selected" : ""}>sim</option>
+            <option value="nao" ${i.ativo ? "" : "selected"}>não</option>
+          </select></td>
+          <td style="text-align:right;white-space:nowrap">
+            <button class="mini" data-fazer="salvar">Salvar</button>
+            <button class="mini perigo" data-fazer="apagar">Apagar</button>
+          </td>
+        </tr>`).join("")}
+      </tbody>
+    </table></div>
+    ${controlesPagina(pg)}`;
+
+  $("lista-indicadores").querySelectorAll("[data-fazer]").forEach((b) =>
+    b.addEventListener("click", () => acaoIndicador(b)));
+
+  ligarPaginacao($("lista-indicadores"), desenharIndicadores);
+}
+
+async function acaoIndicador(botao){
+  const linha = botao.closest("tr");
+  const codigo = linha.dataset.codigo;
+  const campo = (nome) => linha.querySelector(`[data-c="${nome}"]`).value;
+
+  if (botao.dataset.fazer === "apagar"){
+    if (!confirm(
+      `Apagar o indicador "${codigo}"?\n\n` +
+      `TODOS os lançamentos e metas dele serão apagados junto, e isso não tem volta.\n\n` +
+      `Se a intenção é só tirar da tela, marque Ativo = não.`)) return;
+
+    const { error } = await sb.from("indicadores").delete().eq("codigo", codigo);
+    if (error) return avisar($("aviso"), error.message);
+    avisar($("aviso"), `Indicador ${codigo} apagado.`, true);
+    await carregarIndicadores();
+    return;
+  }
+
+  const casas = parseInt(campo("casas"), 10);
+  const ordem = parseInt(campo("ordem"), 10);
+  if (!campo("nome").trim()) return avisar($("aviso"), "O nome não pode ficar vazio.");
+  if (isNaN(casas) || casas < 0 || casas > 6) return avisar($("aviso"), "Casas decimais: use um número de 0 a 6.");
+  if (isNaN(ordem)) return avisar($("aviso"), "Ordem precisa ser um número.");
+
+  const { error } = await sb.from("indicadores").update({
+    nome: campo("nome").trim(),
+    unidade: campo("unidade").trim() || null,
+    meta_padrao: paraNumero(campo("meta_padrao")),
+    sentido: campo("sentido"),
+    agregacao: campo("agregacao"),
+    casas,
+    ordem,
+    ativo: campo("ativo") === "sim"
+  }).eq("codigo", codigo);
+
+  if (error) return avisar($("aviso"), error.message);
+  avisar($("aviso"), `${codigo} atualizado.`, true);
+  await carregarIndicadores();
+}
+
+$("i-criar").addEventListener("click", async () => {
+  const codigo = $("i-codigo").value.trim().toLowerCase();
+  const nome = $("i-nome").value.trim();
+
+  if (!/^[a-z][a-z0-9_]{1,29}$/.test(codigo)){
+    return avisar($("aviso"), "Código inválido. Use letras minúsculas, números e underline, começando por letra.");
+  }
+  if (!nome) return avisar($("aviso"), "Informe o nome que aparece na tela.");
+
+  const botao = $("i-criar");
+  botao.disabled = true; botao.textContent = "Criando…";
+
+  const { error } = await sb.from("indicadores").insert({
+    codigo,
+    nome,
+    unidade: $("i-unidade").value.trim() || null,
+    meta_padrao: paraNumero($("i-meta").value),
+    sentido: $("i-sentido").value,
+    agregacao: $("i-agregacao").value,
+    casas: 2,
+    ordem: (indicadores.at(-1)?.ordem ?? 0) + 1,
+    ativo: true
+  });
+
+  botao.disabled = false; botao.textContent = "Criar indicador";
+
+  if (error){
+    return avisar($("aviso"), /duplicate key/i.test(error.message)
+      ? `Já existe um indicador com o código ${codigo}.` : error.message);
+  }
+
+  avisar($("aviso"), `Indicador ${nome} criado.`, true);
+  ["i-codigo","i-nome","i-unidade","i-meta"].forEach((id) => { $(id).value = ""; });
+  await carregarIndicadores();
+});
+
+/* ---------- sair ---------- */
+$("sair").addEventListener("click", async () => {
+  await sb.auth.signOut();
+  $("area").hidden = true;
+  $("porta").hidden = false;
+  $("e-matricula").value = ""; $("e-senha").value = "";
+  limpar($("erro-entrada"));
+});
+
+/* ---------- sessão já aberta ---------- */
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) await abrirSePuder();
+  else $("e-matricula").focus();
+})();
+</script>
+</body>
+</html>

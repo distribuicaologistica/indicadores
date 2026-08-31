@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Entrar · Painel de indicadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fundo:#eef4fb;
+    --fundo-2:#dbe9fa;
+    --superficie:#ffffff;
+    --borda:#d6e4f4;
+    --azul:#2b7fd4;
+    --azul-forte:#1a5fa8;
+    --azul-suave:#eaf3fd;
+    --tinta:#0f2a45;
+    --tinta-fraca:#65809c;
+    --ok:#12876a;
+    --erro:#c0392b;
+    --raio:16px;
+    --sombra:0 1px 2px rgba(15,42,69,.04), 0 18px 40px -20px rgba(15,42,69,.28);
+    --display:"Sora", system-ui, sans-serif;
+    --corpo:"Plus Jakarta Sans", system-ui, sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;font-family:var(--corpo);color:var(--tinta);
+    background:var(--fundo);
+    background-image:
+      radial-gradient(90% 60% at 50% 0%, #ffffff 0%, var(--fundo) 45%, var(--fundo-2) 100%),
+      radial-gradient(40% 30% at 85% 15%, rgba(43,127,212,.13), transparent 70%);
+    display:flex;align-items:center;justify-content:center;
+    padding:32px 20px;
+  }
+
+  .cartao{
+    width:100%;max-width:400px;
+    background:var(--superficie);
+    border:1px solid var(--borda);
+    border-radius:var(--raio);
+    box-shadow:var(--sombra);
+    padding:36px 32px 26px;
+    position:relative;overflow:hidden;
+    animation:sobe .4s cubic-bezier(.2,.7,.3,1) both;
+  }
+  .cartao::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:4px;
+    background:linear-gradient(90deg, var(--azul) 0%, #6fb4f0 55%, #a9d5f7 100%);
+  }
+  @keyframes sobe{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .simbolo{
+    width:46px;height:46px;border-radius:13px;
+    background:var(--azul-suave);border:1px solid var(--borda);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 16px;
+  }
+  .simbolo svg{width:22px;height:22px;stroke:var(--azul);fill:none;stroke-width:1.7}
+
+  h1{
+    font-family:var(--display);font-weight:700;font-size:23px;
+    letter-spacing:-.02em;text-align:center;margin:0;
+  }
+  .subtitulo{
+    font-size:13px;color:var(--tinta-fraca);
+    text-align:center;margin:6px 0 28px;
+  }
+
+  .campo{margin-bottom:20px}
+  .campo label{
+    display:block;font-size:12px;font-weight:600;
+    color:var(--tinta);margin-bottom:7px;
+  }
+  .ajuda{font-size:12px;color:var(--tinta-fraca);margin:8px 0 0;line-height:1.5}
+
+  input{
+    width:100%;font-family:var(--corpo);font-size:15px;color:var(--tinta);
+    background:#f8fbfe;border:1.5px solid var(--borda);border-radius:10px;
+    padding:12px 14px;transition:border-color .15s, box-shadow .15s, background .15s;
+  }
+  input::placeholder{color:#a8bdd4}
+  input:focus{
+    outline:none;background:var(--superficie);
+    border-color:var(--azul);box-shadow:0 0 0 4px rgba(43,127,212,.14);
+  }
+
+  #matricula{
+    font-family:var(--mono);font-weight:600;font-size:24px;
+    letter-spacing:.18em;text-indent:.18em;text-align:center;padding:14px;
+  }
+  #matricula::placeholder{font-size:20px;letter-spacing:.18em}
+
+  .senha-caixa{position:relative}
+  .senha-caixa input{padding-right:80px}
+  .ver{
+    position:absolute;right:6px;top:50%;transform:translateY(-50%);
+    background:none;border:0;font-family:var(--corpo);
+    font-size:12px;font-weight:600;color:var(--azul);
+    cursor:pointer;padding:8px 10px;border-radius:8px;
+  }
+  .ver:hover{background:var(--azul-suave)}
+  .ver:focus-visible{outline:2px solid var(--azul);outline-offset:1px}
+
+  .entrar{
+    width:100%;font-family:var(--corpo);font-weight:600;font-size:15px;
+    color:#fff;background:var(--azul);border:0;border-radius:10px;
+    padding:14px;margin-top:6px;cursor:pointer;
+    box-shadow:0 6px 16px -6px rgba(43,127,212,.6);
+    transition:background .15s, transform .1s, box-shadow .15s;
+  }
+  .entrar:hover:not(:disabled){background:var(--azul-forte)}
+  .entrar:active:not(:disabled){transform:translateY(1px)}
+  .entrar:disabled{opacity:.6;cursor:progress;box-shadow:none}
+  .entrar:focus-visible{outline:2px solid var(--azul-forte);outline-offset:3px}
+
+  .aviso{
+    font-size:13px;line-height:1.5;padding:12px 14px;border-radius:10px;
+    background:#fdeceb;color:var(--erro);border:1px solid #f6d3d0;
+    margin-bottom:20px;
+  }
+  .aviso.ok{background:#e7f6f1;color:var(--ok);border-color:#c5e9df}
+  [hidden]{display:none !important}
+
+  .rodape{
+    margin-top:24px;padding-top:18px;border-top:1px solid var(--borda);
+    font-size:12px;line-height:1.6;color:var(--tinta-fraca);text-align:center;
+  }
+
+  .regras{list-style:none;padding:0;margin:12px 0 0;font-size:12px;color:var(--tinta-fraca)}
+  .regras li{display:flex;align-items:center;gap:8px;line-height:2}
+  .regras li::before{
+    content:"";width:15px;height:15px;border-radius:50%;
+    border:1.5px solid var(--borda);flex:none;
+  }
+  .regras li.vale{color:var(--ok)}
+  .regras li.vale::before{
+    content:"✓";border-color:var(--ok);background:var(--ok);color:#fff;
+    font-size:9px;display:flex;align-items:center;justify-content:center;
+  }
+
+  @media (max-width:420px){
+    .cartao{padding:30px 22px 22px}
+    #matricula{font-size:20px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+
+<main class="cartao">
+
+  <!-- ============ CENA 1: LOGIN ============ -->
+  <section class="cena" id="cena-login">
+    <div class="simbolo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19V9M9.5 19V5M15 19v-7M20.5 19v-4"/>
+      </svg>
+    </div>
+    <h1>Painel de indicadores</h1>
+    <p class="subtitulo">Acesso para funcionários da Tarumã</p>
+
+    <p class="aviso" id="erro-login" role="alert" aria-live="polite" hidden></p>
+
+    <form id="form-login" novalidate>
+      <div class="campo">
+        <label for="matricula">Matrícula</label>
+        <input id="matricula" name="matricula" type="text" inputmode="numeric"
+               autocomplete="username" placeholder="0000" maxlength="14"
+               autocapitalize="off" spellcheck="false" required>
+        <p class="ajuda">O número que está no seu crachá.</p>
+      </div>
+
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <div class="senha-caixa">
+          <input id="senha" name="senha" type="password"
+                 autocomplete="current-password" placeholder="••••••••" required>
+          <button type="button" class="ver" id="ver-senha" aria-label="Mostrar senha">Mostrar</button>
+        </div>
+        <p class="ajuda">No primeiro acesso, use seu CPF — só os números.</p>
+      </div>
+
+      <button type="submit" class="entrar" id="btn-entrar">Entrar</button>
+    </form>
+
+    <p class="rodape">Se não conseguir entrar, procure o setor de TI.</p>
+  </section>
+
+  <!-- ============ CENA 2: TROCA DA SENHA PROVISÓRIA ============ -->
+  <section class="cena" id="cena-senha" hidden>
+    <div class="simbolo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="10" width="16" height="10" rx="2"/>
+        <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+      </svg>
+    </div>
+    <h1>Crie sua senha</h1>
+    <p class="subtitulo">Primeiro acesso</p>
+
+    <p class="aviso" id="erro-senha" role="alert" aria-live="polite" hidden></p>
+
+    <p class="ajuda" style="margin:0 0 22px">
+      O CPF vale só para entrar da primeira vez — ele não é segredo.
+      Escolha agora uma senha que só você saiba.
+    </p>
+
+    <form id="form-senha" novalidate>
+      <div class="campo">
+        <label for="nova">Nova senha</label>
+        <div class="senha-caixa">
+          <input id="nova" type="password" autocomplete="new-password" placeholder="••••••••" required>
+          <button type="button" class="ver" id="ver-nova" aria-label="Mostrar senha">Mostrar</button>
+        </div>
+        <ul class="regras" id="regras">
+          <li data-regra="tamanho">Pelo menos 6 caracteres</li>
+        </ul>
+      </div>
+
+      <div class="campo">
+        <label for="repete">Repita a senha</label>
+        <input id="repete" type="password" autocomplete="new-password" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="entrar" id="btn-salvar">Salvar senha</button>
+    </form>
+
+    <p class="rodape">Escolha algo que você lembre sem anotar. Esqueceu? O TI devolve para o CPF.</p>
+  </section>
+
+</main>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+/* ==================================================================
+   CONFIGURAÇÃO
+   ================================================================== */
+const SUPABASE_URL      = "https://nquoksknvkahnfvqvcoo.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_u0e1CVU5F7PTGdQ0U2Mx8g_wPRXUHhh";
+const DOMINIO_INTERNO   = "taruma.com.br";
+const DESTINO           = "./painel.html";
+/* ================================================================== */
+
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = (id) => document.getElementById(id);
+const cenaLogin = $("cena-login");
+const cenaSenha = $("cena-senha");
+
+const emailDaMatricula = (m) => `${m}@${DOMINIO_INTERNO}`;
+
+let matriculaAtual = "";
+let cpfDoPrimeiroAcesso = "";
+
+function mostrarErro(el, texto){
+  el.textContent = texto;
+  el.classList.remove("ok");
+  el.hidden = false;
+}
+const limparErro = (el) => { el.hidden = true; el.textContent = ""; };
+
+function trocarCena(qual){
+  cenaLogin.hidden = qual !== "login";
+  cenaSenha.hidden = qual !== "senha";
+  if (qual === "senha") $("nova").focus();
+}
+
+function ligarToggle(botaoId, campoId){
+  const botao = $(botaoId), campo = $(campoId);
+  botao.addEventListener("click", () => {
+    const escondida = campo.type === "password";
+    campo.type = escondida ? "text" : "password";
+    botao.textContent = escondida ? "Ocultar" : "Mostrar";
+    botao.setAttribute("aria-label", escondida ? "Ocultar senha" : "Mostrar senha");
+    campo.focus();
+  });
+}
+ligarToggle("ver-senha", "senha");
+ligarToggle("ver-nova", "nova");
+
+$("matricula").addEventListener("input", (e) => {
+  e.target.value = e.target.value.replace(/\D/g, "");
+});
+
+/* ---------- perfil e roteamento ---------- */
+async function seguirComSessao(){
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session){ trocarCena("login"); return; }
+
+  const { data, error } = await sb
+    .from("perfis")
+    .select("nome, matricula, ativo, senha_provisoria")
+    .eq("id", session.user.id)
+    .maybeSingle();
+
+  if (error || !data){
+    await sb.auth.signOut();
+    mostrarErro($("erro-login"), "Sua conta ainda não está liberada. Procure o setor de TI.");
+    trocarCena("login");
+    return;
+  }
+  if (!data.ativo){
+    await sb.auth.signOut();
+    mostrarErro($("erro-login"), "Esta matrícula está inativa. Procure o setor de TI.");
+    trocarCena("login");
+    return;
+  }
+
+  matriculaAtual = data.matricula || matriculaAtual;
+
+  if (data.senha_provisoria){ trocarCena("senha"); return; }
+  window.location.replace(DESTINO);
+}
+
+/* ---------- entrar ---------- */
+$("form-login").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  limparErro($("erro-login"));
+
+  const matricula = $("matricula").value.trim();
+  const senha = $("senha").value;
+  const botao = $("btn-entrar");
+
+  if (!matricula){ mostrarErro($("erro-login"), "Digite sua matrícula."); $("matricula").focus(); return; }
+  if (!senha){ mostrarErro($("erro-login"), "Digite sua senha."); $("senha").focus(); return; }
+
+  botao.disabled = true; botao.textContent = "Entrando…";
+
+  try{
+    const { error } = await sb.auth.signInWithPassword({
+      email: emailDaMatricula(matricula),
+      password: senha
+    });
+
+    if (error){
+      if (/invalid login credentials/i.test(error.message)){
+        mostrarErro($("erro-login"), "Matrícula ou senha incorreta.");
+      } else if (/rate limit|too many/i.test(error.message)){
+        mostrarErro($("erro-login"), "Muitas tentativas seguidas. Espere um minuto e tente de novo.");
+      } else {
+        mostrarErro($("erro-login"), "Não deu para entrar agora. Tente de novo em instantes.");
+      }
+      $("senha").value = ""; $("senha").focus();
+      return;
+    }
+
+    matriculaAtual = matricula;
+    cpfDoPrimeiroAcesso = senha;
+    await seguirComSessao();
+
+  } catch (err){
+    console.error(err);
+    mostrarErro($("erro-login"), "Sem conexão com o servidor. Verifique a rede e tente de novo.");
+  } finally {
+    botao.disabled = false; botao.textContent = "Entrar";
+  }
+});
+
+/* ---------- trocar a senha provisória ---------- */
+const regras = { tamanho: (s) => s.length >= 6 };
+
+$("nova").addEventListener("input", (e) => {
+  const valor = e.target.value;
+  document.querySelectorAll("#regras li").forEach((li) => {
+    li.classList.toggle("vale", regras[li.dataset.regra](valor));
+  });
+});
+
+$("form-senha").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  limparErro($("erro-senha"));
+
+  const nova = $("nova").value;
+  const repete = $("repete").value;
+  const botao = $("btn-salvar");
+
+  if (!Object.values(regras).every((t) => t(nova))){
+    mostrarErro($("erro-senha"), "A senha precisa ter pelo menos 6 caracteres.");
+    return;
+  }
+  if (nova === matriculaAtual){
+    mostrarErro($("erro-senha"), "A senha não pode ser a sua matrícula. Escolha outra coisa.");
+    return;
+  }
+  if (nova === cpfDoPrimeiroAcesso){
+    mostrarErro($("erro-senha"), "Essa é a senha provisória. Escolha uma senha nova.");
+    return;
+  }
+  if (nova !== repete){
+    mostrarErro($("erro-senha"), "As duas senhas não são iguais.");
+    $("repete").focus();
+    return;
+  }
+
+  botao.disabled = true; botao.textContent = "Salvando…";
+
+  try{
+    const { error: erroSenha } = await sb.auth.updateUser({ password: nova });
+    if (erroSenha){ mostrarErro($("erro-senha"), "Não deu para salvar a senha. Tente de novo."); return; }
+
+    const { error: erroFlag } = await sb.rpc("marcar_senha_definida");
+    if (erroFlag){
+      console.error(erroFlag);
+      mostrarErro($("erro-senha"), "A senha foi trocada, mas o cadastro não atualizou. Avise o setor de TI.");
+      return;
+    }
+
+    window.location.replace(DESTINO);
+
+  } catch (err){
+    console.error(err);
+    mostrarErro($("erro-senha"), "Sem conexão com o servidor. Tente de novo.");
+  } finally {
+    botao.disabled = false; botao.textContent = "Salvar senha";
+  }
+});
+
+/* ---------- sessão existente ---------- */
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) await seguirComSessao();
+  else $("matricula").focus();
+})();
+</script>
+</body>
+</html>

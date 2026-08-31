@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Indicadores · Tarumã</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --fundo:#eef4fb; --fundo-2:#dbe9fa; --superficie:#fff; --borda:#d6e4f4;
+    --azul:#2b7fd4; --azul-forte:#1a5fa8; --azul-suave:#eaf3fd;
+    --tinta:#0f2a45; --tinta-fraca:#65809c;
+    --ok:#2b7fd4; --falha:#c0392b; --falha-suave:#fdeceb;
+    --raio:14px;
+    --sombra:0 1px 2px rgba(15,42,69,.04), 0 14px 32px -20px rgba(15,42,69,.26);
+    --display:"Sora",system-ui,sans-serif;
+    --corpo:"Plus Jakarta Sans",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;font-family:var(--corpo);color:var(--tinta);
+    background:var(--fundo);
+    background-image:radial-gradient(80% 40% at 60% 0%, #fff 0%, var(--fundo) 55%, var(--fundo-2) 100%);
+    display:flex;
+  }
+  [hidden]{display:none !important}
+  button{font-family:var(--corpo)}
+
+  .lateral{
+    width:236px;flex:none;background:var(--superficie);border-right:1px solid var(--borda);
+    padding:22px 16px;display:flex;flex-direction:column;gap:5px;position:sticky;top:0;height:100vh;
+  }
+  .logo{display:flex;align-items:center;gap:11px;padding:0 8px 18px;margin-bottom:6px;border-bottom:1px solid var(--borda)}
+  .logo .simbolo{width:36px;height:36px;border-radius:11px;flex:none;background:var(--azul-suave);
+    border:1px solid var(--borda);display:flex;align-items:center;justify-content:center}
+  .logo svg{width:18px;height:18px;stroke:var(--azul);fill:none;stroke-width:1.9}
+  .logo b{font-family:var(--display);font-size:15px;display:block;letter-spacing:-.01em}
+  .logo span{font-size:11px;color:var(--tinta-fraca)}
+
+  .nav-titulo{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--tinta-fraca);padding:14px 10px 6px}
+  .item{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+    font-size:14px;font-weight:500;color:var(--tinta-fraca);text-align:left;background:none;border:0;
+    border-radius:10px;padding:11px 12px;cursor:pointer;transition:.14s}
+  .item:hover{background:var(--azul-suave);color:var(--azul-forte)}
+  .item.ativo{background:var(--azul);color:#fff;font-weight:600}
+  .item .contador{font-family:var(--mono);font-size:11px;font-weight:600;
+    background:var(--falha-suave);color:var(--falha);border-radius:20px;padding:2px 8px}
+  .item.ativo .contador{background:rgba(255,255,255,.24);color:#fff}
+  .item:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+
+  .rodape-lateral{margin-top:auto;padding-top:16px;border-top:1px solid var(--borda);font-size:12px;color:var(--tinta-fraca)}
+  .rodape-lateral b{display:block;color:var(--tinta);font-size:13px;margin-bottom:2px}
+  .rodape-lateral a,.rodape-lateral button{display:block;width:100%;text-align:left;margin-top:8px;
+    font-size:12px;font-weight:600;color:var(--tinta-fraca);text-decoration:none;background:none;border:0;padding:6px 0;cursor:pointer}
+  .rodape-lateral a:hover,.rodape-lateral button:hover{color:var(--azul)}
+
+  .conteudo{flex:1;min-width:0;padding:28px 30px 60px}
+  h1{font-family:var(--display);font-weight:700;font-size:23px;letter-spacing:-.02em;margin:0}
+  .sub{font-size:13px;color:var(--tinta-fraca);margin:4px 0 24px}
+
+  .cartao{background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);
+    padding:22px 24px;box-shadow:var(--sombra);margin-bottom:18px}
+  .cartao h2{font-family:var(--display);font-weight:600;font-size:15px;margin:0 0 18px}
+
+  .grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px}
+  .resumo{background:var(--superficie);border:1px solid var(--borda);border-left:4px solid var(--ok);
+    border-radius:var(--raio);padding:20px 22px;box-shadow:var(--sombra);cursor:pointer;transition:.15s}
+  .resumo:hover{transform:translateY(-2px)}
+  .resumo.falha{border-left-color:var(--falha)}
+  .resumo .nome{font-size:13px;font-weight:600;color:var(--tinta-fraca);margin-bottom:12px}
+  .valor{font-family:var(--mono);font-weight:600;font-size:28px;letter-spacing:-.03em;
+    display:flex;align-items:baseline;gap:5px;color:var(--ok)}
+  .valor.falha{color:var(--falha)}
+  .valor .un{font-family:var(--corpo);font-size:13px;font-weight:500;color:var(--tinta-fraca)}
+  .linha-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--tinta-fraca);
+    margin-top:12px;padding-top:12px;border-top:1px solid var(--borda)}
+  .linha-meta b{font-weight:600;color:var(--tinta)}
+  .linha-meta b.falha{color:var(--falha)}
+
+  .abas{display:flex;gap:4px;border-bottom:1px solid var(--borda);margin-bottom:20px;flex-wrap:wrap}
+  .aba{font-size:14px;font-weight:600;color:var(--tinta-fraca);background:none;border:0;
+    border-bottom:2px solid transparent;padding:11px 14px;cursor:pointer;margin-bottom:-1px}
+  .aba:hover{color:var(--azul)}
+  .aba.ativa{color:var(--azul);border-bottom-color:var(--azul)}
+
+  .linha-campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:14px;align-items:end}
+  label{display:block;font-size:12px;font-weight:600;margin-bottom:6px}
+  input,select,textarea{width:100%;font-family:var(--corpo);font-size:14px;color:var(--tinta);
+    background:#f8fbfe;border:1.5px solid var(--borda);border-radius:10px;padding:10px 12px;transition:.15s}
+  textarea{font-family:var(--mono);font-size:13px;min-height:150px;resize:vertical;line-height:1.7}
+  input:focus,select:focus,textarea:focus{outline:none;background:var(--superficie);
+    border-color:var(--azul);box-shadow:0 0 0 4px rgba(43,127,212,.14)}
+  .acao{font-weight:600;font-size:14px;color:#fff;background:var(--azul);border:0;border-radius:10px;
+    padding:11px 22px;cursor:pointer;box-shadow:0 6px 16px -6px rgba(43,127,212,.6);transition:.15s}
+  .acao:hover:not(:disabled){background:var(--azul-forte)}
+  .acao:disabled{opacity:.6;cursor:progress;box-shadow:none}
+  .acao.suave{color:var(--tinta-fraca);background:var(--superficie);border:1px solid var(--borda);box-shadow:none}
+  .acao.suave:hover:not(:disabled){color:var(--azul);border-color:var(--azul);background:var(--superficie)}
+
+  .aviso{font-size:13px;line-height:1.5;padding:12px 14px;border-radius:10px;margin-bottom:18px;
+    background:var(--falha-suave);color:var(--falha);border:1px solid #f6d3d0;white-space:pre-line}
+  .aviso.ok{background:#e7f3fd;color:var(--azul-forte);border-color:#c9e0f7}
+
+  .rolagem{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-fraca);
+    text-align:left;padding:10px 12px;border-bottom:1px solid var(--borda);white-space:nowrap}
+  td{padding:11px 12px;border-bottom:1px solid #edf3fa}
+  tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:#f8fbfe}
+  td.num,th.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+  th.num{font-family:var(--corpo)}
+  .cod{font-family:var(--mono);font-size:11px;color:var(--azul);background:var(--azul-suave);
+    border-radius:6px;padding:2px 7px}
+  .marca{font-family:var(--mono);font-weight:600;padding:3px 9px;border-radius:20px;font-size:12px}
+  .marca.ok{background:var(--azul-suave);color:var(--azul-forte)}
+  .marca.falha{background:var(--falha-suave);color:var(--falha)}
+  .forte{font-weight:600}
+  .forte.falha{color:var(--falha)}
+  .forte.ok{color:var(--ok)}
+
+  .mini{font-family:var(--corpo);font-size:12px;font-weight:600;color:var(--tinta-fraca);
+    background:var(--superficie);border:1px solid var(--borda);border-radius:9px;
+    padding:7px 12px;cursor:pointer;transition:.15s}
+  .mini:hover:not(:disabled){color:var(--azul);border-color:var(--azul)}
+  .mini:disabled{opacity:.4;cursor:default}
+  .mini:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+  .paginacao{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    margin-top:16px;padding-top:14px;border-top:1px solid var(--borda);font-size:12px;color:var(--tinta-fraca)}
+  .paginacao .botoes-pag{display:flex;align-items:center;gap:6px}
+  .paginacao .posicao{font-family:var(--mono);font-size:12px;color:var(--tinta);padding:0 4px}
+
+  .tela-grafico{position:relative;height:300px}
+  .vazio{text-align:center;color:var(--tinta-fraca);font-size:14px;padding:36px 0;line-height:1.7}
+
+  @media (max-width:820px){
+    body{flex-direction:column}
+    .lateral{width:100%;height:auto;position:static;flex-direction:row;overflow-x:auto;gap:6px;
+      padding:12px;align-items:center;border-right:0;border-bottom:1px solid var(--borda)}
+    .logo,.nav-titulo,.rodape-lateral{display:none}
+    .item{width:auto;white-space:nowrap;padding:9px 14px}
+    .conteudo{padding:20px 16px 50px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<aside class="lateral">
+  <div class="logo">
+    <div class="simbolo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19V9M9.5 19V5M15 19v-7M20.5 19v-4"/>
+      </svg>
+    </div>
+    <div><b>Indicadores</b><span>Tarumã</span></div>
+  </div>
+
+  <button class="item ativo" data-ir="geral">Visão geral</button>
+  <div class="nav-titulo">Indicadores</div>
+  <div id="menu-indicadores"></div>
+  <div id="menu-extra"></div>
+
+  <div class="rodape-lateral">
+    <b id="quem">—</b>
+    <span id="cargo"></span>
+    <a href="./admin.html" id="link-admin" hidden>Funcionários</a>
+    <button id="sair">Sair</button>
+  </div>
+</aside>
+
+<main class="conteudo" id="conteudo"><p class="vazio">Carregando…</p></main>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+/* ================= CONFIGURAÇÃO ================= */
+const SUPABASE_URL      = "https://nquoksknvkahnfvqvcoo.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_u0e1CVU5F7PTGdQ0U2Mx8g_wPRXUHhh";
+const TELA_LOGIN = "./login.html";
+const DIAS_CARREGADOS = 400;
+/* ================================================ */
+
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = (id) => document.getElementById(id);
+
+let perfil = null, catalogo = [], lancamentos = [], metas = [], motoristas = [];
+let g1 = null, g2 = null;
+
+const ehAdmin = () => perfil?.papel === "admin";
+const ehMotorista = () => perfil?.papel === "motorista";
+const escapar = (t) => String(t ?? "").replace(/[&<>"']/g, (c) =>
+  ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const num = (v, casas = 2) => (v === null || v === undefined || isNaN(v)) ? "—"
+  : Number(v).toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas });
+const dia = (d) => d.split("-").reverse().join("/");
+const competenciaDe = (d) => d.slice(0, 7) + "-01";
+const NOMES_MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const mesCurto = (c) => `${NOMES_MES[Number(c.slice(5,7)) - 1]}/${c.slice(2,4)}`;
+const hojeISO = () => new Date().toISOString().slice(0,10);
+function isoMenosDias(n){ const d = new Date(); d.setDate(d.getDate() - n); return d.toISOString().slice(0,10); }
+const nomeMotorista = (codigo) => motoristas.find((m) => m.codigo === codigo)?.nome ?? codigo ?? "—";
+
+/* ---------- paginação ---------- */
+const POR_PAGINA = 50;
+const paginas = { mes: 1, dados: 1, motoristas: 1 };
+
+function paginar(lista, chave){
+  const total = lista.length;
+  const ultima = Math.max(1, Math.ceil(total / POR_PAGINA));
+  const atual = Math.min(Math.max(paginas[chave], 1), ultima);
+  paginas[chave] = atual;
+  const inicio = (atual - 1) * POR_PAGINA;
+  return {
+    itens: lista.slice(inicio, inicio + POR_PAGINA),
+    chave, atual, ultima, total,
+    de: total ? inicio + 1 : 0,
+    ate: Math.min(inicio + POR_PAGINA, total),
+    deslocamento: inicio
+  };
+}
+
+function controlesPagina(pg){
+  if (pg.total <= POR_PAGINA) return "";
+  return `<div class="paginacao">
+      <span>Mostrando ${pg.de}–${pg.ate} de ${pg.total}</span>
+      <div class="botoes-pag">
+        <button class="mini" data-pag="${pg.chave}:1" ${pg.atual === 1 ? "disabled" : ""}>Início</button>
+        <button class="mini" data-pag="${pg.chave}:${pg.atual - 1}" ${pg.atual === 1 ? "disabled" : ""}>Anterior</button>
+        <span class="posicao">${pg.atual} / ${pg.ultima}</span>
+        <button class="mini" data-pag="${pg.chave}:${pg.atual + 1}" ${pg.atual === pg.ultima ? "disabled" : ""}>Próxima</button>
+        <button class="mini" data-pag="${pg.chave}:${pg.ultima}" ${pg.atual === pg.ultima ? "disabled" : ""}>Fim</button>
+      </div>
+    </div>`;
+}
+
+function ligarPaginacao(redesenhar){
+  $("conteudo").querySelectorAll("[data-pag]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const [chave, destino] = b.dataset.pag.split(":");
+      paginas[chave] = Number(destino);
+      redesenhar();
+    }));
+}
+
+/* ---------- metas ---------- */
+function metaDe(ind, competencia){
+  const propria = metas.find((m) => m.indicador === ind.codigo && m.competencia === competencia);
+  return propria ? Number(propria.meta) : (ind.meta_padrao === null ? null : Number(ind.meta_padrao));
+}
+function atingiu(ind, valor, meta){
+  if (meta === null || valor === null || valor === undefined) return null;
+  return ind.sentido === "menor_melhor" ? Number(valor) <= meta : Number(valor) >= meta;
+}
+
+/* ---------- acumulado por motorista ---------- */
+function acumuladoPorMotorista(ind, competencia){
+  const doMes = lancamentos.filter((l) =>
+    l.indicador === ind.codigo && competenciaDe(l.data) === competencia);
+
+  const porMot = new Map();
+  doMes.forEach((l) => {
+    const chave = l.motorista ?? "—";
+    if (!porMot.has(chave)) porMot.set(chave, { soma: 0, dias: 0 });
+    const a = porMot.get(chave);
+    a.soma += Number(l.valor); a.dias += 1;
+  });
+
+  return [...porMot.entries()].map(([codigo, a]) => ({
+    codigo,
+    nome: nomeMotorista(codigo),
+    dias: a.dias,
+    valor: ind.agregacao === "soma" ? a.soma : a.soma / a.dias
+  }));
+}
+
+function competenciasDe(ind){
+  return [...new Set(lancamentos.filter((l) => l.indicador === ind.codigo)
+    .map((l) => competenciaDe(l.data)))].sort().reverse();
+}
+
+/* ==================================================================
+   VISÃO GERAL
+   ================================================================== */
+function verGeral(){
+  marcarMenu("geral");
+
+  const cartoes = catalogo.map((i) => {
+    const comps = competenciasDe(i);
+    const competencia = comps[0] ?? competenciaDe(hojeISO());
+    const meta = metaDe(i, competencia);
+    const linhas = acumuladoPorMotorista(i, competencia);
+    const fora = linhas.filter((l) => atingiu(i, l.valor, meta) === false).length;
+    const media = linhas.length ? linhas.reduce((t, l) => t + l.valor, 0) / linhas.length : null;
+
+    return `
+      <article class="resumo ${fora > 0 ? "falha" : ""}" data-abrir="${i.codigo}">
+        <div class="nome">${escapar(i.nome)} · ${comps.length ? mesCurto(competencia) : "sem dados"}</div>
+        ${linhas.length ? `
+          <div class="valor ${fora > 0 ? "falha" : ""}">
+            ${num(media, i.casas)}<span class="un">${escapar(i.unidade || "")}${ehMotorista() ? "" : " média"}</span>
+          </div>
+          <div class="linha-meta">
+            <span>Meta ${meta === null ? "—" : num(meta, i.casas)}</span>
+            <b class="${fora > 0 ? "falha" : ""}">${ehMotorista()
+              ? (fora > 0 ? "fora da meta" : "dentro da meta")
+              : `${fora} de ${linhas.length} fora`}</b>
+          </div>
+        ` : `<div class="vazio" style="padding:14px 0;text-align:left">Sem lançamentos ainda.</div>`}
+      </article>`;
+  }).join("");
+
+  $("conteudo").innerHTML = `
+    <h1>Visão geral</h1>
+    <p class="sub">${ehMotorista()
+      ? "Seus números do mês em cada indicador."
+      : "Acumulado do mês por motorista, em cada indicador."}</p>
+    <div class="grade">${cartoes}</div>`;
+
+  $("conteudo").querySelectorAll("[data-abrir]").forEach((el) =>
+    el.addEventListener("click", () => verIndicador(el.dataset.abrir)));
+}
+
+/* ==================================================================
+   INDICADOR
+   ================================================================== */
+let intervalo = { de: isoMenosDias(30), ate: hojeISO() };
+let motoristaFiltro = "";
+let competenciaFiltro = "";
+
+function verIndicador(codigo, aba = "mes"){
+  const i = catalogo.find((x) => x.codigo === codigo);
+  if (!i) return;
+  marcarMenu(codigo);
+
+  const comps = competenciasDe(i);
+  if (!competenciaFiltro || !comps.includes(competenciaFiltro)) competenciaFiltro = comps[0] ?? competenciaDe(hojeISO());
+
+  $("conteudo").innerHTML = `
+    <h1>${escapar(i.nome)}</h1>
+    <p class="sub">
+      ${i.sentido === "menor_melhor" ? "Quanto menor, melhor" : "Quanto maior, melhor"} ·
+      mês fecha por ${i.agregacao === "soma" ? "soma" : "média"}${i.unidade ? ` · em ${escapar(i.unidade)}` : ""}
+    </p>
+    <div class="abas">
+      <button class="aba ${aba === "mes" ? "ativa" : ""}" data-aba="mes">Acumulado do mês</button>
+      <button class="aba ${aba === "grafico" ? "ativa" : ""}" data-aba="grafico">Gráfico</button>
+      <button class="aba ${aba === "dados" ? "ativa" : ""}" data-aba="dados">Valores por dia</button>
+      ${ehAdmin() ? `<button class="aba ${aba === "lancar" ? "ativa" : ""}" data-aba="lancar">Lançar dados</button>` : ""}
+    </div>
+    <div id="corpo-aba"></div>`;
+
+  $("conteudo").querySelectorAll("[data-aba]").forEach((b) =>
+    b.addEventListener("click", () => verIndicador(codigo, b.dataset.aba)));
+
+  ({ mes: abaMes, grafico: abaGrafico, dados: abaDados, lancar: abaLancar })[aba](i);
+}
+
+/* ---------- aba: acumulado do mês ---------- */
+function abaMes(i){
+  const comps = competenciasDe(i);
+  const meta = metaDe(i, competenciaFiltro);
+  const linhas = acumuladoPorMotorista(i, competenciaFiltro)
+    .sort((a, b) => i.sentido === "menor_melhor" ? a.valor - b.valor : b.valor - a.valor);
+
+  const fora = linhas.filter((l) => atingiu(i, l.valor, meta) === false).length;
+  const pg = paginar(linhas, "mes");
+
+  $("corpo-aba").innerHTML = `
+    <div class="cartao">
+      <h2>Competência</h2>
+      <div class="linha-campos" style="max-width:300px">
+        <select id="comp">${comps.map((c) =>
+          `<option value="${c}" ${c === competenciaFiltro ? "selected" : ""}>${mesCurto(c)}</option>`).join("")}</select>
+      </div>
+    </div>
+
+    ${linhas.length ? `
+    <div class="cartao">
+      <h2>${ehMotorista()
+        ? `Seu acumulado ${meta === null ? "" : `· meta ${num(meta, i.casas)}`}`
+        : `${linhas.length} motorista${linhas.length === 1 ? "" : "s"} · ${fora} fora da meta ${meta === null ? "" : `(${num(meta, i.casas)})`}`}</h2>
+      <div class="tela-grafico"><canvas id="gm"></canvas></div>
+    </div>
+
+    <div class="cartao">
+      <h2>${ehMotorista() ? "Fechamento do mês" : "Ranking"}</h2>
+      <div class="rolagem"><table>
+        <thead><tr><th>#</th><th>Motorista</th><th>Código</th><th class="num">Acumulado</th><th class="num">Meta</th><th class="num">Dias</th><th>Situação</th></tr></thead>
+        <tbody>${pg.itens.map((l, k) => {
+          const bateu = atingiu(i, l.valor, meta);
+          return `<tr>
+            <td class="num" style="color:var(--tinta-fraca)">${pg.deslocamento + k + 1}</td>
+            <td>${escapar(l.nome)}</td>
+            <td><span class="cod">${escapar(l.codigo)}</span></td>
+            <td class="num forte ${bateu === false ? "falha" : "ok"}">${num(l.valor, i.casas)}</td>
+            <td class="num">${meta === null ? "—" : num(meta, i.casas)}</td>
+            <td class="num" style="color:var(--tinta-fraca)">${l.dias}</td>
+            <td><span class="marca ${bateu === false ? "falha" : "ok"}">${
+              bateu === null ? "sem meta" : bateu ? "dentro" : "fora"}</span></td>
+          </tr>`;
+        }).join("")}</tbody>
+      </table></div>
+      ${controlesPagina(pg)}
+    </div>` : `<div class="cartao"><p class="vazio">Nenhum lançamento nesta competência.</p></div>`}`;
+
+  ligarPaginacao(() => abaMes(i));
+
+  $("comp").addEventListener("change", (e) => {
+    competenciaFiltro = e.target.value;
+    paginas.mes = 1;
+    verIndicador(i.codigo, "mes");
+  });
+
+  if (!linhas.length) return;
+
+  g1?.destroy();
+  g1 = new Chart($("gm"), {
+    type: "bar",
+    data: {
+      labels: linhas.map((l) => l.nome),
+      datasets: [
+        { label: `Acumulado (${i.agregacao === "soma" ? "soma" : "média"})`,
+          data: linhas.map((l) => l.valor),
+          backgroundColor: linhas.map((l) => atingiu(i, l.valor, meta) === false ? "#c0392b" : "#2b7fd4"),
+          borderRadius: 6, maxBarThickness: 40 },
+        ...(meta === null ? [] : [{ label: "Meta", data: linhas.map(() => meta), type: "line",
+          borderColor: "#94a9c0", borderDash: [6,5], borderWidth: 1.5, pointRadius: 0 }])
+      ]
+    },
+    options: opcoes(i)
+  });
+}
+
+/* ---------- aba: gráfico ---------- */
+function abaGrafico(i){
+  const codigos = [...new Set(lancamentos.filter((l) => l.indicador === i.codigo).map((l) => l.motorista))]
+    .filter(Boolean).sort((a, b) => nomeMotorista(a).localeCompare(nomeMotorista(b)));
+
+  $("corpo-aba").innerHTML = `
+    <div class="cartao">
+      <h2>Filtro</h2>
+      <div class="linha-campos" style="max-width:760px">
+        <div ${ehMotorista() ? "hidden" : ""}><label for="mot">Motorista</label>
+          <select id="mot">
+            <option value="">Todos (média do dia)</option>
+            ${codigos.map((c) => `<option value="${c}" ${c === motoristaFiltro ? "selected" : ""}>${escapar(nomeMotorista(c))}</option>`).join("")}
+          </select></div>
+        <div><label for="de">De</label><input type="date" id="de" value="${intervalo.de}"></div>
+        <div><label for="ate">Até</label><input type="date" id="ate" value="${intervalo.ate}"></div>
+        <div><button class="acao" id="aplicar">Aplicar</button></div>
+      </div>
+    </div>
+    <div class="cartao"><h2>Dia a dia</h2><div class="tela-grafico"><canvas id="ga"></canvas></div></div>
+    <div class="cartao"><h2>Acumulado por mês</h2><div class="tela-grafico"><canvas id="gb"></canvas></div></div>`;
+
+  $("aplicar").addEventListener("click", () => {
+    motoristaFiltro = $("mot").value;
+    intervalo = { de: $("de").value, ate: $("ate").value };
+    abaGrafico(i);
+  });
+
+  const base = lancamentos.filter((l) => l.indicador === i.codigo &&
+    l.data >= intervalo.de && l.data <= intervalo.ate &&
+    (!motoristaFiltro || l.motorista === motoristaFiltro));
+
+  // agrupa por dia (média quando são vários motoristas)
+  const porDia = new Map();
+  base.forEach((l) => {
+    if (!porDia.has(l.data)) porDia.set(l.data, { soma: 0, n: 0 });
+    const a = porDia.get(l.data); a.soma += Number(l.valor); a.n += 1;
+  });
+  const dias = [...porDia.keys()].sort();
+  const valores = dias.map((d) => porDia.get(d).soma / porDia.get(d).n);
+  const cores = dias.map((d, k) => atingiu(i, valores[k], metaDe(i, competenciaDe(d))) === false ? "#c0392b" : "#2b7fd4");
+
+  g1?.destroy();
+  g1 = new Chart($("ga"), {
+    type: "line",
+    data: { labels: dias.map((d) => dia(d).slice(0,5)),
+      datasets: [
+        { label: motoristaFiltro ? nomeMotorista(motoristaFiltro) : "Média do dia",
+          data: valores, borderColor: "#2b7fd4", backgroundColor: "rgba(43,127,212,.10)",
+          pointBackgroundColor: cores, pointBorderColor: cores, pointRadius: 4,
+          borderWidth: 2, fill: true, tension: .25 },
+        { label: "Meta", data: dias.map((d) => metaDe(i, competenciaDe(d))),
+          borderColor: "#94a9c0", borderDash: [6,5], borderWidth: 1.5, pointRadius: 0, fill: false }
+      ] },
+    options: opcoes(i)
+  });
+
+  const comps = competenciasDe(i).slice().reverse().slice(-12);
+  const acum = comps.map((c) => {
+    const linhas = acumuladoPorMotorista(i, c)
+      .filter((l) => !motoristaFiltro || l.codigo === motoristaFiltro);
+    return linhas.length ? linhas.reduce((t, l) => t + l.valor, 0) / linhas.length : null;
+  });
+
+  g2?.destroy();
+  g2 = new Chart($("gb"), {
+    type: "bar",
+    data: { labels: comps.map(mesCurto),
+      datasets: [
+        { label: motoristaFiltro ? nomeMotorista(motoristaFiltro) : "Média dos motoristas",
+          data: acum,
+          backgroundColor: comps.map((c, k) => atingiu(i, acum[k], metaDe(i, c)) === false ? "#c0392b" : "#2b7fd4"),
+          borderRadius: 6, maxBarThickness: 46 },
+        { label: "Meta", data: comps.map((c) => metaDe(i, c)), type: "line",
+          borderColor: "#94a9c0", borderDash: [6,5], borderWidth: 1.5, pointRadius: 0 }
+      ] },
+    options: opcoes(i)
+  });
+}
+
+function opcoes(i){
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { font: { family: "Plus Jakarta Sans" }, usePointStyle: true, boxWidth: 8 } },
+      tooltip: { callbacks: { label: (c) =>
+        `${c.dataset.label}: ${num(c.parsed.y, i.casas)}${i.unidade ? " " + i.unidade : ""}` } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { family: "JetBrains Mono", size: 10 }, maxRotation: 60 } },
+      y: { grid: { color: "#e7eff8" }, ticks: { font: { family: "JetBrains Mono", size: 10 } } }
+    }
+  };
+}
+
+/* ---------- aba: valores por dia ---------- */
+function abaDados(i){
+  const codigos = [...new Set(lancamentos.filter((l) => l.indicador === i.codigo).map((l) => l.motorista))]
+    .filter(Boolean).sort((a, b) => nomeMotorista(a).localeCompare(nomeMotorista(b)));
+
+  const dados = lancamentos.filter((l) => l.indicador === i.codigo &&
+      l.data >= intervalo.de && l.data <= intervalo.ate &&
+      (!motoristaFiltro || l.motorista === motoristaFiltro))
+    .sort((a, b) => b.data.localeCompare(a.data) || nomeMotorista(a.motorista).localeCompare(nomeMotorista(b.motorista)));
+
+  const pg = paginar(dados, "dados");
+
+  $("corpo-aba").innerHTML = `
+    <div class="cartao">
+      <h2>Filtro</h2>
+      <div class="linha-campos" style="max-width:760px">
+        <div ${ehMotorista() ? "hidden" : ""}><label for="mot2">Motorista</label>
+          <select id="mot2"><option value="">Todos</option>
+            ${codigos.map((c) => `<option value="${c}" ${c === motoristaFiltro ? "selected" : ""}>${escapar(nomeMotorista(c))}</option>`).join("")}
+          </select></div>
+        <div><label for="de2">De</label><input type="date" id="de2" value="${intervalo.de}"></div>
+        <div><label for="ate2">Até</label><input type="date" id="ate2" value="${intervalo.ate}"></div>
+        <div><button class="acao" id="aplicar2">Aplicar</button></div>
+      </div>
+    </div>
+    <div class="cartao">
+      <h2>${dados.length} lançamento${dados.length === 1 ? "" : "s"}</h2>
+      ${dados.length ? `<div class="rolagem"><table>
+        <thead><tr><th>Data</th><th>Motorista</th><th>Código</th><th class="num">Valor</th><th class="num">Meta</th><th>Situação</th><th>Observação</th></tr></thead>
+        <tbody>${pg.itens.map((l) => {
+          const meta = metaDe(i, competenciaDe(l.data));
+          const bateu = atingiu(i, l.valor, meta);
+          return `<tr>
+            <td class="num">${dia(l.data)}</td>
+            <td>${escapar(nomeMotorista(l.motorista))}</td>
+            <td><span class="cod">${escapar(l.motorista ?? "—")}</span></td>
+            <td class="num forte ${bateu === false ? "falha" : "ok"}">${num(l.valor, i.casas)}</td>
+            <td class="num">${meta === null ? "—" : num(meta, i.casas)}</td>
+            <td><span class="marca ${bateu === false ? "falha" : "ok"}">${
+              bateu === null ? "sem meta" : bateu ? "dentro" : "fora"}</span></td>
+            <td style="color:var(--tinta-fraca)">${escapar(l.observacao || "")}</td>
+          </tr>`;
+        }).join("")}</tbody></table></div>
+      ${controlesPagina(pg)}` : `<p class="vazio">Nenhum lançamento neste filtro.</p>`}
+    </div>`;
+
+  ligarPaginacao(() => abaDados(i));
+
+  $("aplicar2").addEventListener("click", () => {
+    motoristaFiltro = $("mot2").value;
+    intervalo = { de: $("de2").value, ate: $("ate2").value };
+    paginas.dados = 1;
+    abaDados(i);
+  });
+}
+
+/* ---------- aba: lançar (admin) ---------- */
+function abaLancar(i){
+  if (!ehAdmin()) return;
+  const competencia = competenciaDe(hojeISO());
+  const metaMes = metas.find((m) => m.indicador === i.codigo && m.competencia === competencia);
+
+  $("corpo-aba").innerHTML = `
+    <p class="aviso" id="recado" hidden></p>
+
+    <div class="cartao">
+      <h2>Colar vários lançamentos</h2>
+      <label for="lote">Uma linha por motorista, no formato <b>data;código do motorista;valor</b></label>
+      <textarea id="lote" placeholder="01/08/2026;1042;2,4&#10;01/08/2026;1077;1,9&#10;02/08/2026;1042;3,1"></textarea>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="acao" id="lote-enviar">Enviar</button>
+        <button class="acao suave" id="lote-limpar">Limpar</button>
+      </div>
+      <p class="sub" style="margin:14px 0 0">
+        Aceita ponto e vírgula ou tabulação — dá para colar direto do Excel.
+        Código de motorista ainda não cadastrado é criado na hora, com o próprio código como nome.
+        Reenviar a mesma data e motorista substitui o valor.
+      </p>
+    </div>
+
+    <div class="cartao">
+      <h2>Lançar um</h2>
+      <div class="linha-campos" style="max-width:820px">
+        <div><label for="l-data">Data</label><input type="date" id="l-data" value="${hojeISO()}"></div>
+        <div><label for="l-mot">Código do motorista</label><input id="l-mot" inputmode="numeric" placeholder="1042"></div>
+        <div><label for="l-valor">Valor${i.unidade ? ` (${escapar(i.unidade)})` : ""}</label><input id="l-valor" inputmode="decimal" placeholder="0,00"></div>
+        <div><label for="l-obs">Observação</label><input id="l-obs" placeholder="opcional"></div>
+        <div><button class="acao" id="l-salvar">Salvar</button></div>
+      </div>
+    </div>
+
+    <div class="cartao">
+      <h2>Meta</h2>
+      <div class="linha-campos" style="max-width:820px">
+        <div><label for="m-mes">Meta de ${mesCurto(competencia)}</label>
+          <input id="m-mes" inputmode="decimal" value="${metaMes ? String(metaMes.meta).replace(".", ",") : ""}" placeholder="usa a padrão"></div>
+        <div><label for="m-padrao">Meta padrão</label>
+          <input id="m-padrao" inputmode="decimal" value="${i.meta_padrao === null ? "" : String(i.meta_padrao).replace(".", ",")}"></div>
+        <div><label for="m-sentido">Bate a meta quando é</label>
+          <select id="m-sentido">
+            <option value="menor_melhor" ${i.sentido === "menor_melhor" ? "selected" : ""}>menor ou igual à meta</option>
+            <option value="maior_melhor" ${i.sentido === "maior_melhor" ? "selected" : ""}>maior ou igual à meta</option>
+          </select></div>
+        <div><label for="m-agregacao">Fechamento do mês</label>
+          <select id="m-agregacao">
+            <option value="media" ${i.agregacao === "media" ? "selected" : ""}>média dos dias</option>
+            <option value="soma" ${i.agregacao === "soma" ? "selected" : ""}>soma dos dias</option>
+          </select></div>
+        <div><button class="acao" id="m-salvar">Salvar meta</button></div>
+      </div>
+    </div>`;
+
+  const recado = (t, ok = false) => {
+    const el = $("recado"); el.textContent = t; el.classList.toggle("ok", ok); el.hidden = false;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  $("lote-limpar").addEventListener("click", () => { $("lote").value = ""; });
+
+  $("lote-enviar").addEventListener("click", async () => {
+    const { linhas, erros } = lerLote($("lote").value, i.codigo);
+    if (erros.length) return recado(erros.slice(0, 5).map((e) => `Linha ${e.linha}: ${e.motivo}`).join("\n"));
+    if (!linhas.length) return recado("Nada para enviar.");
+    const botao = $("lote-enviar");
+    botao.disabled = true; botao.textContent = "Enviando…";
+    try{
+      await gravar(linhas);
+      await recarregar();
+      verIndicador(i.codigo, "mes");
+    } catch (e){ recado(e.message); }
+    finally { botao.disabled = false; botao.textContent = "Enviar"; }
+  });
+
+  $("l-salvar").addEventListener("click", async () => {
+    const valor = paraNumero($("l-valor").value);
+    const mot = $("l-mot").value.trim();
+    if (!mot) return recado("Informe o código do motorista.");
+    if (valor === null) return recado("Digite um valor numérico.");
+    try{
+      await gravar([{ indicador: i.codigo, data: $("l-data").value, motorista: mot,
+                      valor, observacao: $("l-obs").value.trim() || null }]);
+      await recarregar();
+      verIndicador(i.codigo, "lancar");
+    } catch (e){ recado(e.message); }
+  });
+
+  $("m-salvar").addEventListener("click", async () => {
+    try{
+      const { error: e1 } = await sb.from("indicadores").update({
+        meta_padrao: paraNumero($("m-padrao").value),
+        sentido: $("m-sentido").value,
+        agregacao: $("m-agregacao").value
+      }).eq("codigo", i.codigo);
+      if (e1) throw e1;
+
+      const doMes = paraNumero($("m-mes").value);
+      if (doMes === null){
+        await sb.from("metas").delete().eq("indicador", i.codigo).eq("competencia", competencia);
+      } else {
+        const { error: e2 } = await sb.from("metas")
+          .upsert({ indicador: i.codigo, competencia, meta: doMes }, { onConflict: "indicador,competencia" });
+        if (e2) throw e2;
+      }
+      await recarregar();
+      verIndicador(i.codigo, "lancar");
+    } catch (e){ recado(e.message); }
+  });
+}
+
+/* ---------- MOTORISTAS (admin) ---------- */
+function verMotoristas(){
+  marcarMenu("motoristas");
+  $("conteudo").innerHTML = `
+    <h1>Motoristas</h1>
+    <p class="sub">Código do Promax e nome exibido nas telas.</p>
+    <p class="aviso" id="recado-m" hidden></p>
+    <div class="cartao">
+      <h2>Cadastrar</h2>
+      <div class="linha-campos" style="max-width:620px">
+        <div><label for="mc">Código</label><input id="mc" inputmode="numeric"></div>
+        <div><label for="mn">Nome</label><input id="mn"></div>
+        <div><button class="acao" id="mb">Salvar</button></div>
+      </div>
+    </div>
+    <div class="cartao">
+      <h2>${motoristas.length} cadastrado${motoristas.length === 1 ? "" : "s"}</h2>
+      ${motoristas.length ? `<div class="rolagem"><table>
+        <thead><tr><th>Código</th><th>Nome</th><th></th></tr></thead>
+        <tbody>${paginar(motoristas, "motoristas").itens.map((m) => `<tr>
+          <td><span class="cod">${escapar(m.codigo)}</span></td>
+          <td><input data-nome="${escapar(m.codigo)}" value="${escapar(m.nome)}" style="max-width:320px"></td>
+          <td style="text-align:right"><button class="acao suave" data-salvar="${escapar(m.codigo)}" style="padding:7px 14px;font-size:12px">Renomear</button></td>
+        </tr>`).join("")}</tbody></table></div>
+      ${controlesPagina(paginar(motoristas, "motoristas"))}` : `<p class="vazio">Nenhum motorista ainda. Eles são criados sozinhos quando você envia um lote.</p>`}
+    </div>`;
+
+  ligarPaginacao(verMotoristas);
+
+  const recado = (t, ok = false) => {
+    const el = $("recado-m"); el.textContent = t; el.classList.toggle("ok", ok); el.hidden = false;
+  };
+
+  $("mb").addEventListener("click", async () => {
+    const codigo = $("mc").value.trim(), nome = $("mn").value.trim();
+    if (!codigo || !nome) return recado("Preencha código e nome.");
+    const { error } = await sb.from("motoristas").upsert({ codigo, nome }, { onConflict: "codigo" });
+    if (error) return recado(error.message);
+    await recarregar(); verMotoristas();
+  });
+
+  $("conteudo").querySelectorAll("[data-salvar]").forEach((b) =>
+    b.addEventListener("click", async () => {
+      const codigo = b.dataset.salvar;
+      const nome = $("conteudo").querySelector(`[data-nome="${codigo}"]`).value.trim();
+      if (!nome) return recado("O nome não pode ficar vazio.");
+      const { error } = await sb.from("motoristas").update({ nome }).eq("codigo", codigo);
+      if (error) return recado(error.message);
+      await recarregar(); verMotoristas();
+    }));
+}
+
+/* ---------- utilidades ---------- */
+function paraNumero(t){
+  let s = String(t ?? "").trim();
+  if (!s) return null;
+  // 1.234,56 -> ponto é milhar; 7,89 -> vírgula decimal; 7.89 -> ponto decimal
+  if (s.includes(",") && s.includes(".")) s = s.replace(/\./g, "").replace(",", ".");
+  else if (s.includes(",")) s = s.replace(",", ".");
+  if (!/^-?\d+(\.\d+)?$/.test(s)) return null;
+  const n = Number(s);
+  return isNaN(n) ? null : n;
+}
+function paraData(t){
+  const s = t.trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  const br = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  return br ? `${br[3]}-${br[2].padStart(2,"0")}-${br[1].padStart(2,"0")}` : null;
+}
+function lerLote(texto, codigo){
+  const linhas = [], erros = [];
+  texto.split(/\r?\n/).forEach((bruta, k) => {
+    const l = bruta.trim();
+    if (!l) return;
+    const p = l.split(/[;\t]/).map((x) => x.trim());
+    if (p.length < 3) return erros.push({ linha: k + 1, motivo: "esperava data;motorista;valor." });
+    const data = paraData(p[0]);
+    const valor = paraNumero(p[2]);
+    if (!data) return erros.push({ linha: k + 1, motivo: "data não reconhecida." });
+    if (!p[1]) return erros.push({ linha: k + 1, motivo: "faltou o código do motorista." });
+    if (valor === null) return erros.push({ linha: k + 1, motivo: "valor não numérico." });
+    linhas.push({ indicador: codigo, data, motorista: p[1], valor, observacao: p[3] || null });
+  });
+  return { linhas, erros };
+}
+async function gravar(linhas){
+  const { data: { session } } = await sb.auth.getSession();
+
+  // cria os motoristas que ainda não existem, senão a chave estrangeira recusa
+  const codigos = [...new Set(linhas.map((l) => l.motorista).filter(Boolean))];
+  if (codigos.length){
+    const { error } = await sb.rpc("garantir_motoristas", { codigos });
+    if (error) throw new Error("Não deu para cadastrar os motoristas novos: " + error.message);
+  }
+
+  const comAutor = linhas.map((l) => ({ ...l, registrado_por: session.user.id, registrado_em: new Date().toISOString() }));
+  const { error } = await sb.from("lancamentos")
+    .upsert(comAutor, { onConflict: "indicador,data,motorista" });
+  if (error) throw new Error(error.message);
+}
+
+/* ---------- menu e carga ---------- */
+function marcarMenu(qual){
+  document.querySelectorAll(".item").forEach((b) => b.classList.toggle("ativo", b.dataset.ir === qual));
+}
+function montarMenu(){
+  $("menu-indicadores").innerHTML = catalogo.map((i) => {
+    const comp = competenciasDe(i)[0];
+    const fora = comp ? acumuladoPorMotorista(i, comp).filter((l) => atingiu(i, l.valor, metaDe(i, comp)) === false).length : 0;
+    return `<button class="item" data-ir="${i.codigo}">${escapar(i.nome)}
+      ${fora > 0 ? `<span class="contador">${fora}</span>` : ""}</button>`;
+  }).join("");
+  $("menu-indicadores").querySelectorAll("[data-ir]").forEach((b) =>
+    b.addEventListener("click", () => {
+      competenciaFiltro = "";
+      paginas.mes = 1; paginas.dados = 1;
+      verIndicador(b.dataset.ir);
+    }));
+
+  if (ehAdmin()){
+    $("menu-extra").innerHTML = `<div class="nav-titulo">Cadastros</div>
+      <button class="item" data-ir="motoristas">Motoristas</button>`;
+    $("menu-extra").querySelector("[data-ir]").addEventListener("click", verMotoristas);
+  }
+}
+document.querySelector('[data-ir="geral"]').addEventListener("click", verGeral);
+
+async function recarregar(){
+  const desde = isoMenosDias(DIAS_CARREGADOS);
+  const [c, l, m, mo] = await Promise.all([
+    sb.from("indicadores").select("*").eq("ativo", true).order("ordem"),
+    sb.from("lancamentos").select("*").gte("data", desde).order("data", { ascending: false }).limit(20000),
+    sb.from("metas").select("*"),
+    sb.from("motoristas").select("*").order("nome")
+  ]);
+  catalogo = c.data ?? []; lancamentos = l.data ?? [];
+  metas = m.data ?? []; motoristas = mo.data ?? [];
+  montarMenu();
+}
+
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session){ window.location.replace(TELA_LOGIN); return; }
+
+  const { data } = await sb.from("perfis")
+    .select("nome, setor, papel, ativo, senha_provisoria")
+    .eq("id", session.user.id).maybeSingle();
+
+  if (!data || !data.ativo){ await sb.auth.signOut(); window.location.replace(TELA_LOGIN); return; }
+  if (data.senha_provisoria){ window.location.replace(TELA_LOGIN); return; }
+
+  perfil = data;
+  $("quem").textContent = perfil.nome.split(" ")[0];
+  $("cargo").textContent = perfil.setor || "Tarumã";
+  if (ehAdmin()) $("link-admin").hidden = false;
+
+  await recarregar();
+  verGeral();
+})();
+
+$("sair").addEventListener("click", async () => {
+  await sb.auth.signOut();
+  window.location.replace(TELA_LOGIN);
+});
+</script>
+</body>
+</html>
