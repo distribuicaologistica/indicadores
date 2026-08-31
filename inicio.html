@@ -12,7 +12,7 @@
   :root{
     --fundo:#eef4fb; --fundo-2:#dbe9fa; --superficie:#fff; --borda:#d6e4f4;
     --azul:#2b7fd4; --azul-forte:#1a5fa8; --azul-suave:#eaf3fd;
-    --laranja:#e07b1f; --laranja-forte:#c2660f; --laranja-suave:#fdf1e3;
+    --laranja:#e07b1f; --laranja-suave:#fdf1e3;
     --tinta:#0f2a45; --tinta-fraca:#65809c;
     --raio:14px;
     --sombra:0 1px 2px rgba(15,42,69,.04), 0 14px 32px -20px rgba(15,42,69,.26);
@@ -29,49 +29,56 @@
   }
   [hidden]{display:none !important}
 
-  /* ---------------- menu ---------------- */
+  /* ---------------- menu lateral ---------------- */
   .lateral{
-    width:272px;flex:none;background:var(--superficie);border-right:1px solid var(--borda);
-    padding:22px 16px;display:flex;flex-direction:column;gap:8px;
+    width:246px;flex:none;background:var(--superficie);border-right:1px solid var(--borda);
+    padding:22px 16px;display:flex;flex-direction:column;gap:3px;
     position:sticky;top:0;height:100vh;overflow-y:auto;
   }
-  .logo{display:flex;align-items:center;gap:11px;padding:0 6px 18px;margin-bottom:4px;border-bottom:1px solid var(--borda)}
+  .logo{display:flex;align-items:center;gap:11px;padding:0 8px 18px;margin-bottom:6px;border-bottom:1px solid var(--borda)}
   .logo .simbolo{width:38px;height:38px;border-radius:11px;flex:none;background:var(--azul-suave);
     border:1px solid var(--borda);display:flex;align-items:center;justify-content:center}
   .logo svg{width:19px;height:19px;stroke:var(--azul);fill:none;stroke-width:1.9}
   .logo b{font-family:var(--display);font-size:15px;display:block;letter-spacing:-.01em}
   .logo span{font-size:11px;color:var(--tinta-fraca)}
 
-  .botao-menu{
-    width:100%;font-family:var(--corpo);font-size:14.5px;font-weight:600;
-    color:#fff;background:var(--azul);border:0;border-radius:10px;
-    padding:14px 16px;cursor:pointer;text-align:center;line-height:1.35;
-    box-shadow:0 5px 14px -8px rgba(43,127,212,.9);
-    transition:background .15s, transform .1s;
+  .nav-titulo{
+    display:flex;align-items:center;gap:8px;
+    font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--tinta-fraca);padding:16px 10px 7px;
   }
-  .botao-menu:hover{background:var(--azul-forte)}
-  .botao-menu:active{transform:translateY(1px)}
-  .botao-menu.ativo{background:var(--azul-forte);box-shadow:inset 0 0 0 2px rgba(255,255,255,.45)}
-  .botao-menu:focus-visible{outline:2px solid var(--azul-forte);outline-offset:3px}
+  .nav-titulo::after{content:"";flex:1;height:1px;background:var(--borda)}
+  .nav-titulo.risco{color:var(--laranja)}
+  .nav-titulo.risco::after{background:var(--laranja-suave)}
 
-  .botao-menu.seguranca{background:var(--laranja);box-shadow:0 5px 14px -8px rgba(224,123,31,.9)}
-  .botao-menu.seguranca:hover{background:var(--laranja-forte)}
-  .botao-menu.seguranca.ativo{background:var(--laranja-forte)}
-
-  .grupo{display:flex;flex-direction:column;gap:8px;padding-left:14px;
-    border-left:2px solid var(--laranja-suave);margin-left:4px}
-  .grupo .botao-menu{font-size:13.5px;padding:12px 14px}
+  .item{
+    display:flex;align-items:center;gap:10px;width:100%;
+    font-family:var(--corpo);font-size:14px;font-weight:500;
+    color:var(--tinta-fraca);text-align:left;
+    background:none;border:0;border-radius:10px;
+    padding:11px 12px;cursor:pointer;transition:.14s;line-height:1.35;
+  }
+  .item:hover{background:var(--azul-suave);color:var(--azul-forte)}
+  .item.ativo{background:var(--azul);color:#fff;font-weight:600}
+  .item:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+  .item .ponto{width:6px;height:6px;border-radius:50%;flex:none;background:var(--borda)}
+  .item:hover .ponto{background:var(--azul)}
+  .item.ativo .ponto{background:#fff}
+  .item.risco .ponto{background:var(--laranja)}
+  .item.risco:hover{background:var(--laranja-suave);color:var(--laranja)}
+  .item.risco.ativo{background:var(--laranja);color:#fff}
+  .item.risco.ativo .ponto{background:#fff}
 
   .rodape-lateral{margin-top:auto;padding-top:16px;border-top:1px solid var(--borda);
     font-size:12px;color:var(--tinta-fraca)}
   .rodape-lateral b{display:block;color:var(--tinta);font-size:13px;margin-bottom:2px}
   .rodape-lateral a,.rodape-lateral button{display:block;width:100%;text-align:left;margin-top:8px;
-    font-size:12px;font-weight:600;color:var(--tinta-fraca);text-decoration:none;
-    background:none;border:0;padding:6px 0;cursor:pointer}
+    font-family:var(--corpo);font-size:12px;font-weight:600;color:var(--tinta-fraca);
+    text-decoration:none;background:none;border:0;padding:6px 0;cursor:pointer}
   .rodape-lateral a:hover,.rodape-lateral button:hover{color:var(--azul)}
 
   /* ---------------- conteúdo ---------------- */
-  .conteudo{flex:1;min-width:0;padding:32px 34px 60px}
+  .conteudo{flex:1;min-width:0;padding:30px 34px 60px}
   h1{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-.02em;margin:0}
   .sub{font-size:13.5px;color:var(--tinta-fraca);margin:6px 0 26px;line-height:1.6}
 
@@ -82,25 +89,34 @@
   .cartao p:last-child{margin-bottom:0}
   .cartao ul{line-height:1.9;padding-left:20px;margin:0}
 
-  .boas-vindas{
-    background:linear-gradient(120deg, var(--azul-forte), var(--azul) 60%, #58a4e4);
-    color:#fff;border:0;padding:30px 32px;
+  .capa{
+    background:linear-gradient(120deg, var(--azul-forte) 0%, var(--azul) 55%, #5aa6e6 100%);
+    color:#fff;border:0;padding:32px;margin-bottom:26px;
   }
-  .boas-vindas h1{color:#fff}
-  .boas-vindas .sub{color:rgba(255,255,255,.85);margin-bottom:0}
+  .capa h1{color:#fff;font-size:26px}
+  .capa .sub{color:rgba(255,255,255,.86);margin:8px 0 0}
 
-  .atalhos{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
-  .atalho{background:var(--superficie);border:1px solid var(--borda);border-radius:12px;
-    padding:18px 20px;cursor:pointer;text-align:left;font-family:var(--corpo);transition:.15s}
-  .atalho:hover{border-color:var(--azul);transform:translateY(-2px)}
-  .atalho b{display:block;font-size:14.5px;font-weight:600;margin-bottom:4px}
-  .atalho span{font-size:12.5px;color:var(--tinta-fraca);line-height:1.5}
+  .titulo-secao{font-family:var(--display);font-weight:600;font-size:13px;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-fraca);margin:0 0 14px}
 
-  .em-breve{
-    display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;
+  .atalhos{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:14px;margin-bottom:28px}
+  .atalho{
+    position:relative;overflow:hidden;
+    background:var(--superficie);border:1px solid var(--borda);border-radius:12px;
+    padding:20px;cursor:pointer;text-align:left;font-family:var(--corpo);
+    box-shadow:var(--sombra);transition:.16s;
+  }
+  .atalho::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--azul);opacity:0;transition:.16s}
+  .atalho:hover{transform:translateY(-2px);border-color:#bcd6ef}
+  .atalho:hover::before{opacity:1}
+  .atalho.risco::before{background:var(--laranja)}
+  .atalho b{display:block;font-size:14.5px;font-weight:600;margin-bottom:5px}
+  .atalho span{font-size:12.5px;color:var(--tinta-fraca);line-height:1.55}
+  .atalho:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+
+  .em-breve{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;
     letter-spacing:.06em;text-transform:uppercase;color:var(--azul-forte);
-    background:var(--azul-suave);border-radius:20px;padding:4px 11px;margin-bottom:14px;
-  }
+    background:var(--azul-suave);border-radius:20px;padding:4px 11px;margin-bottom:14px}
 
   @media (max-width:860px){
     body{flex-direction:column}
@@ -122,6 +138,8 @@
     </div>
     <div><b>Tarumã</b><span>Portal do colaborador</span></div>
   </div>
+
+  <button class="item" data-ir="inicio"><span class="ponto"></span>Início</button>
 
   <nav id="menu"></nav>
 
@@ -147,40 +165,30 @@ const TELA_PAINEL = "./painel.html";
 
 /* ==================================================================
    MENU E CONTEÚDO
-   Para preencher uma seção, troque o "html" dela pelo conteúdo real.
-   Use <div class="cartao"> para cada bloco, como no exemplo do 5S.
+   Para publicar uma seção, troque o "html" dela pelo conteúdo real.
+   Cada bloco de texto vai dentro de <div class="cartao">.
    ================================================================== */
-const SECOES = [
-  { id: "indicadores", rotulo: "Indicadores", link: TELA_PAINEL,
-    resumo: "Devolução, dispersão, refugo e rating" },
-
-  { id: "sonho", rotulo: "Sonho",
-    resumo: "O sonho da Tarumã", html: null },
-
-  { id: "5s", rotulo: "5S",
-    resumo: "Programa 5S", html: null },
-
-  { id: "rota", rotulo: "Rota - Processos",
-    resumo: "Processos de rota", html: null },
-
-  { id: "lups", rotulo: "LUPs",
-    resumo: "Lições de um ponto", html: null },
-
-  { id: "treinamentos", rotulo: "Treinamentos",
-    resumo: "Capacitações e reciclagens", html: null },
-
-  { id: "ouvidoria", rotulo: "Ouvidoria",
-    resumo: "Canal de escuta", html: null },
-
-  { id: "seguranca", rotulo: "Segurança", destaque: true,
-    resumo: "Área de segurança", html: null,
-    filhos: [
-      { id: "abono", rotulo: "Abono de Registros Telemetria",
-        resumo: "Justificativa de registros", html: null },
-      { id: "relato-seguranca", rotulo: "Relato de Segurança",
-        resumo: "Registro de condição insegura", html: null },
-      { id: "relato-positivo", rotulo: "Relato Positivo",
-        resumo: "Reconhecimento de boa prática", html: null }
+const GRUPOS = [
+  {
+    titulo: "Áreas",
+    itens: [
+      { id: "indicadores", rotulo: "Indicadores", link: TELA_PAINEL,
+        resumo: "Devolução, dispersão, refugo e rating" },
+      { id: "sonho",        rotulo: "Sonho",           resumo: "O sonho da Tarumã",        html: null },
+      { id: "5s",           rotulo: "5S",              resumo: "Programa 5S",              html: null },
+      { id: "rota",         rotulo: "Rota - Processos", resumo: "Processos de rota",       html: null },
+      { id: "lups",         rotulo: "LUPs",            resumo: "Lições de um ponto",       html: null },
+      { id: "treinamentos", rotulo: "Treinamentos",    resumo: "Capacitações e reciclagens", html: null },
+      { id: "ouvidoria",    rotulo: "Ouvidoria",       resumo: "Canal de escuta",          html: null }
+    ]
+  },
+  {
+    titulo: "Segurança",
+    destaque: true,
+    itens: [
+      { id: "abono",            rotulo: "Abono de Registros Telemetria", resumo: "Justificativa de registros",       html: null },
+      { id: "relato-seguranca", rotulo: "Relato de Segurança",           resumo: "Registro de condição insegura",    html: null },
+      { id: "relato-positivo",  rotulo: "Relato Positivo",               resumo: "Reconhecimento de boa prática",    html: null }
     ]
   }
 ];
@@ -192,72 +200,73 @@ let perfil = null;
 const escapar = (t) => String(t ?? "").replace(/[&<>"']/g, (c) =>
   ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 
-const todasSecoes = () => SECOES.flatMap((s) => [s, ...(s.filhos ?? [])]);
+const todosItens = () => GRUPOS.flatMap((g) =>
+  g.itens.map((i) => ({ ...i, risco: !!g.destaque })));
 
 /* ---------- menu ---------- */
 function montarMenu(){
-  $("menu").innerHTML = SECOES.map((s) => {
-    const botao = `<button class="botao-menu ${s.destaque ? "seguranca" : ""}"
-                     data-ir="${s.id}">${escapar(s.rotulo)}</button>`;
-    if (!s.filhos) return botao;
-    return botao + `<div class="grupo">${s.filhos.map((f) =>
-      `<button class="botao-menu" data-ir="${f.id}">${escapar(f.rotulo)}</button>`).join("")}</div>`;
-  }).join("");
+  $("menu").innerHTML = GRUPOS.map((g) => `
+    <div class="nav-titulo ${g.destaque ? "risco" : ""}">${escapar(g.titulo)}</div>
+    ${g.itens.map((i) => `
+      <button class="item ${g.destaque ? "risco" : ""}" data-ir="${i.id}">
+        <span class="ponto"></span>${escapar(i.rotulo)}
+      </button>`).join("")}
+  `).join("");
 
-  $("menu").querySelectorAll("[data-ir]").forEach((b) =>
+  document.querySelectorAll("[data-ir]").forEach((b) =>
     b.addEventListener("click", () => abrir(b.dataset.ir)));
 }
 
 function marcar(id){
-  $("menu").querySelectorAll("[data-ir]").forEach((b) =>
+  document.querySelectorAll("[data-ir]").forEach((b) =>
     b.classList.toggle("ativo", b.dataset.ir === id));
 }
 
 /* ---------- conteúdo ---------- */
 function abrir(id){
-  const secao = todasSecoes().find((s) => s.id === id);
-  if (!secao) return verInicio();
+  if (id === "inicio") return verInicio();
 
-  if (secao.link){ window.location.href = secao.link; return; }
+  const item = todosItens().find((s) => s.id === id);
+  if (!item) return verInicio();
+  if (item.link){ window.location.href = item.link; return; }
 
   marcar(id);
   history.replaceState(null, "", "#" + id);
 
-  $("conteudo").innerHTML = secao.html
-    ? `<h1>${escapar(secao.rotulo)}</h1>
-       <p class="sub">${escapar(secao.resumo || "")}</p>
-       ${secao.html}`
-    : `<h1>${escapar(secao.rotulo)}</h1>
-       <p class="sub">${escapar(secao.resumo || "")}</p>
-       <div class="cartao">
-         <span class="em-breve">Em preparação</span>
-         <h2>Conteúdo ainda não publicado</h2>
-         <p>Esta seção está reservada e já aparece no menu para todo mundo,
-            mas o conteúdo ainda vai ser cadastrado.</p>
-       </div>`;
+  $("conteudo").innerHTML = `
+    <h1>${escapar(item.rotulo)}</h1>
+    <p class="sub">${escapar(item.resumo || "")}</p>
+    ${item.html ?? `
+      <div class="cartao">
+        <span class="em-breve">Em preparação</span>
+        <h2>Conteúdo ainda não publicado</h2>
+        <p>Esta seção já aparece no menu, mas o conteúdo ainda vai ser cadastrado.</p>
+      </div>`}`;
 
   window.scrollTo({ top: 0 });
 }
 
 function verInicio(){
-  marcar("");
+  marcar("inicio");
   history.replaceState(null, "", location.pathname);
 
   const hora = new Date().getHours();
   const saudacao = hora < 12 ? "Bom dia" : hora < 18 ? "Boa tarde" : "Boa noite";
 
   $("conteudo").innerHTML = `
-    <div class="cartao boas-vindas">
+    <div class="cartao capa">
       <h1>${saudacao}, ${escapar(perfil.nome.split(" ")[0])}</h1>
-      <p class="sub">Escolha uma área no menu ao lado.</p>
+      <p class="sub">Escolha uma área no menu ao lado ou nos atalhos abaixo.</p>
     </div>
-    <div class="atalhos">
-      ${todasSecoes().map((s) => `
-        <button class="atalho" data-atalho="${s.id}">
-          <b>${escapar(s.rotulo)}</b>
-          <span>${escapar(s.resumo || "")}</span>
-        </button>`).join("")}
-    </div>`;
+    ${GRUPOS.map((g) => `
+      <h2 class="titulo-secao">${escapar(g.titulo)}</h2>
+      <div class="atalhos">
+        ${g.itens.map((i) => `
+          <button class="atalho ${g.destaque ? "risco" : ""}" data-atalho="${i.id}">
+            <b>${escapar(i.rotulo)}</b>
+            <span>${escapar(i.resumo || "")}</span>
+          </button>`).join("")}
+      </div>`).join("")}`;
 
   $("conteudo").querySelectorAll("[data-atalho]").forEach((b) =>
     b.addEventListener("click", () => abrir(b.dataset.atalho)));
@@ -288,7 +297,7 @@ $("sair").addEventListener("click", async () => {
   montarMenu();
 
   const alvo = location.hash.replace("#", "");
-  if (alvo && todasSecoes().some((s) => s.id === alvo)) abrir(alvo);
+  if (alvo && todosItens().some((s) => s.id === alvo)) abrir(alvo);
   else verInicio();
 })();
 </script>
