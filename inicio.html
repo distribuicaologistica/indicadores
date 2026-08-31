@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Início · Tarumã</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fundo:#eef4fb; --fundo-2:#dbe9fa; --superficie:#fff; --borda:#d6e4f4;
+    --azul:#2b7fd4; --azul-forte:#1a5fa8; --azul-suave:#eaf3fd;
+    --laranja:#e07b1f; --laranja-forte:#c2660f; --laranja-suave:#fdf1e3;
+    --tinta:#0f2a45; --tinta-fraca:#65809c;
+    --raio:14px;
+    --sombra:0 1px 2px rgba(15,42,69,.04), 0 14px 32px -20px rgba(15,42,69,.26);
+    --display:"Sora",system-ui,sans-serif;
+    --corpo:"Plus Jakarta Sans",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;font-family:var(--corpo);color:var(--tinta);
+    background:var(--fundo);
+    background-image:radial-gradient(80% 40% at 60% 0%, #fff 0%, var(--fundo) 55%, var(--fundo-2) 100%);
+    display:flex;
+  }
+  [hidden]{display:none !important}
+
+  /* ---------------- menu ---------------- */
+  .lateral{
+    width:272px;flex:none;background:var(--superficie);border-right:1px solid var(--borda);
+    padding:22px 16px;display:flex;flex-direction:column;gap:8px;
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+  }
+  .logo{display:flex;align-items:center;gap:11px;padding:0 6px 18px;margin-bottom:4px;border-bottom:1px solid var(--borda)}
+  .logo .simbolo{width:38px;height:38px;border-radius:11px;flex:none;background:var(--azul-suave);
+    border:1px solid var(--borda);display:flex;align-items:center;justify-content:center}
+  .logo svg{width:19px;height:19px;stroke:var(--azul);fill:none;stroke-width:1.9}
+  .logo b{font-family:var(--display);font-size:15px;display:block;letter-spacing:-.01em}
+  .logo span{font-size:11px;color:var(--tinta-fraca)}
+
+  .botao-menu{
+    width:100%;font-family:var(--corpo);font-size:14.5px;font-weight:600;
+    color:#fff;background:var(--azul);border:0;border-radius:10px;
+    padding:14px 16px;cursor:pointer;text-align:center;line-height:1.35;
+    box-shadow:0 5px 14px -8px rgba(43,127,212,.9);
+    transition:background .15s, transform .1s;
+  }
+  .botao-menu:hover{background:var(--azul-forte)}
+  .botao-menu:active{transform:translateY(1px)}
+  .botao-menu.ativo{background:var(--azul-forte);box-shadow:inset 0 0 0 2px rgba(255,255,255,.45)}
+  .botao-menu:focus-visible{outline:2px solid var(--azul-forte);outline-offset:3px}
+
+  .botao-menu.seguranca{background:var(--laranja);box-shadow:0 5px 14px -8px rgba(224,123,31,.9)}
+  .botao-menu.seguranca:hover{background:var(--laranja-forte)}
+  .botao-menu.seguranca.ativo{background:var(--laranja-forte)}
+
+  .grupo{display:flex;flex-direction:column;gap:8px;padding-left:14px;
+    border-left:2px solid var(--laranja-suave);margin-left:4px}
+  .grupo .botao-menu{font-size:13.5px;padding:12px 14px}
+
+  .rodape-lateral{margin-top:auto;padding-top:16px;border-top:1px solid var(--borda);
+    font-size:12px;color:var(--tinta-fraca)}
+  .rodape-lateral b{display:block;color:var(--tinta);font-size:13px;margin-bottom:2px}
+  .rodape-lateral a,.rodape-lateral button{display:block;width:100%;text-align:left;margin-top:8px;
+    font-size:12px;font-weight:600;color:var(--tinta-fraca);text-decoration:none;
+    background:none;border:0;padding:6px 0;cursor:pointer}
+  .rodape-lateral a:hover,.rodape-lateral button:hover{color:var(--azul)}
+
+  /* ---------------- conteúdo ---------------- */
+  .conteudo{flex:1;min-width:0;padding:32px 34px 60px}
+  h1{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-.02em;margin:0}
+  .sub{font-size:13.5px;color:var(--tinta-fraca);margin:6px 0 26px;line-height:1.6}
+
+  .cartao{background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);
+    padding:26px 28px;box-shadow:var(--sombra);margin-bottom:18px}
+  .cartao h2{font-family:var(--display);font-weight:600;font-size:16px;margin:0 0 14px}
+  .cartao p{line-height:1.7;margin:0 0 12px}
+  .cartao p:last-child{margin-bottom:0}
+  .cartao ul{line-height:1.9;padding-left:20px;margin:0}
+
+  .boas-vindas{
+    background:linear-gradient(120deg, var(--azul-forte), var(--azul) 60%, #58a4e4);
+    color:#fff;border:0;padding:30px 32px;
+  }
+  .boas-vindas h1{color:#fff}
+  .boas-vindas .sub{color:rgba(255,255,255,.85);margin-bottom:0}
+
+  .atalhos{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+  .atalho{background:var(--superficie);border:1px solid var(--borda);border-radius:12px;
+    padding:18px 20px;cursor:pointer;text-align:left;font-family:var(--corpo);transition:.15s}
+  .atalho:hover{border-color:var(--azul);transform:translateY(-2px)}
+  .atalho b{display:block;font-size:14.5px;font-weight:600;margin-bottom:4px}
+  .atalho span{font-size:12.5px;color:var(--tinta-fraca);line-height:1.5}
+
+  .em-breve{
+    display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--azul-forte);
+    background:var(--azul-suave);border-radius:20px;padding:4px 11px;margin-bottom:14px;
+  }
+
+  @media (max-width:860px){
+    body{flex-direction:column}
+    .lateral{width:100%;height:auto;position:static;overflow:visible}
+    .conteudo{padding:22px 16px 50px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<aside class="lateral">
+  <div class="logo">
+    <div class="simbolo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 16V7h11v9M14 10h4l3 3.5V16"/>
+        <circle cx="7" cy="17.5" r="1.9"/><circle cx="17.5" cy="17.5" r="1.9"/>
+      </svg>
+    </div>
+    <div><b>Tarumã</b><span>Portal do colaborador</span></div>
+  </div>
+
+  <nav id="menu"></nav>
+
+  <div class="rodape-lateral">
+    <b id="quem">—</b>
+    <span id="cargo"></span>
+    <a href="./admin.html" id="link-admin" hidden>Administração</a>
+    <button id="sair">Sair</button>
+  </div>
+</aside>
+
+<main class="conteudo" id="conteudo"></main>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+/* ================= CONFIGURAÇÃO ================= */
+const SUPABASE_URL      = "https://nquoksknvkahnfvqvcoo.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_u0e1CVU5F7PTGdQ0U2Mx8g_wPRXUHhh";
+const TELA_LOGIN  = "./login.html";
+const TELA_PAINEL = "./painel.html";
+/* ================================================ */
+
+/* ==================================================================
+   MENU E CONTEÚDO
+   Para preencher uma seção, troque o "html" dela pelo conteúdo real.
+   Use <div class="cartao"> para cada bloco, como no exemplo do 5S.
+   ================================================================== */
+const SECOES = [
+  { id: "indicadores", rotulo: "Indicadores", link: TELA_PAINEL,
+    resumo: "Devolução, dispersão, refugo e rating" },
+
+  { id: "sonho", rotulo: "Sonho",
+    resumo: "O sonho da Tarumã", html: null },
+
+  { id: "5s", rotulo: "5S",
+    resumo: "Programa 5S", html: null },
+
+  { id: "rota", rotulo: "Rota - Processos",
+    resumo: "Processos de rota", html: null },
+
+  { id: "lups", rotulo: "LUPs",
+    resumo: "Lições de um ponto", html: null },
+
+  { id: "treinamentos", rotulo: "Treinamentos",
+    resumo: "Capacitações e reciclagens", html: null },
+
+  { id: "ouvidoria", rotulo: "Ouvidoria",
+    resumo: "Canal de escuta", html: null },
+
+  { id: "seguranca", rotulo: "Segurança", destaque: true,
+    resumo: "Área de segurança", html: null,
+    filhos: [
+      { id: "abono", rotulo: "Abono de Registros Telemetria",
+        resumo: "Justificativa de registros", html: null },
+      { id: "relato-seguranca", rotulo: "Relato de Segurança",
+        resumo: "Registro de condição insegura", html: null },
+      { id: "relato-positivo", rotulo: "Relato Positivo",
+        resumo: "Reconhecimento de boa prática", html: null }
+    ]
+  }
+];
+
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = (id) => document.getElementById(id);
+let perfil = null;
+
+const escapar = (t) => String(t ?? "").replace(/[&<>"']/g, (c) =>
+  ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+
+const todasSecoes = () => SECOES.flatMap((s) => [s, ...(s.filhos ?? [])]);
+
+/* ---------- menu ---------- */
+function montarMenu(){
+  $("menu").innerHTML = SECOES.map((s) => {
+    const botao = `<button class="botao-menu ${s.destaque ? "seguranca" : ""}"
+                     data-ir="${s.id}">${escapar(s.rotulo)}</button>`;
+    if (!s.filhos) return botao;
+    return botao + `<div class="grupo">${s.filhos.map((f) =>
+      `<button class="botao-menu" data-ir="${f.id}">${escapar(f.rotulo)}</button>`).join("")}</div>`;
+  }).join("");
+
+  $("menu").querySelectorAll("[data-ir]").forEach((b) =>
+    b.addEventListener("click", () => abrir(b.dataset.ir)));
+}
+
+function marcar(id){
+  $("menu").querySelectorAll("[data-ir]").forEach((b) =>
+    b.classList.toggle("ativo", b.dataset.ir === id));
+}
+
+/* ---------- conteúdo ---------- */
+function abrir(id){
+  const secao = todasSecoes().find((s) => s.id === id);
+  if (!secao) return verInicio();
+
+  if (secao.link){ window.location.href = secao.link; return; }
+
+  marcar(id);
+  history.replaceState(null, "", "#" + id);
+
+  $("conteudo").innerHTML = secao.html
+    ? `<h1>${escapar(secao.rotulo)}</h1>
+       <p class="sub">${escapar(secao.resumo || "")}</p>
+       ${secao.html}`
+    : `<h1>${escapar(secao.rotulo)}</h1>
+       <p class="sub">${escapar(secao.resumo || "")}</p>
+       <div class="cartao">
+         <span class="em-breve">Em preparação</span>
+         <h2>Conteúdo ainda não publicado</h2>
+         <p>Esta seção está reservada e já aparece no menu para todo mundo,
+            mas o conteúdo ainda vai ser cadastrado.</p>
+       </div>`;
+
+  window.scrollTo({ top: 0 });
+}
+
+function verInicio(){
+  marcar("");
+  history.replaceState(null, "", location.pathname);
+
+  const hora = new Date().getHours();
+  const saudacao = hora < 12 ? "Bom dia" : hora < 18 ? "Boa tarde" : "Boa noite";
+
+  $("conteudo").innerHTML = `
+    <div class="cartao boas-vindas">
+      <h1>${saudacao}, ${escapar(perfil.nome.split(" ")[0])}</h1>
+      <p class="sub">Escolha uma área no menu ao lado.</p>
+    </div>
+    <div class="atalhos">
+      ${todasSecoes().map((s) => `
+        <button class="atalho" data-atalho="${s.id}">
+          <b>${escapar(s.rotulo)}</b>
+          <span>${escapar(s.resumo || "")}</span>
+        </button>`).join("")}
+    </div>`;
+
+  $("conteudo").querySelectorAll("[data-atalho]").forEach((b) =>
+    b.addEventListener("click", () => abrir(b.dataset.atalho)));
+}
+
+$("sair").addEventListener("click", async () => {
+  await sb.auth.signOut();
+  window.location.replace(TELA_LOGIN);
+});
+
+/* ---------- entrada ---------- */
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session){ window.location.replace(TELA_LOGIN); return; }
+
+  const { data } = await sb.from("perfis")
+    .select("nome, setor, papel, ativo, senha_provisoria")
+    .eq("id", session.user.id).maybeSingle();
+
+  if (!data || !data.ativo){ await sb.auth.signOut(); window.location.replace(TELA_LOGIN); return; }
+  if (data.senha_provisoria){ window.location.replace(TELA_LOGIN); return; }
+
+  perfil = data;
+  $("quem").textContent = perfil.nome.split(" ")[0];
+  $("cargo").textContent = perfil.setor || "Tarumã";
+  if (perfil.papel === "admin") $("link-admin").hidden = false;
+
+  montarMenu();
+
+  const alvo = location.hash.replace("#", "");
+  if (alvo && todasSecoes().some((s) => s.id === alvo)) abrir(alvo);
+  else verInicio();
+})();
+</script>
+</body>
+</html>
