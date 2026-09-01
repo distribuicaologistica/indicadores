@@ -114,6 +114,270 @@
   .atalho span{font-size:12.5px;color:var(--tinta-fraca);line-height:1.55}
   .atalho:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
 
+  /* ---- componentes para as páginas de conteúdo ---- */
+  .destaque{
+    background:linear-gradient(120deg, var(--azul-forte), var(--azul) 70%, #5aa6e6);
+    color:#fff;border:0;
+  }
+  .destaque h2{color:#fff;font-size:19px}
+  .destaque p{font-size:16px;line-height:1.75;color:rgba(255,255,255,.94)}
+
+  .frase{
+    font-family:var(--display);font-weight:600;font-size:21px;line-height:1.5;
+    letter-spacing:-.01em;margin:0;
+  }
+
+  .pilares{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .pilar{border:1px solid var(--borda);border-radius:12px;padding:20px}
+  .pilar .numero{
+    font-family:var(--mono);font-size:11px;font-weight:600;color:var(--azul);
+    background:var(--azul-suave);border-radius:20px;padding:3px 10px;display:inline-block;margin-bottom:10px;
+  }
+  .pilar b{display:block;font-size:14.5px;margin-bottom:6px}
+  .pilar span{font-size:13px;color:var(--tinta-fraca);line-height:1.6}
+
+  .marcos{list-style:none;padding:0;margin:0}
+  .marcos li{
+    position:relative;padding:0 0 22px 26px;border-left:2px solid var(--borda);
+    margin-left:6px;line-height:1.65;
+  }
+  .marcos li:last-child{border-left-color:transparent;padding-bottom:0}
+  .marcos li::before{
+    content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;
+    border-radius:50%;background:var(--superficie);border:2px solid var(--azul);
+  }
+  .marcos b{display:block;font-family:var(--mono);font-size:11px;color:var(--azul);margin-bottom:3px}
+
+  /* ---- sonho ---- */
+  .manifesto{
+    background:linear-gradient(135deg, #0b2035 0%, #12365c 55%, #1b4f80 100%);
+    border:0;color:#fff;padding:38px 40px;
+  }
+  .manifesto .verbo{
+    font-family:var(--display);font-weight:700;font-size:46px;line-height:1;
+    letter-spacing:-.03em;margin:0 0 10px;
+  }
+  .manifesto .risca{width:74px;height:2px;background:var(--laranja);margin:0 0 20px}
+  .manifesto p{font-size:17px;line-height:1.6;color:rgba(255,255,255,.9);margin:0 0 14px}
+  .manifesto p:last-child{margin-bottom:0}
+  .manifesto .valores{
+    font-family:var(--display);font-weight:700;font-size:27px;line-height:1.25;
+    letter-spacing:-.02em;color:#fff;margin:0 0 14px;
+  }
+  .manifesto .valores em{font-style:normal;color:#f5b04d}
+
+  .metas{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+  .meta-cartao{
+    border:1px solid var(--borda);border-left:4px solid var(--laranja);
+    border-radius:12px;padding:18px 20px;
+  }
+  .meta-cartao .rotulo{font-size:13px;font-weight:600;color:var(--tinta-fraca);margin-bottom:10px}
+  .meta-cartao .alvo{
+    font-family:var(--mono);font-weight:600;font-size:25px;letter-spacing:-.02em;color:var(--tinta);
+  }
+  .meta-cartao .condicao{
+    display:block;font-family:var(--corpo);font-size:11px;font-weight:600;
+    color:var(--tinta-fraca);margin-top:8px;
+  }
+
+  /* ---- 5S ---- */
+  .abertura{display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:center}
+  .roda{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
+  .abertura .frase-5s{font-family:var(--display);font-weight:600;font-size:20px;
+    line-height:1.5;letter-spacing:-.01em;margin:0 0 14px}
+
+  .sensos{display:flex;flex-direction:column;gap:12px}
+  .senso{
+    display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;
+    border:1px solid var(--borda);border-radius:12px;padding:18px 20px;
+    border-left-width:4px;border-left-style:solid;
+  }
+  .senso .marcador{
+    width:34px;height:34px;border-radius:10px;display:flex;align-items:center;
+    justify-content:center;font-family:var(--display);font-weight:700;font-size:16px;color:#fff;
+  }
+  .senso .japones{font-family:var(--display);font-weight:600;font-size:16px;margin:0 0 2px}
+  .senso .traducao{font-size:12px;font-weight:600;color:var(--tinta-fraca);
+    text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px}
+  .senso p{font-size:14px;line-height:1.65;margin:0;color:var(--tinta)}
+
+  @media (max-width:760px){
+    .abertura{grid-template-columns:1fr;gap:20px}
+  }
+
+  /* ---- fluxos de processo ---- */
+  .sub-abas{display:flex;gap:4px;border-bottom:1px solid var(--borda);margin-bottom:22px;flex-wrap:wrap}
+  .sub-aba{font-family:var(--corpo);font-size:14px;font-weight:600;color:var(--tinta-fraca);
+    background:none;border:0;border-bottom:2px solid transparent;padding:11px 16px;
+    cursor:pointer;margin-bottom:-1px}
+  .sub-aba:hover{color:var(--azul)}
+  .sub-aba.ativa{color:var(--azul);border-bottom-color:var(--azul)}
+  .sub-aba:focus-visible{outline:2px solid var(--azul);outline-offset:-2px}
+
+  .fluxo{position:relative;padding-left:2px}
+  .no{position:relative;padding:0 0 14px 28px;border-left:2px solid var(--borda);margin-left:7px}
+  .no:last-child{border-left-color:transparent}
+  .no::before{content:"";position:absolute;left:-8px;top:5px;width:14px;height:14px;
+    border-radius:50%;background:var(--superficie);border:2px solid var(--azul)}
+  .no .caixa{background:var(--superficie);border:1px solid var(--borda);border-radius:11px;
+    padding:13px 16px;display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+  .no .texto{font-size:14.5px;line-height:1.5;font-weight:500}
+  .no .quem{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--azul-forte);background:var(--azul-suave);
+    border-radius:20px;padding:4px 10px;white-space:nowrap;flex:none}
+  .no.motorista .caixa{border-color:#bcd6ef;background:#f7fbff}
+  .no.motorista .quem{background:var(--azul);color:#fff}
+
+  .no.marco::before{background:var(--azul);border-color:var(--azul)}
+  .no.marco .texto{font-family:var(--display);font-weight:600;font-size:13px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--azul)}
+  .no.marco .caixa{border:0;background:none;padding:8px 0}
+
+  .no.decisao::before{border-color:var(--laranja);border-radius:3px;transform:rotate(45deg);top:6px}
+  .no.decisao .caixa{border-color:#f0d4b0;background:var(--laranja-suave)}
+  .no.decisao .texto{font-weight:600;color:#8a4a05}
+
+  .ramos{display:grid;gap:12px;margin-top:12px}
+  .ramo{border-left:2px solid var(--borda);padding-left:16px;margin-left:4px}
+  .ramo > .etiqueta{
+    display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;border-radius:20px;padding:3px 11px;margin-bottom:10px;
+  }
+  .ramo.sim > .etiqueta{background:#e7f3fd;color:var(--azul-forte)}
+  .ramo.nao > .etiqueta{background:var(--laranja-suave);color:#8a4a05}
+  .ramo .no{padding-left:24px}
+
+  .volta{font-size:13px;color:var(--tinta-fraca);font-style:italic;padding:2px 0 10px 28px;margin-left:7px}
+
+  /* ---- treinamentos ---- */
+  .treinos{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px}
+  .treino{
+    position:relative;text-align:left;font-family:var(--corpo);cursor:pointer;
+    background:var(--superficie);border:1px solid var(--borda);border-radius:12px;
+    padding:20px;box-shadow:var(--sombra);transition:.16s;
+  }
+  .treino:hover{transform:translateY(-2px);border-color:var(--azul)}
+  .treino:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+  .treino .numero{
+    display:flex;align-items:center;justify-content:center;
+    width:32px;height:32px;border-radius:9px;margin-bottom:12px;
+    font-family:var(--display);font-weight:700;font-size:15px;
+    color:#fff;background:var(--azul);
+  }
+  .treino b{display:block;font-size:15px;font-weight:600;margin-bottom:4px}
+  .treino span{font-size:12.5px;color:var(--tinta-fraca);line-height:1.55}
+
+  .voltar{
+    display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;
+    color:var(--azul);background:none;border:0;padding:0;cursor:pointer;margin-bottom:16px;
+    font-family:var(--corpo);
+  }
+  .voltar:hover{color:var(--azul-forte)}
+  .voltar::before{content:"←"}
+
+  .etiquetas{display:flex;flex-wrap:wrap;gap:8px}
+  .etiquetas span{
+    font-size:13px;font-weight:500;color:var(--tinta);
+    background:var(--azul-suave);border:1px solid var(--borda);
+    border-radius:20px;padding:6px 13px;
+  }
+
+  .excecoes{display:flex;flex-wrap:wrap;gap:8px}
+  .excecoes span{
+    font-size:13px;font-weight:500;color:#8a4a05;
+    background:var(--laranja-suave);border:1px solid #f0d4b0;
+    border-radius:20px;padding:6px 13px;
+  }
+
+  .servir{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .letra{border:1px solid var(--borda);border-radius:12px;padding:18px;text-align:center}
+  .letra .inicial{
+    font-family:var(--display);font-weight:700;font-size:38px;line-height:1;
+    color:var(--laranja);margin-bottom:6px;
+  }
+  .letra b{display:block;font-size:13px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--tinta);margin-bottom:10px}
+  .letra p{font-size:13px;line-height:1.6;color:var(--tinta-fraca);margin:0}
+
+  .fatores{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+  .fator{
+    border-radius:12px;padding:20px 16px;text-align:center;color:#fff;
+    background:linear-gradient(150deg, #e07b1f, #c2660f);
+  }
+  .fator b{display:block;font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+
+  .tempos{width:100%;border-collapse:collapse;font-size:14px}
+  .tempos th{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--tinta-fraca);text-align:left;padding:10px 12px;border-bottom:1px solid var(--borda)}
+  .tempos td{padding:12px;border-bottom:1px solid #edf3fa}
+  .tempos tr:last-child td{border-bottom:0}
+  .tempos .sigla{font-family:var(--mono);font-weight:600;color:var(--azul)}
+  .tempos .hora{font-family:var(--mono);font-weight:600;text-align:right;font-size:15px}
+
+  /* ---- formulários ---- */
+  .quadro-form{
+    background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);
+    box-shadow:var(--sombra);overflow:hidden;
+  }
+  .quadro-form iframe{display:block;width:100%;height:78vh;min-height:560px;border:0;background:#fff}
+
+  .abrir-fora{
+    display:inline-flex;align-items:center;gap:8px;font-family:var(--corpo);
+    font-size:14px;font-weight:600;color:#fff;background:var(--azul);
+    border:0;border-radius:10px;padding:12px 20px;text-decoration:none;
+    box-shadow:0 6px 16px -6px rgba(43,127,212,.6);transition:.15s;
+  }
+  .abrir-fora:hover{background:var(--azul-forte)}
+  .abrir-fora::after{content:"↗";font-size:13px}
+  .abrir-fora.alerta{background:var(--laranja)}
+  .abrir-fora.alerta:hover{background:#c2660f}
+
+  .recado-form{
+    font-size:13px;line-height:1.6;color:#8a4a05;background:var(--laranja-suave);
+    border:1px solid #f0d4b0;border-radius:11px;padding:13px 16px;margin:0 0 16px;
+  }
+
+  /* ---- LUPs ---- */
+  .lup-cabecalho{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:4px}
+  .lup-campo .rotulo{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--tinta-fraca);margin-bottom:4px}
+  .lup-campo .valor{font-size:14px;font-weight:500;line-height:1.45}
+  .lup-objetivo{background:var(--azul-suave);border:1px solid var(--borda);border-radius:11px;
+    padding:14px 16px;margin-top:18px;font-size:14.5px;line-height:1.6}
+  .lup-objetivo b{display:block;font-size:10px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--azul-forte);margin-bottom:5px}
+
+  .epis{display:flex;flex-wrap:wrap;gap:12px}
+  .epi{display:flex;flex-direction:column;align-items:center;gap:8px;
+    border:1px solid var(--borda);border-radius:12px;padding:14px 10px;min-width:104px;flex:1}
+  .epi svg{width:32px;height:32px;stroke:var(--azul);fill:none;stroke-width:1.6;
+    stroke-linecap:round;stroke-linejoin:round}
+  .epi span{font-size:11.5px;font-weight:600;color:var(--tinta-fraca);text-align:center;line-height:1.3}
+
+  .passos-lup{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:16px}
+  .passo-lup{border:1px solid var(--borda);border-radius:12px;overflow:hidden;background:var(--superficie)}
+  .passo-lup .topo{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:10px 14px;background:var(--azul-suave);border-bottom:1px solid var(--borda)}
+  .passo-lup .n{font-family:var(--mono);font-weight:600;font-size:13px;color:#fff;
+    background:var(--azul);border-radius:7px;width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;flex:none}
+  .passo-lup .responsavel{font-size:12px;font-weight:600;color:var(--azul-forte)}
+  .passo-lup .veredito{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    border-radius:20px;padding:3px 10px}
+  .passo-lup .veredito.certo{background:#e7f6f1;color:#12876a}
+  .passo-lup .veredito.errado{background:#fdeceb;color:var(--falha)}
+  .passo-lup img{display:block;width:100%;height:190px;object-fit:cover;background:#f2f7fc}
+  .vaga-foto{
+    height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    background:repeating-linear-gradient(45deg,#f5f9fd,#f5f9fd 10px,#eef4fb 10px,#eef4fb 20px);
+    border-bottom:1px dashed var(--borda);color:var(--tinta-fraca);text-align:center;padding:14px;
+  }
+  .vaga-foto svg{width:26px;height:26px;stroke:#9db8d4;fill:none;stroke-width:1.6}
+  .vaga-foto b{font-size:12px;font-weight:600}
+  .vaga-foto code{font-family:var(--mono);font-size:10.5px;color:#7d97b3;word-break:break-all}
+  .passo-lup .legenda{padding:14px 16px;font-size:13.5px;line-height:1.55}
+  .passo-lup .itens{margin:10px 0 0;padding-left:18px;font-size:12.5px;color:var(--tinta-fraca);line-height:1.8}
+
   .em-breve{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;
     letter-spacing:.06em;text-transform:uppercase;color:var(--azul-forte);
     background:var(--azul-suave);border-radius:20px;padding:4px 11px;margin-bottom:14px}
@@ -174,24 +438,764 @@ const GRUPOS = [
     itens: [
       { id: "indicadores", rotulo: "Indicadores", link: TELA_PAINEL,
         resumo: "Devolução, dispersão, refugo e rating" },
-      { id: "sonho",        rotulo: "Sonho",           resumo: "O sonho da Tarumã",        html: null },
-      { id: "5s",           rotulo: "5S",              resumo: "Programa 5S",              html: null },
-      { id: "rota",         rotulo: "Rota - Processos", resumo: "Processos de rota",       html: null },
-      { id: "lups",         rotulo: "LUPs",            resumo: "Lições de um ponto",       html: null },
-      { id: "treinamentos", rotulo: "Treinamentos",    resumo: "Capacitações e reciclagens", html: null },
-      { id: "ouvidoria",    rotulo: "Ouvidoria",       resumo: "Canal de escuta",          html: null }
+      { id: "sonho", rotulo: "Sonho", resumo: "O sonho da revenda",
+        html: `
+          <div class="cartao manifesto">
+            <div class="verbo">Liderar</div>
+            <div class="risca"></div>
+            <p>o mercado de bebidas sendo reconhecida como uma empresa</p>
+            <div class="valores"><em>Inovadora, Diversa, Inclusiva e Segura</em></div>
+            <p>comprometida com a excelência, sustentabilidade e rentabilidade
+               de nossas operações.</p>
+          </div>
+
+          <div class="cartao">
+            <h2>Indicadores do sonho</h2>
+            <div class="metas">
+              <div class="meta-cartao">
+                <div class="rotulo">TRI</div>
+                <div class="alvo">&le; 1</div>
+                <span class="condicao">Quanto menor, melhor</span>
+              </div>
+              <div class="meta-cartao">
+                <div class="rotulo">NPS</div>
+                <div class="alvo">&ge; 75,6%</div>
+                <span class="condicao">Quanto maior, melhor</span>
+              </div>
+              <div class="meta-cartao">
+                <div class="rotulo">Engagement</div>
+                <div class="alvo">&ge; 85%</div>
+                <span class="condicao">Quanto maior, melhor</span>
+              </div>
+              <div class="meta-cartao">
+                <div class="rotulo">Rentabilidade</div>
+                <div class="alvo">&ge; 2,5%</div>
+                <span class="condicao">Quanto maior, melhor</span>
+              </div>
+            </div>
+          </div>` },
+      { id: "5s", rotulo: "5S", resumo: "Uma dose de bom senso em tudo que a gente faz",
+        html: `
+          <div class="cartao">
+            <div class="abertura">
+              <div>
+                <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="Ciclo dos cinco sensos do 5S" class="roda">
+      <path d="M 167.37 28.21 A 132 132 0 0 1 283.07 112.27 L 245.77 126.73 A 92 92 0 0 0 165.14 68.14 Z" fill="#1a5fa8"/>
+      <path d="M 287.62 126.28 A 132 132 0 0 1 243.43 262.29 L 218.15 231.29 A 92 92 0 0 0 248.95 136.50 Z" fill="#2b7fd4"/>
+      <path d="M 231.51 270.95 A 132 132 0 0 1 88.49 270.95 L 110.16 237.33 A 92 92 0 0 0 209.84 237.33 Z" fill="#4aa3d9"/>
+      <path d="M 76.57 262.29 A 132 132 0 0 1 32.38 126.28 L 71.05 136.50 A 92 92 0 0 0 101.85 231.29 Z" fill="#e07b1f"/>
+      <path d="M 36.93 112.27 A 132 132 0 0 1 152.63 28.21 L 154.86 68.14 A 92 92 0 0 0 74.23 126.73 Z" fill="#12876a"/>
+      <circle cx="160" cy="160" r="72" fill="#0f2a45"/>
+      <text x="160" y="160" text-anchor="middle" dominant-baseline="central"
+            fill="#fff" font-family="Sora, sans-serif" font-weight="700" font-size="46">5S</text>
+      <text x="225.8" y="69.4" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Sora, sans-serif" font-weight="700" font-size="19">1</text>
+      <text x="266.5" y="194.6" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Sora, sans-serif" font-weight="700" font-size="19">2</text>
+      <text x="160.0" y="272.0" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Sora, sans-serif" font-weight="700" font-size="19">3</text>
+      <text x="53.5" y="194.6" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Sora, sans-serif" font-weight="700" font-size="19">4</text>
+      <text x="94.2" y="69.4" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Sora, sans-serif" font-weight="700" font-size="19">5</text>
+    </svg>
+              </div>
+              <div>
+                <p class="frase-5s">Uma dose de bom senso em tudo que a gente faz.</p>
+                <p>O 5S é uma metodologia de gestão nascida no Japão, voltada para a organização,
+                   a limpeza e a padronização do ambiente de trabalho, com o objetivo de aumentar
+                   a produtividade e a eficiência.</p>
+                <p>Ela se apoia em cinco princípios, cada um representado por uma palavra japonesa
+                   começada pela letra S. Os cinco formam um ciclo: o último sustenta os quatro
+                   anteriores e leva de volta ao primeiro.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="cartao">
+            <h2>Os cinco sensos</h2>
+            <div class="sensos">
+              <div class="senso" style="border-left-color:#1a5fa8">
+                <div class="marcador" style="background:#1a5fa8">1</div>
+                <div>
+                  <p class="japones">Seiri</p>
+                  <p class="traducao">Senso de utilização</p>
+                  <p>Separar o necessário do desnecessário, eliminando itens que não são usados ou que estão em excesso no ambiente de trabalho.</p>
+                </div>
+              </div>
+              <div class="senso" style="border-left-color:#2b7fd4">
+                <div class="marcador" style="background:#2b7fd4">2</div>
+                <div>
+                  <p class="japones">Seiton</p>
+                  <p class="traducao">Senso de organização</p>
+                  <p>Organizar tudo o que é necessário, de forma que seja fácil de achar e de acessar, evitando perda de tempo e retrabalho.</p>
+                </div>
+              </div>
+              <div class="senso" style="border-left-color:#4aa3d9">
+                <div class="marcador" style="background:#4aa3d9">3</div>
+                <div>
+                  <p class="japones">Seiso</p>
+                  <p class="traducao">Senso de limpeza</p>
+                  <p>Manter o ambiente limpo, eliminando sujeira, resíduos e qualquer coisa que prejudique a saúde e a segurança de quem trabalha ali.</p>
+                </div>
+              </div>
+              <div class="senso" style="border-left-color:#e07b1f">
+                <div class="marcador" style="background:#e07b1f">4</div>
+                <div>
+                  <p class="japones">Seiketsu</p>
+                  <p class="traducao">Senso de padronização</p>
+                  <p>Estabelecer padrões de organização e limpeza para sustentar o que foi conquistado nos três primeiros sensos, evitando que tudo volte ao que era.</p>
+                </div>
+              </div>
+              <div class="senso" style="border-left-color:#12876a">
+                <div class="marcador" style="background:#12876a">5</div>
+                <div>
+                  <p class="japones">Shitsuke</p>
+                  <p class="traducao">Senso de disciplina</p>
+                  <p>Cumprir as regras e os padrões combinados no dia a dia, garantindo que todos sigam os procedimentos e contribuam para a melhoria contínua.</p>
+                </div>
+              </div>
+            </div>
+          </div>` },
+      { id: "rota", rotulo: "Rota - Processos",
+        resumo: "Mapeamento de processos da distribuição", fluxo: "rota" },
+      { id: "lups", rotulo: "LUPs",
+        resumo: "Lições de um ponto — sete padrões da rotina", lups: true },
+      { id: "treinamentos", rotulo: "Treinamentos",
+        resumo: "Oito temas da rotina da equipe de entregas", treinos: true },
+      { id: "ouvidoria", rotulo: "Ouvidoria",
+        resumo: "Canal de escuta do colaborador",
+        form: "https://docs.google.com/forms/d/e/1FAIpQLSf3P2RV6dBeCKFod3-n1PhH2V-tIM_UUrQs6Ek69Ku_gCZTGQ/viewform",
+        intro: "Espaço para sugestões, dúvidas, elogios e reclamações. Escreva com o máximo de detalhe que puder — quanto mais claro o relato, mais rápido ele chega em quem pode resolver." }
     ]
   },
   {
     titulo: "Segurança",
     destaque: true,
     itens: [
-      { id: "abono",            rotulo: "Abono de Registros Telemetria", resumo: "Justificativa de registros",       html: null },
-      { id: "relato-seguranca", rotulo: "Relato de Segurança",           resumo: "Registro de condição insegura",    html: null },
-      { id: "relato-positivo",  rotulo: "Relato Positivo",               resumo: "Reconhecimento de boa prática",    html: null }
+      { id: "abono", rotulo: "Abono de Registros",
+        resumo: "Solicitação de abono de registro",
+        form: "https://docs.google.com/forms/d/e/1FAIpQLSfeD1wtC553dqkhU02-p_lACALHzyc0e06ZMx-OqwXe6tpmvA/viewform",
+        intro: "Use este formulário para pedir o abono de um registro. Descreva o que aconteceu com o máximo de detalhe: data, horário e o que motivou o registro." },
+
+      { id: "telemetria", rotulo: "Telemetria",
+        resumo: "Justificativa de registros de telemetria",
+        form: "https://docs.google.com/forms/d/e/1FAIpQLSfeD1wtC553dqkhU02-p_lACALHzyc0e06ZMx-OqwXe6tpmvA/viewform",
+        intro: "Justifique aqui os registros apontados pela telemetria do veículo." },
+
+      { id: "relato-seguranca", rotulo: "Relato de Segurança",
+        resumo: "Registro de condição ou ato inseguro",
+        form: "https://forms.gle/3vQsnXkofN5xPPWi8",
+        intro: "Viu uma condição insegura, um ato inseguro ou um quase-acidente? Registre aqui. Quanto antes o relato chega, mais rápido a correção acontece." },
+
+      { id: "relato-positivo", rotulo: "Relato Positivo",
+        resumo: "Reconhecimento de boa prática",
+        form: "https://docs.google.com/forms/u/0/d/1Ko4kIdYErLDQGIXLivds-iCFNUC3fIDFc0FDkGZD0nI/viewform",
+        semEmbutir: true,
+        aviso: "Este link é de edição do formulário e pode pedir permissão de acesso. Substitua pelo link público, obtido em Enviar → link dentro do Google Forms.",
+        intro: "Viu alguém agindo de forma segura ou resolvendo bem uma situação? Registre o reconhecimento aqui." }
     ]
   }
 ];
+
+
+/* ==================================================================
+   FLUXOS DE PROCESSO — Rota
+   Tipos de nó: marco | passo | decisao | volta
+   ================================================================== */
+const FLUXOS = {
+  "pre-rota": {
+    rotulo: "Pré Rota",
+    titulo: "Liberação da frota",
+    resumo: "Da matinal até a saída do caminhão pela portaria.",
+    blocos: [{
+      nos: [
+        { t: "marco", texto: "Início" },
+        { t: "passo", texto: "Preparar material para a matinal", quem: "Sup. Transp." },
+        { t: "passo", texto: "Preparar escala das equipes", quem: "Sup. Transp." },
+        { t: "passo", texto: "Informar mapas da blitz", quem: "Sup. Transp." },
+        { t: "passo", texto: "Liberar EE da matinal", quem: "Sup. Transp." },
+        { t: "passo", texto: "Enviar carros para o armazém", quem: "Sup. Transp." },
+        { t: "passo", texto: "Realizar matinal", quem: "Sup. Transp." },
+        { t: "passo", texto: "Liberar mapas para a equipe de entrega", quem: "Sup. Transp." },
+        { t: "passo", texto: "Conferir carga do caminhão", quem: "Equipe de Entrega" },
+        { t: "decisao", texto: "A carga está OK?", ramos: [
+          { rotulo: "Não", tipo: "nao", nos: [
+            { t: "passo", texto: "Digitar a falta no Promax", quem: "AR" },
+            { t: "passo", texto: "Enviar carros para o armazém", quem: "Sup. Transp." },
+            { t: "passo", texto: "Repor o produto faltoso", quem: "Conferente" },
+            { t: "volta", texto: "Volta para a conferência da carga." }
+          ]},
+          { rotulo: "Sim", tipo: "sim", nos: [
+            { t: "passo", texto: "Encaminhar caminhão para a portaria", quem: "Sup. Transp. / AR" }
+          ]}
+        ]},
+        { t: "passo", texto: "Conferência da carga na portaria", quem: "Portaria" },
+        { t: "passo", texto: "Dar saída no caminhão (MPD)", quem: "Portaria" },
+        { t: "marco", texto: "Fim" }
+      ]
+    }, {
+      titulo: "Acompanhamento em paralelo",
+      nota: "Acontece junto com a liberação, depois que os mapas saem para a equipe de entrega.",
+      nos: [
+        { t: "passo", texto: "Acompanhar liberação FF no armazém", quem: "Conferente" },
+        { t: "passo", texto: "Acompanhar liberação FF no pátio", quem: "Sup. Transp. / AR" },
+        { t: "passo", texto: "Acompanhar liberação FF na portaria", quem: "AR" },
+        { t: "passo", texto: "Acompanhar o TML via carta de controle", quem: "AR" },
+        { t: "passo", texto: "Passar status da liberação para o time", quem: "Estagiário" }
+      ]
+    }]
+  },
+
+  "rota": {
+    rotulo: "Rota",
+    titulo: "Processo de entrega em rota",
+    resumo: "O ciclo que se repete a cada ponto de venda.",
+    blocos: [{
+      nos: [
+        { t: "marco", texto: "Início" },
+        { t: "passo", texto: "Preparar o ponto de parada", quem: "Motorista", destaque: true },
+        { t: "passo", texto: "Conferir a NF com o PDV", quem: "Ajudante" },
+        { t: "decisao", texto: "O cliente vai receber?", ramos: [
+          { rotulo: "Sim", tipo: "sim", nos: [
+            { t: "passo", texto: "Conferir vasilhames, forma de pagamento, refugo e etiquetas de troca",
+              quem: "Motorista / Ajudante", destaque: true },
+            { t: "decisao", texto: "Tem algum problema?", ramos: [
+              { rotulo: "Não", tipo: "sim", nos: [
+                { t: "passo", texto: "Descarregar o pedido", quem: "Motorista / Ajudante", destaque: true },
+                { t: "passo", texto: "Receber o pagamento e recolher vasilhame", quem: "Motorista", destaque: true },
+                { t: "passo", texto: "Pegar a assinatura do cliente", quem: "Motorista", destaque: true }
+              ]},
+              { rotulo: "Sim", tipo: "nao", nos: [
+                { t: "passo", texto: "Escrever o motivo da devolução na NF", quem: "Motorista", destaque: true },
+                { t: "passo", texto: "Pegar a assinatura do cliente", quem: "Motorista", destaque: true }
+              ]}
+            ]}
+          ]},
+          { rotulo: "Não", tipo: "nao", nos: [
+            { t: "passo", texto: "Escrever o motivo da devolução na NF", quem: "Motorista", destaque: true },
+            { t: "passo", texto: "Pegar a assinatura do cliente", quem: "Motorista", destaque: true }
+          ]}
+        ]},
+        { t: "passo", texto: "Sinalizar no tracking", quem: "Motorista", destaque: true },
+        { t: "decisao", texto: "Teve devolução?", ramos: [
+          { rotulo: "Não", tipo: "sim", nos: [
+            { t: "passo", texto: "Arrumar e fazer o rodízio da carga", quem: "Motorista / Ajudante", destaque: true }
+          ]},
+          { rotulo: "Sim", tipo: "nao", nos: [
+            { t: "passo", texto: "Aguardar a tratativa conforme o ANS", quem: "Motorista", destaque: true },
+            { t: "passo", texto: "Tratar as devoluções apontadas", quem: "CME" },
+            { t: "decisao", texto: "A devolução foi revertida?", ramos: [
+              { rotulo: "Sim", tipo: "sim", nos: [
+                { t: "passo", texto: "Informar o repasse ao motorista", quem: "CME" },
+                { t: "passo", texto: "Retornar ao PDV", quem: "Motorista", destaque: true },
+                { t: "volta", texto: "Volta para o descarregamento do pedido." }
+              ]},
+              { rotulo: "Não", tipo: "nao", nos: [
+                { t: "passo", texto: "Seguir rota", quem: "Motorista", destaque: true }
+              ]}
+            ]}
+          ]}
+        ]},
+        { t: "decisao", texto: "É a última entrega?", ramos: [
+          { rotulo: "Não", tipo: "nao", nos: [
+            { t: "passo", texto: "Ir para a próxima entrega", quem: "Motorista", destaque: true },
+            { t: "volta", texto: "Volta para a conferência da NF com o PDV." }
+          ]},
+          { rotulo: "Sim", tipo: "sim", nos: [
+            { t: "passo", texto: "Voltar à revenda", quem: "Motorista", destaque: true },
+            { t: "passo", texto: "Finalizar a rota no tracking", quem: "Motorista", destaque: true }
+          ]}
+        ]},
+        { t: "marco", texto: "Fim" }
+      ]
+    }]
+  },
+
+  "pos-rota": {
+    rotulo: "Pós Rota",
+    titulo: "Prestação de contas",
+    resumo: "Duas frentes na volta: a física e a financeira.",
+    blocos: [{
+      titulo: "Prestação de contas física",
+      nos: [
+        { t: "marco", texto: "Início" },
+        { t: "passo", texto: "Estacionar o caminhão no local de descarga", quem: "Motorista", destaque: true },
+        { t: "decisao", texto: "Há devolução?", ramos: [
+          { rotulo: "Sim", tipo: "sim", nos: [
+            { t: "passo", texto: "Separar a NF de devolução para o conferente", quem: "Motorista", destaque: true },
+            { t: "passo", texto: "Conferir a devolução", quem: "Conferente" },
+            { t: "passo", texto: "Dar entrada no MPD", quem: "Conferente" }
+          ]},
+          { rotulo: "Não", tipo: "nao", nos: [
+            { t: "volta", texto: "Segue direto para a trava e a abertura das baias." }
+          ]}
+        ]},
+        { t: "passo", texto: "Colocar trava-rodas, chave na porta e abrir as baias",
+          quem: "Motorista / Ajudante", destaque: true },
+        { t: "passo", texto: "Fazer a conferência e digitar o KM", quem: "Conferente" },
+        { t: "decisao", texto: "Há diferenças?", ramos: [
+          { rotulo: "Sim", tipo: "nao", nos: [
+            { t: "passo", texto: "Informar o ajudante", quem: "Conferente" },
+            { t: "passo", texto: "Acompanhar a reconferência", quem: "Ajudante" },
+            { t: "decisao", texto: "Ainda há diferenças?", ramos: [
+              { rotulo: "Sim", tipo: "nao", nos: [
+                { t: "passo", texto: "Gerar vale físico", quem: "Conferente" },
+                { t: "passo", texto: "Gerar vale financeiro", quem: "Banco" }
+              ]},
+              { rotulo: "Não", tipo: "sim", nos: [
+                { t: "volta", texto: "Segue para o descarregamento." }
+              ]}
+            ]}
+          ]},
+          { rotulo: "Não", tipo: "sim", nos: [
+            { t: "volta", texto: "Segue para o descarregamento." }
+          ]}
+        ]},
+        { t: "passo", texto: "Descarregar o caminhão", quem: "Operador" },
+        { t: "decisao", texto: "Tem blitz de refugo?", ramos: [
+          { rotulo: "Sim", tipo: "sim", nos: [
+            { t: "passo", texto: "Fazer a apuração de refugo", quem: "Conferente" },
+            { t: "passo", texto: "Acompanhar", quem: "Ajudante" }
+          ]},
+          { rotulo: "Não", tipo: "nao", nos: [
+            { t: "volta", texto: "Segue para a limpeza." }
+          ]}
+        ]},
+        { t: "passo", texto: "Completar paletes e limpar o caminhão", quem: "Ajudante" },
+        { t: "marco", texto: "Fim" }
+      ]
+    }, {
+      titulo: "Prestação de contas financeira",
+      nos: [
+        { t: "marco", texto: "Início" },
+        { t: "passo", texto: "Trazer o caminhão para o box e retirar o KM", quem: "Motorista", destaque: true },
+        { t: "passo", texto: "Retirar o numerário do caminhão", quem: "Motorista", destaque: true },
+        { t: "passo", texto: "Fazer a prestação de contas financeira", quem: "Motorista", destaque: true },
+        { t: "decisao", texto: "Há diferenças?", ramos: [
+          { rotulo: "Sim", tipo: "nao", nos: [
+            { t: "passo", texto: "Gerar vale financeiro e assinar", quem: "Caixa" }
+          ]},
+          { rotulo: "Não", tipo: "sim", nos: [
+            { t: "volta", texto: "Encerra sem pendência." }
+          ]}
+        ]},
+        { t: "marco", texto: "Fim" }
+      ]
+    }]
+  }
+};
+
+function desenharNos(nos){
+  return nos.map((n) => {
+    if (n.t === "volta") return `<p class="volta">${escapar(n.texto)}</p>`;
+
+    if (n.t === "marco")
+      return `<div class="no marco"><div class="caixa"><span class="texto">${escapar(n.texto)}</span></div></div>`;
+
+    if (n.t === "decisao")
+      return `<div class="no decisao">
+                <div class="caixa"><span class="texto">${escapar(n.texto)}</span></div>
+                <div class="ramos">${n.ramos.map((r) => `
+                  <div class="ramo ${r.tipo}">
+                    <span class="etiqueta">${escapar(r.rotulo)}</span>
+                    ${desenharNos(r.nos)}
+                  </div>`).join("")}</div>
+              </div>`;
+
+    return `<div class="no ${n.destaque ? "motorista" : ""}">
+              <div class="caixa">
+                <span class="texto">${escapar(n.texto)}</span>
+                ${n.quem ? `<span class="quem">${escapar(n.quem)}</span>` : ""}
+              </div>
+            </div>`;
+  }).join("");
+}
+
+function desenharFluxo(chave){
+  const f = FLUXOS[chave];
+  return `
+    <div class="sub-abas">
+      ${Object.keys(FLUXOS).map((k) => `
+        <button class="sub-aba ${k === chave ? "ativa" : ""}" data-fluxo="${k}">${escapar(FLUXOS[k].rotulo)}</button>`).join("")}
+    </div>
+    <div class="cartao">
+      <h2>${escapar(f.titulo)}</h2>
+      <p style="color:var(--tinta-fraca);font-size:13.5px;margin:-6px 0 18px">${escapar(f.resumo)}</p>
+      ${f.blocos.map((b) => `
+        ${b.titulo ? `<h2 style="margin-top:26px">${escapar(b.titulo)}</h2>` : ""}
+        ${b.nota ? `<p style="color:var(--tinta-fraca);font-size:13px;margin:-8px 0 16px">${escapar(b.nota)}</p>` : ""}
+        <div class="fluxo">${desenharNos(b.nos)}</div>`).join("")}
+    </div>`;
+}
+
+
+/* ==================================================================
+   TREINAMENTOS
+   ================================================================== */
+const TREINAMENTOS = [
+  { n: 1, id: "refugo", titulo: "Refugo", resumo: "O que é refugo anomalia e como identificar",
+    html: `
+      <div class="cartao">
+        <h2>Conceito</h2>
+        <p>Refugo é toda e qualquer garrafa que não esteja habilitada para o processo de
+           fabricação do produto, desde que o problema identificado não seja um destes:</p>
+        <div class="excecoes">
+          <span>Bicada interna</span><span>Bicada externa</span><span>Outros com rótulo Ambev</span>
+        </div>
+      </div>
+      <div class="cartao">
+        <h2>O que caracteriza o refugo anomalia</h2>
+        <p>É a <b>fácil detecção do problema</b>: não é preciso maior habilidade do refugador
+           para identificá-lo.</p>
+      </div>
+      <div class="cartao">
+        <h2>Tipos mais comuns no processo</h2>
+        <div class="etiquetas">
+          <span>Com tampa</span><span>Concorrência</span><span>Cor fora do padrão</span>
+          <span>Faltante</span><span>Logo estranho</span><span>Quebrada</span>
+          <span>Rótulo plástico</span><span>Segunda</span><span>Suja externa</span>
+          <span>Suja interna</span><span>Trincada</span>
+        </div>
+      </div>` },
+
+  { n: 2, id: "rating", titulo: "Rating", resumo: "A avaliação que o cliente faz do nosso serviço",
+    html: `
+      <div class="cartao destaque">
+        <p class="frase">Rating é a avaliação que os nossos clientes fazem sobre o nível de
+           serviço prestado, pelo site do Parceiro Ambev.</p>
+      </div>
+      <div class="cartao">
+        <h2>Para que serve</h2>
+        <div class="pilares">
+          <div class="pilar"><span class="numero">01</span><b>Saber onde melhorar</b>
+            <span>A avaliação mostra o ponto exato que incomodou o cliente.</span></div>
+          <div class="pilar"><span class="numero">02</span><b>Aumentar a satisfação</b>
+            <span>Corrigir o que foi apontado eleva o nível de serviço.</span></div>
+          <div class="pilar"><span class="numero">03</span><b>Dar visibilidade</b>
+            <span>O trabalho bem feito aparece e é reconhecido.</span></div>
+          <div class="pilar"><span class="numero">04</span><b>Estreitar o relacionamento</b>
+            <span>O cliente percebe que é ouvido e responde melhor.</span></div>
+        </div>
+      </div>` },
+
+  { n: 3, id: "bees", titulo: "BEES", resumo: "A tela inicial do aplicativo",
+    html: `
+      <div class="cartao">
+        <h2>O que aparece na tela inicial</h2>
+        <div class="sensos">
+          <div class="senso" style="border-left-color:#e07b1f">
+            <div class="marcador" style="background:#e07b1f">1</div>
+            <div><p class="japones">Sair da aplicação</p>
+              <p>Use essa opção para sair. Em seguida clique em <b>Sair</b>. Para voltar, é preciso
+                 entrar com CPF e placa do veículo, ou CPF e senha.</p></div>
+          </div>
+          <div class="senso" style="border-left-color:#2b7fd4">
+            <div class="marcador" style="background:#2b7fd4">2</div>
+            <div><p class="japones">Número do mapa</p>
+              <p>Identifica a carga do dia.</p></div>
+          </div>
+          <div class="senso" style="border-left-color:#4aa3d9">
+            <div class="marcador" style="background:#4aa3d9">3</div>
+            <div><p class="japones">Visitas</p>
+              <p>Quantas visitas você já concluiu e quantas tem no total na rota do dia.</p></div>
+          </div>
+          <div class="senso" style="border-left-color:#12876a">
+            <div class="marcador" style="background:#12876a">4</div>
+            <div><p class="japones">Placa do veículo</p>
+              <p>Confirme se é a placa do caminhão que você está dirigindo.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="cartao">
+        <h2>Antes de sair</h2>
+        <p>O botão <b>Continuar rota</b> fica no rodapé, e o <b>Checklist de Segurança</b> precisa
+           aparecer como finalizado antes de você seguir.</p>
+      </div>` },
+
+  { n: 4, id: "devolucao", titulo: "Devolução", resumo: "O que fazer quando o PDV não recebe",
+    nos: [
+      { t: "marco", texto: "Início" },
+      { t: "passo", texto: "Preparação para a saída em rota", quem: "Motorista", destaque: true },
+      { t: "passo", texto: "Conferir a NF com o cliente ao chegar no PDV", quem: "Motorista", destaque: true },
+      { t: "decisao", texto: "O PDV vai receber?", ramos: [
+        { rotulo: "Sim", tipo: "sim", nos: [
+          { t: "passo", texto: "Realizar a entrega e seguir a rota", quem: "Motorista", destaque: true }
+        ]},
+        { rotulo: "Não", tipo: "nao", nos: [
+          { t: "passo", texto: "Acionar o supervisor de rota ou o CME", quem: "Motorista", destaque: true },
+          { t: "decisao", texto: "O supervisor ou o CME tem autonomia para resolver?", ramos: [
+            { rotulo: "Não", tipo: "nao", nos: [
+              { t: "passo", texto: "Contato com a equipe de vendas para solucionar o problema",
+                quem: "CME / Sup. Rota" }
+            ]},
+            { rotulo: "Sim", tipo: "sim", nos: [
+              { t: "volta", texto: "Segue direto para a tratativa com vendas." }
+            ]}
+          ]},
+          { t: "decisao", texto: "Vendas resolveu?", ramos: [
+            { rotulo: "Sim", tipo: "sim", nos: [
+              { t: "passo", texto: "Realizar a entrega e seguir a rota", quem: "Motorista", destaque: true }
+            ]},
+            { rotulo: "Não", tipo: "nao", nos: [
+              { t: "passo", texto: "Registrar o motivo correto, colher a assinatura e continuar a rota",
+                quem: "Motorista", destaque: true }
+            ]}
+          ]}
+        ]}
+      ]},
+      { t: "marco", texto: "Fim" }
+    ] },
+
+  { n: 5, id: "servir", titulo: "SERVIR", resumo: "A nova rotina básica da equipe de entregas",
+    html: `
+      <div class="cartao destaque">
+        <p class="frase">Nova rotina básica da equipe de entregas</p>
+      </div>
+      <div class="cartao">
+        <h2>Seis compromissos</h2>
+        <div class="servir">
+          <div class="letra"><div class="inicial">S</div><b>Segurança</b>
+            <p>Eu sou a segurança na minha rotina. Esse é o meu foco e a minha prioridade.</p></div>
+          <div class="letra"><div class="inicial">E</div><b>Encantar</b>
+            <p>Escuto com atenção, tenho disposição e ajudo a resolver os problemas.</p></div>
+          <div class="letra"><div class="inicial">R</div><b>Realizar</b>
+            <p>Rota correta, atendimento excelente e cliente satisfeito é resultado positivo.</p></div>
+          <div class="letra"><div class="inicial">V</div><b>Verificar</b>
+            <p>Garanto uma entrega com qualidade, verificando cada atividade da rotina.</p></div>
+          <div class="letra"><div class="inicial">I</div><b>Impressionar</b>
+            <p>A sua motivação é contagiante e reflete na satisfação do cliente.</p></div>
+          <div class="letra"><div class="inicial">R</div><b>Revisar</b>
+            <p>Quando eu reviso, garanto eficiência e o resultado positivo do meu trabalho.</p></div>
+        </div>
+      </div>` },
+
+  { n: 6, id: "tempo", titulo: "Tempo e Movimento", resumo: "Os tempos padrão da distribuição",
+    html: `
+      <div class="cartao">
+        <h2>Indicadores da distribuição</h2>
+        <table class="tempos">
+          <thead><tr><th>Sigla</th><th>O que é</th><th style="text-align:right">Padrão</th></tr></thead>
+          <tbody>
+            <tr><td class="sigla">TML</td><td>Tempo médio de liberação</td><td class="hora">00:30</td></tr>
+            <tr><td class="sigla">TR</td><td>Tempo em rota</td><td class="hora">09:20</td></tr>
+            <tr><td class="sigla">TI</td><td>Tempo interno</td><td class="hora">00:30</td></tr>
+            <tr><td class="sigla">JL</td><td>Jornada líquida</td><td class="hora">10:20</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cartao">
+        <h2>E o DPO?</h2>
+        <p>DPO é o manual de processos da distribuição — é dele que saem os mapeamentos
+           que estão em <b>Rota - Processos</b>.</p>
+      </div>` },
+
+  { n: 7, id: "5s-treino", titulo: "5S", resumo: "A filosofia dos cinco sensos",
+    html: `
+      <div class="cartao">
+        <h2>O que é</h2>
+        <p>Uma filosofia empresarial de origem japonesa, chamada de Programa 5S, baseada em
+           cinco palavras: <b>Seiri, Seiton, Seiso, Seiketsu e Shitsuke</b>.</p>
+        <p>Cada uma corresponde a um senso: utilização, organização, limpeza, padronização
+           e disciplina. O conteúdo completo, com a descrição de cada senso, está na seção
+           <b>5S</b> do menu.</p>
+      </div>` },
+
+  { n: 8, id: "qualidade", titulo: "Qualidade", resumo: "Os cinco fatores que afetam o produto",
+    html: `
+      <div class="cartao">
+        <h2>Fundamentos</h2>
+        <p>A partir das informações e reclamações colhidas dos clientes, foram ranqueados os
+           cinco fatores mais impactantes para a preservação da qualidade dos produtos:</p>
+        <div class="fatores">
+          <div class="fator"><b>Temperatura</b></div>
+          <div class="fator"><b>Luz</b></div>
+          <div class="fator"><b>Umidade</b></div>
+          <div class="fator"><b>Poeira</b></div>
+          <div class="fator"><b>Validade</b></div>
+        </div>
+      </div>` }
+];
+
+function desenharTreinamentos(){
+  return `
+    <div class="treinos">
+      ${TREINAMENTOS.map((t) => `
+        <button class="treino" data-treino="${t.id}">
+          <div class="numero">${t.n}</div>
+          <b>${escapar(t.titulo)}</b>
+          <span>${escapar(t.resumo)}</span>
+        </button>`).join("")}
+    </div>`;
+}
+
+
+const EPIS = [
+  { nome: "Bota de segurança", svg: `<path d="M7 3v9l-2 2v6h14v-3c0-2-2-2.5-4-4l-2-2V3z"/><path d="M5 17h14"/>` },
+  { nome: "Óculos de proteção", svg: `<path d="M2 11a4 4 0 0 0 8 0 2 2 0 0 1 4 0 4 4 0 0 0 8 0"/><path d="M2 11V9a2 2 0 0 1 2-2h4M22 11V9a2 2 0 0 0-2-2h-4"/>` },
+  { nome: "Luvas", svg: `<path d="M7 20V9a1.6 1.6 0 0 1 3.2 0V4.6a1.6 1.6 0 0 1 3.2 0V9m0 0V5.6a1.6 1.6 0 0 1 3.2 0V13m0-3.4a1.6 1.6 0 0 1 3.2 0V15a5 5 0 0 1-5 5H7z"/>` },
+  { nome: "Uniforme", svg: `<path d="M8 3l4 3 4-3 4 2.4V11h-3v10H7V11H4V5.4z"/>` },
+  { nome: "Colete refletivo", svg: `<path d="M8 3l4 2 4-2 3 2v16H5V5z"/><path d="M12 5v16M5 11h14M5 15h14"/>` }
+];
+
+const ICONE_FOTO = `<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10.5" r="1.8"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/></svg>`;
+
+/* ==================================================================
+   LUPs — Lições de Um Ponto
+   Para publicar a foto de um passo, preencha "img" com o caminho:
+       img: "./img/lups/conferencia-1.jpg"
+   Sem isso, o passo mostra a caixa reservada para a imagem.
+   ================================================================== */
+const LUPS = [
+  { id: "conferencia", n: 1, titulo: "Conferência de carga",
+    objetivo: "Padronizar a forma de conferência de carga.",
+    data: "06/02/2024", elaborador: "Silvio Martins", supervisor: "Silvio Martins",
+    areas: "Distribuição e Armazém", padrao: "AC.3.PO.LOGC.000002",
+    passos: [
+      { n: 1, quem: "Ajudante", texto: "Abrir todas as baias." },
+      { n: 2, quem: "Ajudante", texto: "Realizar giro de 360° para verificar se existe pallet misto." },
+      { n: 3, quem: "Ajudante", texto: "Havendo dificuldade na conferência, chamar o conferente." },
+      { n: 4, quem: "Ajudante", texto: "Conferir baia por baia conforme especificado na OCP." },
+      { n: 5, quem: "Ajudante", texto: "Se a variedade de produtos for baixa, conferir SKU por SKU." },
+      { n: 6, quem: "Ajudante", texto: "Se a variedade de produtos for alta, conferir de acordo com as embalagens." }
+    ] },
+
+  { id: "prestacao-financeira", n: 2, titulo: "Prestação financeira",
+    objetivo: "Padronizar a forma de realizar o fechamento financeiro do mapa.",
+    data: "06/02/2024", elaborador: "Silvio Martins", supervisor: "Silvio Martins / Thiago Fabri",
+    areas: "Distribuição e Armazém", padrao: "Prestação de contas financeira",
+    passos: [
+      { n: 1, quem: "Motorista", texto: "Retirar a chave na portaria, abrir o cofre, retirar o dinheiro e dirigir-se ao pré-acerto." },
+      { n: 2, quem: "Motorista", texto: "Separar as notas e os boletos." },
+      { n: 3, quem: "Motorista", texto: "Antes de depositar o dinheiro no cofre, entregar os boletos e canhotos no caixa." },
+      { n: 4, quem: "Motorista", texto: "Depositar o dinheiro no cofre." },
+      { n: 5, quem: "Motorista", texto: "Anotar a quantidade de cédulas por valor e somar o total em dinheiro." },
+      { n: 6, quem: "Motorista", texto: "Entregar o dinheiro e aguardar a apuração." }
+    ] },
+
+  { id: "prestacao-fisica", n: 3, titulo: "Prestação física",
+    objetivo: "Padronizar a forma de realizar o fechamento físico do mapa.",
+    data: "06/02/2024", elaborador: "Silvio Martins", supervisor: "Silvio Martins / Thiago Fabri",
+    areas: "Distribuição e Armazém", padrao: "Prestação de contas físicas",
+    passos: [
+      { n: 1, quem: "Portaria",  texto: "Dar entrada no caminhão." },
+      { n: 2, quem: "Motorista", texto: "Dar o fechamento de rota ao entrar na empresa." },
+      { n: 3, quem: "Motorista", texto: "Confirmar a finalização da viagem no palm." },
+      { n: 4, quem: "Ajudante",  texto: "Abrir as baias do caminhão para conferência." },
+      { n: 5, quem: "Ajudante",  texto: "Informar ao conferente as devoluções ou trocas efetuadas e acompanhar a conferência do AG." },
+      { n: 6, quem: "Motorista", texto: "Depois de informar o KM ao conferente, recolher os numerários e seguir para a sala de pré-acerto." }
+    ] },
+
+  { id: "qualidade-entrega", n: 4, titulo: "Qualidade na entrega",
+    objetivo: "Padronizar a forma de realizar a entrega com qualidade no PDV.",
+    data: "05/04/2024", elaborador: "Silvio Martins", supervisor: "Silvio Martins / Thiago Fabri",
+    areas: "Distribuição e Armazém", padrao: "Qualidade na entrega",
+    passos: [
+      { n: 1, quem: "Motorista", ok: true,  texto: "Manuseio correto de descartável." },
+      { n: 2, quem: "Motorista", ok: false, texto: "Empilhamento errado, direto no chão." },
+      { n: 3, quem: "Motorista", ok: true,  texto: "Manuseio correto de descartável, carregando pelo lado do produto." },
+      { n: 4, quem: "Motorista", ok: false, texto: "Manuseio incorreto, utilizando o shrink." },
+      { n: 5, quem: "Motorista", ok: true,  texto: "Empilhamento correto, com o produto empilhado sobre papelão." },
+      { n: 6, quem: "Motorista", ok: false, texto: "Empilhamento errado, direto no chão." }
+    ] },
+
+  { id: "qualidade-marketplace", n: 5, titulo: "Qualidade na entrega Marketplace",
+    objetivo: "Padronizar a forma de realizar a entrega com qualidade no PDV.",
+    data: "11/02/2025", elaborador: "Silvio Martins e Thiago Fabri", supervisor: "Silvio Martins / Thiago Fabri",
+    areas: "Distribuição e Armazém", padrao: "Qualidade na entrega Marketplace",
+    passos: [
+      { n: 1, quem: "Motorista", ok: true,  texto: "Empilhamento correto de descartável." },
+      { n: 2, quem: "Motorista", ok: false, texto: "Empilhamento errado, direto no chão." },
+      { n: 3, quem: "Motorista", ok: true,  texto: "Manuseio correto de descartável, carregando pelo lado do produto." },
+      { n: 4, quem: "Motorista", ok: false, texto: "Empilhamento errado, direto no chão." },
+      { n: 5, quem: "Motorista", ok: true,  texto: "Armazenamento correto de Marketplace." },
+      { n: 6, quem: "Motorista", ok: true,  texto: "Pallet correto com Marketplace." }
+    ] },
+
+  { id: "devolucao-produtos", n: 6, titulo: "Devolução de produtos",
+    objetivo: "Padronizar a forma de realizar o fechamento físico do mapa.",
+    data: "19/02/2024", elaborador: "Silvio Martins", supervisor: "Silvio Martins",
+    areas: "Distribuição e Armazém", padrao: "Distr.0008",
+    passos: [
+      { n: 1, quem: "Motorista", texto: "Informar a devolução como RECUSAR no celular, para tratamento pelo CME." },
+      { n: 2, quem: "Portaria",  texto: "Dar entrada no caminhão." },
+      { n: 3, quem: "Motorista", texto: "Entregar a nota na portaria." },
+      { n: 4, quem: "Motorista", texto: "Informar ao conferente o número do mapa." },
+      { n: 5, quem: "Motorista", texto: "Abrir as baias do caminhão para conferência, informar as devoluções ou trocas efetuadas e acompanhar a contagem do AG." },
+      { n: 6, quem: "Motorista", texto: "Segregar os produtos na última baia, do lado do motorista, para facilitar a conferência." },
+      { n: 7, quem: "Motorista", texto: "Informar o KM do veículo." },
+      { n: 8, quem: "Motorista", texto: "Se for gerado vale, retornar à sala dos conferentes para assinar e justificar. Se não houver, o ajudante está liberado." }
+    ] },
+
+  { id: "troca", n: 7, titulo: "Trocas",
+    objetivo: "Padronizar a forma de realizar as trocas no PDV.",
+    data: "19/02/2024", elaborador: "Silvio Martins", supervisor: "Silvio Martins / Thiago Fabri",
+    areas: "Distribuição e Armazém", padrao: "Trocas",
+    passos: [
+      { n: 1, quem: "Portaria",  texto: "Conferir baia por baia conforme especificado na OCP e verificar se as trocas foram carregadas." },
+      { n: 2, quem: "Motorista", texto: "Conferir a nota com o cliente antes de realizar a entrega, conferindo a etiqueta de troca." },
+      { n: 3, quem: "Motorista", texto: "Troca de responsabilidade da fábrica — etiqueta AMARELA.",
+        itens: ["Mal cheio", "Falta de data de validade", "Impurezas"] },
+      { n: 4, quem: "Ajudante",  texto: "Troca de responsabilidade da Tarumã — etiqueta VERDE.",
+        itens: ["Dentro do prazo comercial", "Embalagem avariada", "Vencido"] },
+      { n: 5, quem: "Ajudante",  texto: "Troca de responsabilidade da fábrica — etiqueta VERMELHA.",
+        itens: ["Mal cheia", "Falta de data de validade", "Impurezas"] },
+      { n: 6, quem: "Motorista", texto: "Realizar a entrega." }
+    ] }
+];
+
+function desenharLup(lup){
+  return `
+    <div class="sub-abas">
+      ${LUPS.map((l) => `
+        <button class="sub-aba ${l.id === lup.id ? "ativa" : ""}" data-lup="${l.id}">${escapar(l.titulo)}</button>`).join("")}
+    </div>
+
+    <div class="cartao">
+      <h2>${lup.n}. ${escapar(lup.titulo)}</h2>
+      <div class="lup-cabecalho">
+        <div class="lup-campo"><div class="rotulo">Publicação</div><div class="valor">${escapar(lup.data)}</div></div>
+        <div class="lup-campo"><div class="rotulo">Elaborador</div><div class="valor">${escapar(lup.elaborador)}</div></div>
+        <div class="lup-campo"><div class="rotulo">Supervisor imediato</div><div class="valor">${escapar(lup.supervisor)}</div></div>
+        <div class="lup-campo"><div class="rotulo">Áreas</div><div class="valor">${escapar(lup.areas)}</div></div>
+        <div class="lup-campo"><div class="rotulo">Padrão</div><div class="valor">${escapar(lup.padrao)}</div></div>
+      </div>
+      <div class="lup-objetivo"><b>Objetivo</b>${escapar(lup.objetivo)}</div>
+    </div>
+
+    <div class="cartao">
+      <h2>Equipamentos de proteção individual e coletiva</h2>
+      <div class="epis">
+        ${EPIS.map((e) => `
+          <div class="epi">
+            <svg viewBox="0 0 24 24">${e.svg}</svg>
+            <span>${escapar(e.nome)}</span>
+          </div>`).join("")}
+      </div>
+    </div>
+
+    <div class="cartao">
+      <h2>Passo a passo</h2>
+      <div class="passos-lup">
+        ${lup.passos.map((p) => `
+          <div class="passo-lup">
+            <div class="topo">
+              <span class="n">${p.n}</span>
+              <span class="responsavel">${escapar(p.quem)}</span>
+              ${p.ok === undefined ? "" :
+                `<span class="veredito ${p.ok ? "certo" : "errado"}">${p.ok ? "Correto" : "Errado"}</span>`}
+            </div>
+            ${p.img
+              ? `<img src="${escapar(p.img)}" alt="${escapar(p.texto)}" loading="lazy">`
+              : `<div class="vaga-foto">
+                   ${ICONE_FOTO}
+                   <b>Foto ainda não enviada</b>
+                   <code>./img/lups/${lup.id}-${p.n}.jpg</code>
+                 </div>`}
+            <div class="legenda">
+              ${escapar(p.texto)}
+              ${p.itens ? `<ul class="itens">${p.itens.map((i) => `<li>${escapar(i)}</li>`).join("")}</ul>` : ""}
+            </div>
+          </div>`).join("")}
+      </div>
+    </div>`;
+}
 
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = (id) => document.getElementById(id);
@@ -233,8 +1237,91 @@ function abrir(id){
   marcar(id);
   history.replaceState(null, "", "#" + id);
 
+  if (item.lups){
+    const desenhar = (idLup) => {
+      const lup = LUPS.find((l) => l.id === idLup) ?? LUPS[0];
+      $("conteudo").innerHTML = `
+        <h1>${escapar(item.rotulo)}</h1>
+        <p class="sub">${escapar(item.resumo || "")}</p>
+        ${desenharLup(lup)}`;
+      $("conteudo").querySelectorAll("[data-lup]").forEach((b) =>
+        b.addEventListener("click", () => desenhar(b.dataset.lup)));
+      window.scrollTo({ top: 0 });
+    };
+    desenhar(LUPS[0].id);
+    return;
+  }
+
+  if (item.form){
+    const embutir = !item.semEmbutir;
+    const url = item.form.includes("?")
+      ? item.form + "&embedded=true"
+      : item.form + "?embedded=true";
+
+    $("conteudo").innerHTML = `
+      <h1>${escapar(item.rotulo)}</h1>
+      <p class="sub">${escapar(item.resumo || "")}</p>
+      ${item.aviso ? `<p class="recado-form">${escapar(item.aviso)}</p>` : ""}
+      <div class="cartao">
+        <p>${escapar(item.intro || "")}</p>
+        <p style="margin-top:16px">
+          <a class="abrir-fora ${item.aviso ? "alerta" : ""}"
+             href="${escapar(item.form)}" target="_blank" rel="noopener">Abrir formulário</a>
+        </p>
+      </div>
+      ${embutir ? `<div class="quadro-form">
+        <iframe src="${escapar(url)}" title="${escapar(item.rotulo)}"
+                loading="lazy">Carregando o formulário…</iframe>
+      </div>` : ""}`;
+
+    window.scrollTo({ top: 0 });
+    return;
+  }
+
+  if (item.treinos){
+    const lista = () => {
+      $("conteudo").innerHTML = `
+        <h1>${escapar(item.rotulo)}</h1>
+        <p class="sub">${escapar(item.resumo || "")}</p>
+        ${desenharTreinamentos()}`;
+      $("conteudo").querySelectorAll("[data-treino]").forEach((b) =>
+        b.addEventListener("click", () => detalhe(b.dataset.treino)));
+      window.scrollTo({ top: 0 });
+    };
+
+    const detalhe = (idTreino) => {
+      const t = TREINAMENTOS.find((x) => x.id === idTreino);
+      if (!t) return lista();
+      $("conteudo").innerHTML = `
+        <button class="voltar" id="voltar-treinos">Todos os treinamentos</button>
+        <h1>${t.n}. ${escapar(t.titulo)}</h1>
+        <p class="sub">${escapar(t.resumo)}</p>
+        ${t.html ?? ""}
+        ${t.nos ? `<div class="cartao"><h2>Fluxo</h2><div class="fluxo">${desenharNos(t.nos)}</div></div>` : ""}`;
+      $("voltar-treinos").addEventListener("click", lista);
+      window.scrollTo({ top: 0 });
+    };
+
+    lista();
+    return;
+  }
+
+  if (item.fluxo){
+    const desenhar = (chave) => {
+      $("conteudo").innerHTML = `
+        <h1>${escapar(item.rotulo)}</h1>
+        <p class="sub">${escapar(item.resumo || "")}</p>
+        ${desenharFluxo(chave)}`;
+      $("conteudo").querySelectorAll("[data-fluxo]").forEach((b) =>
+        b.addEventListener("click", () => desenhar(b.dataset.fluxo)));
+      window.scrollTo({ top: 0 });
+    };
+    desenhar("pre-rota");
+    return;
+  }
+
   $("conteudo").innerHTML = `
-    <h1>${escapar(item.rotulo)}</h1>
+    <h1>${escapar(item.id === "sonho" ? "Sonho da revenda" : item.rotulo)}</h1>
     <p class="sub">${escapar(item.resumo || "")}</p>
     ${item.html ?? `
       <div class="cartao">
