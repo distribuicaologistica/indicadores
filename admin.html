@@ -139,6 +139,7 @@
   .selo.admin{background:#e6f0fb;color:var(--azul-forte)}
   .selo.gestor{background:#e7f6f1;color:var(--ok)}
   .selo.motorista{background:#fff3e2;color:#b26a00}
+  .selo.moderador{background:#ede7fb;color:#5b3fa8}
   .selo.provisoria{background:#fff3e2;color:#b26a00}
   .selo.bloqueado{background:#fdeceb;color:var(--erro)}
 
@@ -156,6 +157,13 @@
   .edicao .linha-campos{margin-bottom:14px}
 
   .vazio{text-align:center;color:var(--tinta-fraca);font-size:14px;padding:34px 0;line-height:1.6}
+
+  .escolhas{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+  .escolha{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;
+    border:1px solid var(--borda);border-radius:9px;padding:8px 12px;cursor:pointer;background:#f8fbfe}
+  .escolha:hover{border-color:var(--azul)}
+  .escolha input{width:auto;margin:0;padding:0}
+  .escolha.marcada{background:var(--azul-suave);border-color:var(--azul);color:var(--azul-forte)}
 
   .paginacao{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
     margin-top:16px;padding-top:14px;border-top:1px solid var(--borda);font-size:12px;color:var(--tinta-fraca)}
@@ -283,6 +291,7 @@
           <select id="n-papel">
             <option value="funcionario">Funcionário</option>
             <option value="motorista">Motorista</option>
+            <option value="moderador">Moderador</option>
             <option value="gestor">Gestor</option>
             <option value="admin">Admin</option>
           </select>
@@ -290,6 +299,10 @@
         <div class="campo" id="campo-n-mot" hidden>
           <label for="n-motorista">Código do motorista (Promax)</label>
           <input id="n-motorista" class="mono" inputmode="numeric" maxlength="20" placeholder="1042">
+        </div>
+        <div class="campo" id="campo-n-ind" hidden style="grid-column:1/-1">
+          <label>Indicadores que ele pode lançar</label>
+          <div class="escolhas" id="n-indicadores"></div>
         </div>
       </div>
       <button type="submit" class="acao" id="btn-novo" style="margin-top:20px">Cadastrar</button>
@@ -428,7 +441,43 @@ function ligarPaginacao(area, redesenhar){
 
 $("n-papel").addEventListener("change", (e) => {
   $("campo-n-mot").hidden = e.target.value !== "motorista";
+  $("campo-n-ind").hidden = e.target.value !== "moderador";
+  if (e.target.value === "moderador") $("n-indicadores").innerHTML = caixasIndicadores([]);
 });
+
+// Caixas de seleção dos indicadores, usadas no cadastro e na edição.
+function caixasIndicadores(marcados, prefixo = "ind"){
+  if (!indicadores.length) return `<span style="font-size:13px;color:var(--tinta-fraca)">Carregando indicadores…</span>`;
+  return indicadores.map((i) => `
+    <label class="escolha ${marcados.includes(i.codigo) ? "marcada" : ""}">
+      <input type="checkbox" data-${prefixo}="${escapar(i.codigo)}"
+             ${marcados.includes(i.codigo) ? "checked" : ""}>
+      ${escapar(i.nome)}
+    </label>`).join("");
+}
+
+// Realce da caixa marcada.
+document.addEventListener("change", (e) => {
+  if (e.target.matches('.escolha input'))
+    e.target.closest(".escolha").classList.toggle("marcada", e.target.checked);
+});
+
+async function definirModerador(matricula, codigos){
+  try{
+    const { funcionarios: lista } = await chamar("listar");
+    const perfil = (lista ?? []).find((f) => f.matricula === matricula);
+    if (!perfil) return "não achei o perfil para atribuir os indicadores.";
+
+    await sb.from("moderador_indicadores").delete().eq("perfil_id", perfil.id);
+
+    if (codigos.length){
+      const { error } = await sb.from("moderador_indicadores")
+        .insert(codigos.map((c) => ({ perfil_id: perfil.id, indicador: c })));
+      if (error) return error.message;
+    }
+    return null;
+  } catch (e){ return e.message; }
+}
 
 function avisar(el, texto, ok = false){
   el.textContent = texto;
@@ -508,7 +557,7 @@ async function abrirSePuder(){
   $("quem").textContent = `${perfil.nome.split(" ")[0]} · matrícula ${perfil.matricula}`;
   $("porta").hidden = true;
   $("area").hidden = false;
-  await carregar();
+  await Promise.all([carregar(), carregarIndicadores()]);
   return true;
 }
 
@@ -612,6 +661,15 @@ $("form-novo").addEventListener("submit", async (e) => {
     });
 
     let recado = r.mensagem;
+
+    if (papel === "moderador"){
+      const codigos = [...$("n-indicadores").querySelectorAll("[data-ind]:checked")]
+        .map((c) => c.dataset.ind);
+      const erro = await definirModerador($("n-matricula").value.trim(), codigos);
+      recado += erro ? ` Atenção: ${erro}`
+                     : ` Pode lançar ${codigos.length} indicador${codigos.length === 1 ? "" : "es"}.`;
+    }
+
     if (papel === "motorista"){
       const erro = await vincularMotorista($("n-matricula").value.trim(), codigoMot, $("n-nome").value.trim());
       recado += erro ? ` Atenção: ${erro}` : ` Vinculado ao motorista ${codigoMot}.`;
@@ -620,6 +678,7 @@ $("form-novo").addEventListener("submit", async (e) => {
     avisar($("aviso"), recado, true);
     $("form-novo").reset();
     $("campo-n-mot").hidden = true;
+    $("campo-n-ind").hidden = true;
     await carregar();
   } catch (err){
     avisar($("aviso"), err.message);
@@ -707,6 +766,7 @@ function abrirEdicao(ficha, f){
         <select data-e="papel">
           <option value="funcionario">Funcionário</option>
           <option value="motorista">Motorista</option>
+          <option value="moderador">Moderador</option>
           <option value="gestor">Gestor</option>
           <option value="admin">Admin</option>
         </select>
@@ -714,6 +774,10 @@ function abrirEdicao(ficha, f){
       <div class="campo">
         <label>Código do motorista</label>
         <input data-e="motorista" placeholder="só para papel motorista">
+      </div>
+      <div class="campo" style="grid-column:1/-1">
+        <label>Indicadores que ele pode lançar (papel moderador)</label>
+        <div class="escolhas" data-e="indicadores"></div>
       </div>
     </div>
     <button class="acao" data-e="salvar">Salvar</button>
@@ -724,6 +788,12 @@ function abrirEdicao(ficha, f){
   sb.from("motoristas").select("codigo").eq("perfil_id", f.id).maybeSingle()
     .then(({ data }) => {
       if (data) bloco.querySelector('[data-e="motorista"]').value = data.codigo;
+    });
+
+  sb.from("moderador_indicadores").select("indicador").eq("perfil_id", f.id)
+    .then(({ data }) => {
+      const marcados = (data ?? []).map((r) => r.indicador);
+      bloco.querySelector('[data-e="indicadores"]').innerHTML = caixasIndicadores(marcados, "edind");
     });
 
   bloco.querySelector('[data-e="salvar"]').addEventListener("click", async (ev) => {
@@ -744,6 +814,16 @@ function abrirEdicao(ficha, f){
       });
 
       let extra = "";
+
+      if (papel === "moderador"){
+        const codigos = [...bloco.querySelectorAll("[data-edind]:checked")].map((c) => c.dataset.edind);
+        const erro = await definirModerador(f.matricula, codigos);
+        extra += erro ? ` Atenção: ${erro}`
+                      : ` Pode lançar ${codigos.length} indicador${codigos.length === 1 ? "" : "es"}.`;
+      } else {
+        await sb.from("moderador_indicadores").delete().eq("perfil_id", f.id);
+      }
+
       if (papel === "motorista"){
         const erro = await vincularMotorista(f.matricula, codigoMot,
           bloco.querySelector('[data-e="nome"]').value.trim());

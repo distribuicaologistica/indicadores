@@ -245,10 +245,14 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = (id) => document.getElementById(id);
 
 let perfil = null, catalogo = [], lancamentos = [], metas = [], motoristas = [];
+let meusIndicadores = [];   // indicadores que este moderador pode lançar
 let g1 = null, g2 = null;
 
 const ehAdmin = () => perfil?.papel === "admin";
 const ehMotorista = () => perfil?.papel === "motorista";
+// Quem pode lançar neste indicador: admin em todos, moderador nos atribuídos.
+const podeLancar = (codigo) =>
+  ehAdmin() || (perfil?.papel === "moderador" && meusIndicadores.includes(codigo));
 const escapar = (t) => String(t ?? "").replace(/[&<>"']/g, (c) =>
   ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const num = (v, casas = 2) => (v === null || v === undefined || isNaN(v)) ? "—"
@@ -406,13 +410,14 @@ function verIndicador(codigo, aba = "mes"){
       <button class="aba ${aba === "mes" ? "ativa" : ""}" data-aba="mes">Acumulado do mês</button>
       <button class="aba ${aba === "grafico" ? "ativa" : ""}" data-aba="grafico">Gráfico</button>
       <button class="aba ${aba === "dados" ? "ativa" : ""}" data-aba="dados">Valores por dia</button>
-      ${ehAdmin() ? `<button class="aba ${aba === "lancar" ? "ativa" : ""}" data-aba="lancar">Lançar dados</button>` : ""}
+      ${podeLancar(i.codigo) ? `<button class="aba ${aba === "lancar" ? "ativa" : ""}" data-aba="lancar">Lançar dados</button>` : ""}
     </div>
     <div id="corpo-aba"></div>`;
 
   $("conteudo").querySelectorAll("[data-aba]").forEach((b) =>
     b.addEventListener("click", () => verIndicador(codigo, b.dataset.aba)));
 
+  if (aba === "lancar" && !podeLancar(i.codigo)) aba = "mes";
   ({ mes: abaMes, grafico: abaGrafico, dados: abaDados, lancar: abaLancar })[aba](i);
 }
 
@@ -645,7 +650,7 @@ function abaDados(i){
 
 /* ---------- aba: lançar (admin) ---------- */
 function abaLancar(i){
-  if (!ehAdmin()) return;
+  if (!podeLancar(i.codigo)) return;
   const competencia = competenciaDe(hojeISO());
   const metaMes = metas.find((m) => m.indicador === i.codigo && m.competencia === competencia);
 
@@ -885,6 +890,12 @@ document.querySelector('[data-ir="geral"]').addEventListener("click", verGeral);
 
 async function recarregar(){
   const desde = isoMenosDias(DIAS_CARREGADOS);
+  if (perfil?.papel === "moderador"){
+    const { data } = await sb.from("moderador_indicadores")
+      .select("indicador").eq("perfil_id", (await sb.auth.getSession()).data.session.user.id);
+    meusIndicadores = (data ?? []).map((r) => r.indicador);
+  }
+
   const [c, l, m, mo] = await Promise.all([
     sb.from("indicadores").select("*").eq("ativo", true).order("ordem"),
     sb.from("lancamentos").select("*").gte("data", desde).order("data", { ascending: false }).limit(20000),
