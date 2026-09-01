@@ -355,6 +355,17 @@
             <option value="soma">soma dos dias</option>
           </select>
         </div>
+        <div class="campo">
+          <label for="i-periodicidade">Periodicidade</label>
+          <select id="i-periodicidade">
+            <option value="diario">um lançamento por dia</option>
+            <option value="mensal">um lançamento por mês</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="i-cor">Cor no painel</label>
+          <input type="color" id="i-cor" value="#2b7fd4" style="height:44px;padding:5px">
+        </div>
       </div>
       <button class="acao" id="i-criar" style="margin-top:20px">Criar indicador</button>
       <p class="vazio" style="padding:14px 0 0;text-align:left;font-size:12px">
@@ -886,7 +897,7 @@ function desenharIndicadores(){
     <div class="rolagem"><table>
       <thead><tr>
         <th>Código</th><th>Nome</th><th>Unidade</th><th>Meta padrão</th>
-        <th>Sentido</th><th>Fechamento</th><th>Casas</th><th>Ordem</th><th>Ativo</th><th></th>
+        <th>Sentido</th><th>Fechamento</th><th>Período</th><th>Cor</th><th>Casas</th><th>Ordem</th><th>Ativo</th><th></th>
       </tr></thead>
       <tbody>${pg.itens.map((i) => `
         <tr data-codigo="${escapar(i.codigo)}">
@@ -903,6 +914,12 @@ function desenharIndicadores(){
             <option value="media" ${i.agregacao === "media" ? "selected" : ""}>média</option>
             <option value="soma" ${i.agregacao === "soma" ? "selected" : ""}>soma</option>
           </select></td>
+          <td><select data-c="periodicidade">
+            <option value="diario" ${i.periodicidade !== "mensal" ? "selected" : ""}>diário</option>
+            <option value="mensal" ${i.periodicidade === "mensal" ? "selected" : ""}>mensal</option>
+          </select></td>
+          <td style="width:70px"><input type="color" data-c="cor"
+              value="${i.cor || "#2b7fd4"}" style="height:38px;padding:4px"></td>
           <td class="estreito"><input data-c="casas" inputmode="numeric" value="${i.casas}"></td>
           <td class="estreito"><input data-c="ordem" inputmode="numeric" value="${i.ordem}"></td>
           <td><select data-c="ativo">
@@ -954,6 +971,8 @@ async function acaoIndicador(botao){
     meta_padrao: paraNumero(campo("meta_padrao")),
     sentido: campo("sentido"),
     agregacao: campo("agregacao"),
+    periodicidade: campo("periodicidade"),
+    cor: campo("cor"),
     casas,
     ordem,
     ativo: campo("ativo") === "sim"
@@ -983,6 +1002,8 @@ $("i-criar").addEventListener("click", async () => {
     meta_padrao: paraNumero($("i-meta").value),
     sentido: $("i-sentido").value,
     agregacao: $("i-agregacao").value,
+    periodicidade: $("i-periodicidade").value,
+    cor: $("i-cor").value,
     casas: 2,
     ordem: (indicadores.at(-1)?.ordem ?? 0) + 1,
     ativo: true

@@ -49,6 +49,8 @@
     border-radius:10px;padding:11px 12px;cursor:pointer;transition:.14s}
   .item:hover{background:var(--azul-suave);color:var(--azul-forte)}
   .item.ativo{background:var(--azul);color:#fff;font-weight:600}
+  .item .ponto{width:7px;height:7px;border-radius:50%;flex:none}
+  .item.ativo .ponto{background:#fff !important}
   .item .contador{font-family:var(--mono);font-size:11px;font-weight:600;
     background:var(--falha-suave);color:var(--falha);border-radius:20px;padding:2px 8px}
   .item.ativo .contador{background:rgba(255,255,255,.24);color:#fff}
@@ -135,6 +137,14 @@
     margin-top:16px;padding-top:14px;border-top:1px solid var(--borda);font-size:12px;color:var(--tinta-fraca)}
   .paginacao .botoes-pag{display:flex;align-items:center;gap:6px}
   .paginacao .posicao{font-family:var(--mono);font-size:12px;color:var(--tinta);padding:0 4px}
+
+  .selo-periodo{
+    font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;border-radius:20px;padding:3px 9px;
+    background:var(--azul-suave);color:var(--azul-forte);
+  }
+  .resumo .cabeca{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+  .resumo .cabeca .nome{margin:0}
 
   .tela-grafico{position:relative;height:300px}
   .vazio{text-align:center;color:var(--tinta-fraca);font-size:14px;padding:36px 0;line-height:1.7}
@@ -251,6 +261,8 @@ let g1 = null, g2 = null;
 const ehAdmin = () => perfil?.papel === "admin";
 const ehMotorista = () => perfil?.papel === "motorista";
 // Quem pode lançar neste indicador: admin em todos, moderador nos atribuídos.
+const ehMensal = (i) => i.periodicidade === "mensal";
+const corDe = (i) => i.cor || "#2b7fd4";
 const podeLancar = (codigo) =>
   ehAdmin() || (perfil?.papel === "moderador" && meusIndicadores.includes(codigo));
 const escapar = (t) => String(t ?? "").replace(/[&<>"']/g, (c) =>
@@ -358,11 +370,16 @@ function verGeral(){
     const media = linhas.length ? linhas.reduce((t, l) => t + l.valor, 0) / linhas.length : null;
 
     return `
-      <article class="resumo ${fora > 0 ? "falha" : ""}" data-abrir="${i.codigo}">
-        <div class="nome">${escapar(i.nome)} · ${comps.length ? mesCurto(competencia) : "sem dados"}</div>
+      <article class="resumo ${fora > 0 ? "falha" : ""}" data-abrir="${i.codigo}"
+               style="${fora > 0 ? "" : `border-left-color:${corDe(i)}`}">
+        <div class="cabeca">
+          <div class="nome">${escapar(i.nome)} · ${comps.length ? mesCurto(competencia) : "sem dados"}</div>
+          ${ehMensal(i) ? `<span class="selo-periodo"
+             style="background:${corDe(i)}1f;color:${corDe(i)}">mensal</span>` : ""}
+        </div>
         ${linhas.length ? `
           <div class="valor ${fora > 0 ? "falha" : ""}">
-            ${num(media, i.casas)}<span class="un">${escapar(i.unidade || "")}${ehMotorista() ? "" : " média"}</span>
+            ${num(media, i.casas)}<span class="un">${escapar(i.unidade || "")}${(ehMotorista() || ehMensal(i)) ? "" : " média"}</span>
           </div>
           <div class="linha-meta">
             <span>Meta ${meta === null ? "—" : num(meta, i.casas)}</span>
@@ -404,12 +421,13 @@ function verIndicador(codigo, aba = "mes"){
     <h1>${escapar(i.nome)}</h1>
     <p class="sub">
       ${i.sentido === "menor_melhor" ? "Quanto menor, melhor" : "Quanto maior, melhor"} ·
-      mês fecha por ${i.agregacao === "soma" ? "soma" : "média"}${i.unidade ? ` · em ${escapar(i.unidade)}` : ""}
+      ${ehMensal(i) ? "um lançamento por mês"
+        : `mês fecha por ${i.agregacao === "soma" ? "soma" : "média"}`}${i.unidade ? ` · em ${escapar(i.unidade)}` : ""}
     </p>
     <div class="abas">
-      <button class="aba ${aba === "mes" ? "ativa" : ""}" data-aba="mes">Acumulado do mês</button>
+      <button class="aba ${aba === "mes" ? "ativa" : ""}" data-aba="mes">${ehMensal(i) ? "Fechamento do mês" : "Acumulado do mês"}</button>
       <button class="aba ${aba === "grafico" ? "ativa" : ""}" data-aba="grafico">Gráfico</button>
-      <button class="aba ${aba === "dados" ? "ativa" : ""}" data-aba="dados">Valores por dia</button>
+      <button class="aba ${aba === "dados" ? "ativa" : ""}" data-aba="dados">${ehMensal(i) ? "Lançamentos" : "Valores por dia"}</button>
       ${podeLancar(i.codigo) ? `<button class="aba ${aba === "lancar" ? "ativa" : ""}" data-aba="lancar">Lançar dados</button>` : ""}
     </div>
     <div id="corpo-aba"></div>`;
@@ -511,13 +529,14 @@ function abaGrafico(i){
             <option value="">Todos (média do dia)</option>
             ${codigos.map((c) => `<option value="${c}" ${c === motoristaFiltro ? "selected" : ""}>${escapar(nomeMotorista(c))}</option>`).join("")}
           </select></div>
-        <div><label for="de">De</label><input type="date" id="de" value="${intervalo.de}"></div>
-        <div><label for="ate">Até</label><input type="date" id="ate" value="${intervalo.ate}"></div>
+        <div ${ehMensal(i) ? "hidden" : ""}><label for="de">De</label><input type="date" id="de" value="${intervalo.de}"></div>
+        <div ${ehMensal(i) ? "hidden" : ""}><label for="ate">Até</label><input type="date" id="ate" value="${intervalo.ate}"></div>
         <div><button class="acao" id="aplicar">Aplicar</button></div>
       </div>
     </div>
-    <div class="cartao"><h2>Dia a dia</h2><div class="tela-grafico"><canvas id="ga"></canvas></div></div>
-    <div class="cartao"><h2>Acumulado por mês</h2><div class="tela-grafico"><canvas id="gb"></canvas></div></div>`;
+    ${ehMensal(i) ? "" : `<div class="cartao"><h2>Dia a dia</h2><div class="tela-grafico"><canvas id="ga"></canvas></div></div>`}
+    <div class="cartao"><h2>${ehMensal(i) ? "Histórico mensal" : "Acumulado por mês"}</h2>
+      <div class="tela-grafico"><canvas id="gb"></canvas></div></div>`;
 
   $("aplicar").addEventListener("click", () => {
     motoristaFiltro = $("mot").value;
@@ -526,7 +545,7 @@ function abaGrafico(i){
   });
 
   const base = lancamentos.filter((l) => l.indicador === i.codigo &&
-    l.data >= intervalo.de && l.data <= intervalo.ate &&
+    (ehMensal(i) || (l.data >= intervalo.de && l.data <= intervalo.ate)) &&
     (!motoristaFiltro || l.motorista === motoristaFiltro));
 
   // agrupa por dia (média quando são vários motoristas)
@@ -540,7 +559,7 @@ function abaGrafico(i){
   const cores = dias.map((d, k) => atingiu(i, valores[k], metaDe(i, competenciaDe(d))) === false ? "#c0392b" : "#2b7fd4");
 
   g1?.destroy();
-  g1 = new Chart($("ga"), {
+  if (!ehMensal(i)) g1 = new Chart($("ga"), {
     type: "line",
     data: { labels: dias.map((d) => dia(d).slice(0,5)),
       datasets: [
@@ -598,7 +617,7 @@ function abaDados(i){
     .filter(Boolean).sort((a, b) => nomeMotorista(a).localeCompare(nomeMotorista(b)));
 
   const dados = lancamentos.filter((l) => l.indicador === i.codigo &&
-      l.data >= intervalo.de && l.data <= intervalo.ate &&
+      (ehMensal(i) || (l.data >= intervalo.de && l.data <= intervalo.ate)) &&
       (!motoristaFiltro || l.motorista === motoristaFiltro))
     .sort((a, b) => b.data.localeCompare(a.data) || nomeMotorista(a.motorista).localeCompare(nomeMotorista(b.motorista)));
 
@@ -612,20 +631,20 @@ function abaDados(i){
           <select id="mot2"><option value="">Todos</option>
             ${codigos.map((c) => `<option value="${c}" ${c === motoristaFiltro ? "selected" : ""}>${escapar(nomeMotorista(c))}</option>`).join("")}
           </select></div>
-        <div><label for="de2">De</label><input type="date" id="de2" value="${intervalo.de}"></div>
-        <div><label for="ate2">Até</label><input type="date" id="ate2" value="${intervalo.ate}"></div>
+        <div ${ehMensal(i) ? "hidden" : ""}><label for="de2">De</label><input type="date" id="de2" value="${intervalo.de}"></div>
+        <div ${ehMensal(i) ? "hidden" : ""}><label for="ate2">Até</label><input type="date" id="ate2" value="${intervalo.ate}"></div>
         <div><button class="acao" id="aplicar2">Aplicar</button></div>
       </div>
     </div>
     <div class="cartao">
       <h2>${dados.length} lançamento${dados.length === 1 ? "" : "s"}</h2>
       ${dados.length ? `<div class="rolagem"><table>
-        <thead><tr><th>Data</th><th>Motorista</th><th>Código</th><th class="num">Valor</th><th class="num">Meta</th><th>Situação</th><th>Observação</th></tr></thead>
+        <thead><tr><th>${ehMensal(i) ? "Competência" : "Data"}</th><th>Motorista</th><th>Código</th><th class="num">Valor</th><th class="num">Meta</th><th>Situação</th><th>Observação</th></tr></thead>
         <tbody>${pg.itens.map((l) => {
           const meta = metaDe(i, competenciaDe(l.data));
           const bateu = atingiu(i, l.valor, meta);
           return `<tr>
-            <td class="num">${dia(l.data)}</td>
+            <td class="num">${ehMensal(i) ? mesCurto(competenciaDe(l.data)) : dia(l.data)}</td>
             <td>${escapar(nomeMotorista(l.motorista))}</td>
             <td><span class="cod">${escapar(l.motorista ?? "—")}</span></td>
             <td class="num forte ${bateu === false ? "falha" : "ok"}">${num(l.valor, i.casas)}</td>
@@ -659,8 +678,11 @@ function abaLancar(i){
 
     <div class="cartao">
       <h2>Colar vários lançamentos</h2>
-      <label for="lote">Uma linha por motorista, no formato <b>data;código do motorista;valor</b></label>
-      <textarea id="lote" placeholder="01/08/2026;1042;2,4&#10;01/08/2026;1077;1,9&#10;02/08/2026;1042;3,1"></textarea>
+      <label for="lote">Uma linha por motorista, no formato
+        <b>${ehMensal(i) ? "mês;código do motorista;valor" : "data;código do motorista;valor"}</b></label>
+      <textarea id="lote" placeholder="${ehMensal(i)
+        ? "01/2026;1042;92,5&#10;01/2026;1077;88,0&#10;02/2026;1042;91,2"
+        : "01/08/2026;1042;2,4&#10;01/08/2026;1077;1,9&#10;02/08/2026;1042;3,1"}"></textarea>
       <div style="display:flex;gap:10px;margin-top:14px">
         <button class="acao" id="lote-enviar">Enviar</button>
         <button class="acao suave" id="lote-limpar">Limpar</button>
@@ -668,14 +690,17 @@ function abaLancar(i){
       <p class="sub" style="margin:14px 0 0">
         Aceita ponto e vírgula ou tabulação — dá para colar direto do Excel.
         Código de motorista ainda não cadastrado é criado na hora, com o próprio código como nome.
-        Reenviar a mesma data e motorista substitui o valor.
+        Reenviar ${ehMensal(i) ? "o mesmo mês" : "a mesma data"} e motorista substitui o valor.
       </p>
     </div>
 
     <div class="cartao">
       <h2>Lançar um</h2>
       <div class="linha-campos" style="max-width:820px">
-        <div><label for="l-data">Data</label><input type="date" id="l-data" value="${hojeISO()}"></div>
+        <div><label for="l-data">${ehMensal(i) ? "Competência" : "Data"}</label>
+          ${ehMensal(i)
+            ? `<input type="month" id="l-data" value="${hojeISO().slice(0,7)}">`
+            : `<input type="date" id="l-data" value="${hojeISO()}">`}</div>
         <div><label for="l-mot">Código do motorista</label><input id="l-mot" inputmode="numeric" placeholder="1042"></div>
         <div><label for="l-valor">Valor${i.unidade ? ` (${escapar(i.unidade)})` : ""}</label><input id="l-valor" inputmode="decimal" placeholder="0,00"></div>
         <div><label for="l-obs">Observação</label><input id="l-obs" placeholder="opcional"></div>
@@ -712,7 +737,7 @@ function abaLancar(i){
   $("lote-limpar").addEventListener("click", () => { $("lote").value = ""; });
 
   $("lote-enviar").addEventListener("click", async () => {
-    const { linhas, erros } = lerLote($("lote").value, i.codigo);
+    const { linhas, erros } = lerLote($("lote").value, i.codigo, ehMensal(i));
     if (erros.length) return recado(erros.slice(0, 5).map((e) => `Linha ${e.linha}: ${e.motivo}`).join("\n"));
     if (!linhas.length) return recado("Nada para enviar.");
     const botao = $("lote-enviar");
@@ -731,7 +756,8 @@ function abaLancar(i){
     if (!mot) return recado("Informe o código do motorista.");
     if (valor === null) return recado("Digite um valor numérico.");
     try{
-      await gravar([{ indicador: i.codigo, data: $("l-data").value, motorista: mot,
+      const quando = ehMensal(i) ? `${$("l-data").value}-01` : $("l-data").value;
+      await gravar([{ indicador: i.codigo, data: quando, motorista: mot,
                       valor, observacao: $("l-obs").value.trim() || null }]);
       await recarregar();
       verIndicador(i.codigo, "lancar");
@@ -830,16 +856,28 @@ function paraData(t){
   const br = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
   return br ? `${br[3]}-${br[2].padStart(2,"0")}-${br[1].padStart(2,"0")}` : null;
 }
-function lerLote(texto, codigo){
+
+// Mensal: aceita 01/2026, 1/2026 e 2026-01. Grava sempre no dia 1.
+function paraMes(t){
+  const s = t.trim();
+  const br = s.match(/^(\d{1,2})\/(\d{4})$/);
+  if (br) return `${br[2]}-${br[1].padStart(2,"0")}-01`;
+  const iso = s.match(/^(\d{4})-(\d{2})(-\d{2})?$/);
+  if (iso) return `${iso[1]}-${iso[2]}-01`;
+  return null;
+}
+function lerLote(texto, codigo, mensal = false){
   const linhas = [], erros = [];
   texto.split(/\r?\n/).forEach((bruta, k) => {
     const l = bruta.trim();
     if (!l) return;
     const p = l.split(/[;\t]/).map((x) => x.trim());
-    if (p.length < 3) return erros.push({ linha: k + 1, motivo: "esperava data;motorista;valor." });
-    const data = paraData(p[0]);
+    if (p.length < 3) return erros.push({ linha: k + 1,
+      motivo: mensal ? "esperava mês;motorista;valor." : "esperava data;motorista;valor." });
+    const data = mensal ? paraMes(p[0]) : paraData(p[0]);
     const valor = paraNumero(p[2]);
-    if (!data) return erros.push({ linha: k + 1, motivo: "data não reconhecida." });
+    if (!data) return erros.push({ linha: k + 1,
+      motivo: mensal ? "mês não reconhecido (use 01/2026)." : "data não reconhecida." });
     if (!p[1]) return erros.push({ linha: k + 1, motivo: "faltou o código do motorista." });
     if (valor === null) return erros.push({ linha: k + 1, motivo: "valor não numérico." });
     linhas.push({ indicador: codigo, data, motorista: p[1], valor, observacao: p[3] || null });
@@ -867,12 +905,21 @@ function marcarMenu(qual){
   document.querySelectorAll(".item").forEach((b) => b.classList.toggle("ativo", b.dataset.ir === qual));
 }
 function montarMenu(){
-  $("menu-indicadores").innerHTML = catalogo.map((i) => {
+  const botao = (i) => {
     const comp = competenciasDe(i)[0];
-    const fora = comp ? acumuladoPorMotorista(i, comp).filter((l) => atingiu(i, l.valor, metaDe(i, comp)) === false).length : 0;
-    return `<button class="item" data-ir="${i.codigo}">${escapar(i.nome)}
-      ${fora > 0 ? `<span class="contador">${fora}</span>` : ""}</button>`;
-  }).join("");
+    const fora = comp ? acumuladoPorMotorista(i, comp)
+      .filter((l) => atingiu(i, l.valor, metaDe(i, comp)) === false).length : 0;
+    return `<button class="item" data-ir="${i.codigo}">
+        <span class="ponto" style="background:${corDe(i)}"></span>${escapar(i.nome)}
+        ${fora > 0 ? `<span class="contador">${fora}</span>` : ""}</button>`;
+  };
+
+  const diarios = catalogo.filter((i) => !ehMensal(i));
+  const mensais = catalogo.filter(ehMensal);
+
+  $("menu-indicadores").innerHTML =
+    (diarios.length ? diarios.map(botao).join("") : "") +
+    (mensais.length ? `<div class="nav-titulo">Mensais</div>` + mensais.map(botao).join("") : "");
   $("menu-indicadores").querySelectorAll("[data-ir]").forEach((b) =>
     b.addEventListener("click", () => {
       competenciaFiltro = "";
