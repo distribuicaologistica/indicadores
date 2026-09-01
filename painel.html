@@ -415,8 +415,8 @@ function verGeral(){
     <p class="sub">${ehMotorista()
       ? "Seus números em cada indicador."
       : "Acumulado por motorista, em cada indicador."}</p>
-    ${bloco("Acompanhamento diário", diarios, "#2b7fd4")}
-    ${bloco("Acompanhamento mensal", mensais, corMensal)}`;
+    ${bloco("Acompanhamento mensal", mensais, corMensal)}
+    ${bloco("Acompanhamento diário", diarios, "#2b7fd4")}`;
 
   $("conteudo").querySelectorAll("[data-abrir]").forEach((el) =>
     el.addEventListener("click", () => verIndicador(el.dataset.abrir)));
@@ -938,8 +938,8 @@ function montarMenu(){
   const mensais = catalogo.filter(ehMensal);
 
   $("menu-indicadores").innerHTML =
-    (diarios.length ? diarios.map(botao).join("") : "") +
-    (mensais.length ? `<div class="nav-titulo">Mensais</div>` + mensais.map(botao).join("") : "");
+    (mensais.length ? `<div class="nav-titulo">Mensais</div>` + mensais.map(botao).join("") : "") +
+    (diarios.length ? `<div class="nav-titulo">Diários</div>` + diarios.map(botao).join("") : "");
   $("menu-indicadores").querySelectorAll("[data-ir]").forEach((b) =>
     b.addEventListener("click", () => {
       competenciaFiltro = "";
