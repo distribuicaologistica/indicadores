@@ -138,6 +138,16 @@
   .paginacao .botoes-pag{display:flex;align-items:center;gap:6px}
   .paginacao .posicao{font-family:var(--mono);font-size:12px;color:var(--tinta);padding:0 4px}
 
+  .titulo-bloco{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--display);font-weight:600;font-size:13px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-fraca);
+    margin:0 0 14px;
+  }
+  .titulo-bloco::after{content:"";flex:1;height:1px;background:var(--borda)}
+  .titulo-bloco .bolinha{width:9px;height:9px;border-radius:50%;flex:none}
+  .grade + .titulo-bloco{margin-top:30px}
+
   .selo-periodo{
     font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;
     text-transform:uppercase;border-radius:20px;padding:3px 9px;
@@ -361,7 +371,7 @@ function competenciasDe(ind){
 function verGeral(){
   marcarMenu("geral");
 
-  const cartoes = catalogo.map((i) => {
+  const cartao = (i) => {
     const comps = competenciasDe(i);
     const competencia = comps[0] ?? competenciaDe(hojeISO());
     const meta = metaDe(i, competencia);
@@ -371,14 +381,15 @@ function verGeral(){
 
     return `
       <article class="resumo ${fora > 0 ? "falha" : ""}" data-abrir="${i.codigo}"
-               style="${fora > 0 ? "" : `border-left-color:${corDe(i)}`}">
+               style="${fora > 0 ? "" : `border-left-color:${corDe(i)};background:linear-gradient(105deg, ${corDe(i)}0f, #fff 60%)`}">
         <div class="cabeca">
           <div class="nome">${escapar(i.nome)} · ${comps.length ? mesCurto(competencia) : "sem dados"}</div>
           ${ehMensal(i) ? `<span class="selo-periodo"
              style="background:${corDe(i)}1f;color:${corDe(i)}">mensal</span>` : ""}
         </div>
         ${linhas.length ? `
-          <div class="valor ${fora > 0 ? "falha" : ""}">
+          <div class="valor ${fora > 0 ? "falha" : ""}"
+               style="${fora > 0 ? "" : `color:${corDe(i)}`}">
             ${num(media, i.casas)}<span class="un">${escapar(i.unidade || "")}${(ehMotorista() || ehMensal(i)) ? "" : " média"}</span>
           </div>
           <div class="linha-meta">
@@ -389,14 +400,23 @@ function verGeral(){
           </div>
         ` : `<div class="vazio" style="padding:14px 0;text-align:left">Sem lançamentos ainda.</div>`}
       </article>`;
-  }).join("");
+  };
+
+  const diarios = catalogo.filter((i) => !ehMensal(i));
+  const mensais = catalogo.filter(ehMensal);
+  const corMensal = mensais.length ? corDe(mensais[0]) : "#6d4aa8";
+
+  const bloco = (titulo, lista, cor) => !lista.length ? "" : `
+    <h2 class="titulo-bloco"><span class="bolinha" style="background:${cor}"></span>${titulo}</h2>
+    <div class="grade">${lista.map(cartao).join("")}</div>`;
 
   $("conteudo").innerHTML = `
     <h1>Visão geral</h1>
     <p class="sub">${ehMotorista()
-      ? "Seus números do mês em cada indicador."
-      : "Acumulado do mês por motorista, em cada indicador."}</p>
-    <div class="grade">${cartoes}</div>`;
+      ? "Seus números em cada indicador."
+      : "Acumulado por motorista, em cada indicador."}</p>
+    ${bloco("Acompanhamento diário", diarios, "#2b7fd4")}
+    ${bloco("Acompanhamento mensal", mensais, corMensal)}`;
 
   $("conteudo").querySelectorAll("[data-abrir]").forEach((el) =>
     el.addEventListener("click", () => verIndicador(el.dataset.abrir)));
@@ -1014,6 +1034,5 @@ $("sair").addEventListener("click", async () => {
   });
 })();
 </script>
-.
 </body>
 </html>
