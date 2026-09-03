@@ -279,6 +279,17 @@ const escapar = (t) => String(t ?? "").replace(/[&<>"']/g, (c) =>
   ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const num = (v, casas = 2) => (v === null || v === undefined || isNaN(v)) ? "—"
   : Number(v).toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas });
+
+// Unidades de dinheiro vêm ANTES do número (R$ 1.234,56); as demais, depois.
+const ehDinheiro = (u) => /^(r\$|rs|reais|\$)$/i.test(String(u ?? "").trim());
+const prefixoMoeda = (u) => ehDinheiro(u) ? (/^\$$/.test(u.trim()) ? "$ " : "R$ ") : "";
+
+// Valor já com a unidade no lugar certo. Para o painel usar em todo canto.
+function comUnidade(v, i){
+  if (v === null || v === undefined || isNaN(v)) return "—";
+  const n = num(v, i.casas);
+  return ehDinheiro(i.unidade) ? `${prefixoMoeda(i.unidade)}${n}` : n;
+}
 const dia = (d) => d.split("-").reverse().join("/");
 const competenciaDe = (d) => d.slice(0, 7) + "-01";
 const NOMES_MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
@@ -390,10 +401,10 @@ function verGeral(){
         ${linhas.length ? `
           <div class="valor ${fora > 0 ? "falha" : ""}"
                style="${fora > 0 ? "" : `color:${corDe(i)}`}">
-            ${num(media, i.casas)}<span class="un">${escapar(i.unidade || "")}${(ehMotorista() || ehMensal(i)) ? "" : " média"}</span>
+            ${ehDinheiro(i.unidade) ? `<span class="un" style="margin-right:2px">${escapar(prefixoMoeda(i.unidade).trim())}</span>` : ""}${num(media, i.casas)}<span class="un">${ehDinheiro(i.unidade) ? ((ehMotorista() || ehMensal(i)) ? "" : " média") : `${escapar(i.unidade || "")}${(ehMotorista() || ehMensal(i)) ? "" : " média"}`}</span>
           </div>
           <div class="linha-meta">
-            <span>Meta ${meta === null ? "—" : num(meta, i.casas)}</span>
+            <span>Meta ${meta === null ? "—" : comUnidade(meta, i)}</span>
             <b class="${fora > 0 ? "falha" : ""}">${ehMotorista()
               ? (fora > 0 ? "fora da meta" : "dentro da meta")
               : `${fora} de ${linhas.length} fora`}</b>
@@ -481,8 +492,8 @@ function abaMes(i){
     ${linhas.length ? `
     <div class="cartao">
       <h2>${ehMotorista()
-        ? `Seu acumulado ${meta === null ? "" : `· meta ${num(meta, i.casas)}`}`
-        : `${linhas.length} motorista${linhas.length === 1 ? "" : "s"} · ${fora} fora da meta ${meta === null ? "" : `(${num(meta, i.casas)})`}`}</h2>
+        ? `Seu acumulado ${meta === null ? "" : `· meta ${comUnidade(meta, i)}`}`
+        : `${linhas.length} motorista${linhas.length === 1 ? "" : "s"} · ${fora} fora da meta ${meta === null ? "" : `(${comUnidade(meta, i)})`}`}</h2>
       <div class="tela-grafico"><canvas id="gm"></canvas></div>
     </div>
 
@@ -496,8 +507,8 @@ function abaMes(i){
             <td class="num" style="color:var(--tinta-fraca)">${pg.deslocamento + k + 1}</td>
             <td>${escapar(l.nome)}</td>
             <td><span class="cod">${escapar(l.codigo)}</span></td>
-            <td class="num forte ${bateu === false ? "falha" : "ok"}">${num(l.valor, i.casas)}</td>
-            <td class="num">${meta === null ? "—" : num(meta, i.casas)}</td>
+            <td class="num forte ${bateu === false ? "falha" : "ok"}">${comUnidade(l.valor, i)}</td>
+            <td class="num">${meta === null ? "—" : comUnidade(meta, i)}</td>
             <td class="num" style="color:var(--tinta-fraca)">${l.dias}</td>
             <td><span class="marca ${bateu === false ? "falha" : "ok"}">${
               bateu === null ? "sem meta" : bateu ? "dentro" : "fora"}</span></td>
@@ -622,7 +633,7 @@ function opcoes(i){
     plugins: {
       legend: { labels: { font: { family: "Plus Jakarta Sans" }, usePointStyle: true, boxWidth: 8 } },
       tooltip: { callbacks: { label: (c) =>
-        `${c.dataset.label}: ${num(c.parsed.y, i.casas)}${i.unidade ? " " + i.unidade : ""}` } }
+        `${c.dataset.label}: ${comUnidade(c.parsed.y, i)}${ehDinheiro(i.unidade) ? "" : (i.unidade ? " " + i.unidade : "")}` } }
     },
     scales: {
       x: { grid: { display: false }, ticks: { font: { family: "JetBrains Mono", size: 10 }, maxRotation: 60 } },
@@ -667,8 +678,8 @@ function abaDados(i){
             <td class="num">${ehMensal(i) ? mesCurto(competenciaDe(l.data)) : dia(l.data)}</td>
             <td>${escapar(nomeMotorista(l.motorista))}</td>
             <td><span class="cod">${escapar(l.motorista ?? "—")}</span></td>
-            <td class="num forte ${bateu === false ? "falha" : "ok"}">${num(l.valor, i.casas)}</td>
-            <td class="num">${meta === null ? "—" : num(meta, i.casas)}</td>
+            <td class="num forte ${bateu === false ? "falha" : "ok"}">${comUnidade(l.valor, i)}</td>
+            <td class="num">${meta === null ? "—" : comUnidade(meta, i)}</td>
             <td><span class="marca ${bateu === false ? "falha" : "ok"}">${
               bateu === null ? "sem meta" : bateu ? "dentro" : "fora"}</span></td>
             <td style="color:var(--tinta-fraca)">${escapar(l.observacao || "")}</td>
