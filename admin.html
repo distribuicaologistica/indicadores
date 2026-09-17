@@ -629,6 +629,7 @@ function desenhar(){
         <button class="mini" data-fazer="editar">Editar</button>
         <button class="mini" data-fazer="resetar">Resetar senha</button>
         <button class="mini ${f.ativo ? "perigo" : ""}" data-fazer="ativo">${f.ativo ? "Bloquear" : "Liberar"}</button>
+        <button class="mini perigo" data-fazer="excluir">Excluir</button>
       </div>
     </div>
   `).join("") + controlesPagina(pg);
@@ -750,6 +751,23 @@ $("lista").addEventListener("click", async (e) => {
     if (!novo && !confirm(`Bloquear o acesso de ${f.nome}?`)) return;
     try{
       const r = await chamar("alternar_ativo", { id: f.id, ativo: novo });
+      avisar($("aviso"), r.mensagem, true);
+      await carregar();
+    } catch (err){ avisar($("aviso"), err.message); }
+    return;
+  }
+
+  if (botao.dataset.fazer === "excluir"){
+    const confirmacao = prompt(
+      `Isso apaga a conta de ${f.nome} (matrícula ${f.matricula}) para sempre — ` +
+      `não é como bloquear, não tem como desfazer.\n\n` +
+      `Se ele for motorista, o cadastro de motorista continua, só perde o login.\n` +
+      `Os lançamentos, indicadores e histórico dele não são apagados.\n\n` +
+      `Para confirmar, digite EXCLUIR:`
+    );
+    if (confirmacao !== "EXCLUIR") return;
+    try{
+      const r = await chamar("excluir", { id: f.id });
       avisar($("aviso"), r.mensagem, true);
       await carregar();
     } catch (err){ avisar($("aviso"), err.message); }

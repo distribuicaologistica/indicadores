@@ -887,7 +887,10 @@ function verMotoristas(){
         <tbody>${paginar(motoristas, "motoristas").itens.map((m) => `<tr>
           <td><span class="cod">${escapar(m.codigo)}</span></td>
           <td><input data-nome="${escapar(m.codigo)}" value="${escapar(m.nome)}" style="max-width:320px"></td>
-          <td style="text-align:right"><button class="acao suave" data-salvar="${escapar(m.codigo)}" style="padding:7px 14px;font-size:12px">Renomear</button></td>
+          <td style="text-align:right;white-space:nowrap">
+            <button class="acao suave" data-salvar="${escapar(m.codigo)}" style="padding:7px 14px;font-size:12px">Renomear</button>
+            <button class="acao suave" data-apagar-motorista="${escapar(m.codigo)}" style="padding:7px 14px;font-size:12px;color:var(--falha);border-color:#f6d3d0">Excluir</button>
+          </td>
         </tr>`).join("")}</tbody></table></div>
       ${controlesPagina(paginar(motoristas, "motoristas"))}` : `<p class="vazio">Nenhum motorista ainda. Eles são criados sozinhos quando você envia um lote.</p>`}
     </div>`;
@@ -913,6 +916,27 @@ function verMotoristas(){
       if (!nome) return recado("O nome não pode ficar vazio.");
       const { error } = await sb.from("motoristas").update({ nome }).eq("codigo", codigo);
       if (error) return recado(error.message);
+      await recarregar(); verMotoristas();
+    }));
+
+  $("conteudo").querySelectorAll("[data-apagar-motorista]").forEach((b) =>
+    b.addEventListener("click", async () => {
+      const codigo = b.dataset.apagarMotorista;
+      const m = motoristas.find((x) => x.codigo === codigo);
+      if (!confirm(`Excluir o motorista ${m?.nome ?? codigo} (código ${codigo})?\n\nSó é possível se ele não tiver nenhum lançamento registrado.`)) return;
+
+      const { error } = await sb.from("motoristas").delete().eq("codigo", codigo);
+      if (error){
+        // 23503 = violação de chave estrangeira: existem lançamentos apontando para este motorista.
+        if (error.code === "23503" || /foreign key/i.test(error.message)){
+          recado(`Não dá para excluir: existem lançamentos registrados para ${m?.nome ?? codigo}. ` +
+                 `Apague os lançamentos dele primeiro, na aba "Valores por dia" de cada indicador, e tente de novo.`);
+        } else {
+          recado(error.message);
+        }
+        return;
+      }
+      recado(`Motorista ${m?.nome ?? codigo} excluído.`, true);
       await recarregar(); verMotoristas();
     }));
 }
