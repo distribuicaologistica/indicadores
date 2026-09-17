@@ -311,7 +311,7 @@ const DIAS_CARREGADOS = 400;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = (id) => document.getElementById(id);
 
-let perfil = null, catalogo = [], lancamentos = [], metas = [], motoristas = [];
+let perfil = null, catalogo = [], lancamentos = [], metas = [], motoristas = [], acumulados = [];
 let meusIndicadores = [];   // indicadores que este moderador pode lançar
 let g1 = null, g2 = null;
 
@@ -397,30 +397,26 @@ function atingiu(ind, valor, meta){
   return ind.sentido === "menor_melhor" ? Number(valor) <= meta : Number(valor) >= meta;
 }
 
-/* ---------- acumulado por motorista ---------- */
+/* ---------- acumulado por motorista ----------
+   Lido da view v_acumulado_mensal, calculada no banco sobre a tabela
+   inteira — não sofre o teto de 20.000 linhas que o carregamento de
+   "lancamentos" no navegador tem. É essa fonte que garante que meses
+   antigos continuem aparecendo mesmo com muito histórico acumulado. */
 function acumuladoPorMotorista(ind, competencia){
-  const doMes = lancamentos.filter((l) =>
-    l.indicador === ind.codigo && competenciaDe(l.data) === competencia);
-
-  const porMot = new Map();
-  doMes.forEach((l) => {
-    const chave = l.motorista ?? "—";
-    if (!porMot.has(chave)) porMot.set(chave, { soma: 0, dias: 0 });
-    const a = porMot.get(chave);
-    a.soma += Number(l.valor); a.dias += 1;
-  });
-
-  return [...porMot.entries()].map(([codigo, a]) => ({
-    codigo,
-    nome: nomeMotorista(codigo),
-    dias: a.dias,
-    valor: ind.agregacao === "soma" ? a.soma : a.soma / a.dias
-  }));
+  return acumulados
+    .filter((a) => a.indicador === ind.codigo && a.competencia === competencia)
+    .map((a) => ({
+      codigo: a.motorista,
+      nome: a.motorista_nome || nomeMotorista(a.motorista),
+      dias: a.dias,
+      valor: Number(a.valor)
+    }));
 }
 
 function competenciasDe(ind){
-  return [...new Set(lancamentos.filter((l) => l.indicador === ind.codigo)
-    .map((l) => competenciaDe(l.data)))].sort().reverse();
+  return [...new Set(acumulados
+    .filter((a) => a.indicador === ind.codigo)
+    .map((a) => a.competencia))].sort().reverse();
 }
 
 /* ==================================================================
@@ -870,7 +866,7 @@ function verMotoristas(){
   marcarMenu("motoristas");
   $("conteudo").innerHTML = `
     <h1>Motoristas</h1>
-    <p class="sub">Código do Promax e nome exibido nas telas.</p>
+    <p class="sub">Código do Promax e nome exibido nas telas. Excluir um motorista apaga também todo o histórico de indicadores dele.</p>
     <p class="aviso" id="recado-m" hidden></p>
     <div class="cartao">
       <h2>Cadastrar</h2>
@@ -923,20 +919,23 @@ function verMotoristas(){
     b.addEventListener("click", async () => {
       const codigo = b.dataset.apagarMotorista;
       const m = motoristas.find((x) => x.codigo === codigo);
-      if (!confirm(`Excluir o motorista ${m?.nome ?? codigo} (código ${codigo})?\n\nSó é possível se ele não tiver nenhum lançamento registrado.`)) return;
+
+      const { count } = await sb.from("lancamentos")
+        .select("id", { count: "exact", head: true })
+        .eq("motorista", codigo);
+
+      const aviso = count
+        ? `Excluir ${m?.nome ?? codigo} (código ${codigo}) apaga também ${count} lançamento${count === 1 ? "" : "s"} ` +
+          `dele em todos os indicadores — para sempre, sem desfazer.`
+        : `Excluir ${m?.nome ?? codigo} (código ${codigo})? Ele não tem nenhum lançamento registrado.`;
+
+      const confirmacao = prompt(`${aviso}\n\nPara confirmar, digite EXCLUIR:`);
+      if (confirmacao !== "EXCLUIR") return;
 
       const { error } = await sb.from("motoristas").delete().eq("codigo", codigo);
-      if (error){
-        // 23503 = violação de chave estrangeira: existem lançamentos apontando para este motorista.
-        if (error.code === "23503" || /foreign key/i.test(error.message)){
-          recado(`Não dá para excluir: existem lançamentos registrados para ${m?.nome ?? codigo}. ` +
-                 `Apague os lançamentos dele primeiro, na aba "Valores por dia" de cada indicador, e tente de novo.`);
-        } else {
-          recado(error.message);
-        }
-        return;
-      }
-      recado(`Motorista ${m?.nome ?? codigo} excluído.`, true);
+      if (error){ recado(error.message); return; }
+
+      recado(`Motorista ${m?.nome ?? codigo} e seus lançamentos foram excluídos.`, true);
       await recarregar(); verMotoristas();
     }));
 }
@@ -1045,14 +1044,18 @@ async function recarregar(){
     meusIndicadores = (data ?? []).map((r) => r.indicador);
   }
 
-  const [c, l, m, mo] = await Promise.all([
+  const [c, l, m, mo, ac] = await Promise.all([
     sb.from("indicadores").select("*").eq("ativo", true).order("ordem"),
     sb.from("lancamentos").select("*").gte("data", desde).order("data", { ascending: false }).limit(20000),
     sb.from("metas").select("*"),
-    sb.from("motoristas").select("*").order("nome")
+    sb.from("motoristas").select("*").order("nome"),
+    // Sem filtro de data: essa view é agregada (uma linha por indicador/motorista/mês),
+    // então mesmo com anos de histórico ela continua leve.
+    sb.from("v_acumulado_mensal").select("*")
   ]);
   catalogo = c.data ?? []; lancamentos = l.data ?? [];
   metas = m.data ?? []; motoristas = mo.data ?? [];
+  acumulados = ac.data ?? [];
   montarMenu();
 }
 
